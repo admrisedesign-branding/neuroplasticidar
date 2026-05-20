@@ -821,7 +821,6 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 <section id="hero">
   <video id="hero-video" muted loop playsinline
     preload="none"
-    src="https://cifndytwoehbnmjllrml.supabase.co/storage/v1/object/public/videos/6264294-uhd_3840_2160_25fps.mp4"
     poster="">
   </video>
   <div class="hero-overlay"></div>
@@ -973,8 +972,6 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
             disablepictureinpicture
             disableremoteplayback
             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none"
-            src="https://cifndytwoehbnmjllrml.supabase.co/storage/v1/object/public/videos/copy_54B72248-C35B-46AA-9459-C2CE33B27A76.MOV"
-            onerror="this.style.display='none';document.getElementById('bag-iframe').style.display='block'"
             preload="none"
             id="bag-video">
           </video>
@@ -1905,9 +1902,10 @@ document.addEventListener('DOMContentLoaded',async()=>{
   renderBag();
   renderKitsList();
   window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>20));
-  // Inicia vídeo do hero após carregamento — preload=none evita download automático
+  // Vídeo hero — src só é definido via JS para evitar download automático
   const heroVid=document.getElementById('hero-video');
   if(heroVid){
+    heroVid.src='https://cifndytwoehbnmjllrml.supabase.co/storage/v1/object/public/videos/6264294-uhd_3840_2160_25fps.mp4';
     heroVid.load();
     heroVid.play().catch(()=>{});
   }
@@ -2003,13 +2001,20 @@ function filterPedidos(s,el){
 async function updatePedidoStatus(id,status){await sb.from('leads').update({status}).eq('id',id);await loadDashboard();}
 function renderBag(){
   showKit(0);
-  // Só reproduz quando a seção fica visível — evita download automático
+  // Src do vídeo só é definido quando a seção fica visível — evita download automático
   const vid=document.getElementById('bag-video');
   if(vid){
+    let loaded=false;
     const obs=new IntersectionObserver((entries)=>{
       entries.forEach(e=>{
-        if(e.isIntersecting){vid.play().catch(()=>{});}
-        else{vid.pause();}
+        if(e.isIntersecting){
+          if(!loaded){
+            vid.src='https://cifndytwoehbnmjllrml.supabase.co/storage/v1/object/public/videos/copy_54B72248-C35B-46AA-9459-C2CE33B27A76.MOV';
+            vid.load();
+            loaded=true;
+          }
+          vid.play().catch(()=>{});
+        } else { vid.pause(); }
       });
     },{threshold:0.3});
     obs.observe(vid);
