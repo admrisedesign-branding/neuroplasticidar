@@ -968,12 +968,14 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
         <!-- Vídeo da bolsa — substitua pelo seu vídeo real -->
         <div class="bag-video-wrap" id="bag-wrap">
           <video
-            autoplay muted loop playsinline
+            muted loop playsinline
             disablepictureinpicture
             disableremoteplayback
             style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none"
             src="https://cifndytwoehbnmjllrml.supabase.co/storage/v1/object/public/videos/copy_54B72248-C35B-46AA-9459-C2CE33B27A76.MOV"
-            onerror="this.style.display='none';document.getElementById('bag-iframe').style.display='block'">
+            onerror="this.style.display='none';document.getElementById('bag-iframe').style.display='block'"
+            preload="none"
+            id="bag-video">
           </video>
           <!-- Fallback iframe caso o navegador bloqueie o link direto do Drive -->
           <iframe id="bag-iframe"
@@ -1963,8 +1965,18 @@ function filterPedidos(s,el){
 }
 async function updatePedidoStatus(id,status){await sb.from('leads').update({status}).eq('id',id);await loadDashboard();}
 function renderBag(){
-  /* Vídeo único em loop — sem dots, sem timer, sem interação */
   showKit(0);
+  // Só reproduz quando a seção fica visível — evita download automático
+  const vid=document.getElementById('bag-video');
+  if(vid){
+    const obs=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){vid.play().catch(()=>{});}
+        else{vid.pause();}
+      });
+    },{threshold:0.3});
+    obs.observe(vid);
+  }
 }
 function showKit(i){
   currentKitIndex=i;
