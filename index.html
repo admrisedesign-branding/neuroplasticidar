@@ -2175,27 +2175,34 @@ function doCad(){
   acc[email]={name,pw:btoa(pass)};localStorage.setItem('np_acc',JSON.stringify(acc));
   user={name,email,role:'user'};purchases=[];saveSession();closeDialog('dlg-auth');updateNavUI();afterAuth();
 }
-function doLogin(){
+async function doLogin(){
   clearAuthError();
   const email=document.getElementById('lg-email').value.trim();
   const pass=document.getElementById('lg-pass').value;
   if(!email||!pass){showAuthError('Preencha e-mail e senha.');return;}
 
-  // Verifica contas internas (admin + equipe)
-  const team=JSON.parse(localStorage.getItem('np_team')||'{}');
-
-  // Admin principal
+  // 1. Admin principal
   if(email===ADMIN_EMAIL&&pass===ADMIN_PASS){
     user={name:'Joice Almeida',email,role:'admin',isOwner:true};
     purchases=[];saveSession();closeDialog('dlg-auth');updateNavUI();showAdmin();return;
   }
-  // Membros da equipe
-  if(team[email]){
-    if(team[email].pw!==btoa(pass)){showAuthError('Senha incorreta.');return;}
-    user={name:team[email].name,email,role:team[email].role};
-    purchases=[];saveSession();closeDialog('dlg-auth');updateNavUI();showAdmin();return;
-  }
-  // Clientes normais
+
+  // 2. Membros da equipe — busca no Supabase
+  try{
+    const{data:members}=await sb.from('team_members').select('*').eq('email',email).limit(1);
+    if(members&&members.length>0){
+      const m=members[0];
+      // Compara senha (salva como texto simples por ora)
+      if(m.password_hash===pass){
+        user={name:m.name,email,role:m.role};
+        purchases=[];saveSession();closeDialog('dlg-auth');updateNavUI();showAdmin();return;
+      } else {
+        showAuthError('Senha incorreta.');return;
+      }
+    }
+  }catch(e){console.warn('Team check error:',e);}
+
+  // 3. Clientes normais
   const acc=JSON.parse(localStorage.getItem('np_acc')||'{}');
   if(!acc[email]){showAuthError('Conta não encontrada. Crie uma conta.');return;}
   if(acc[email].pw!==btoa(pass)){showAuthError('Senha incorreta.');return;}
@@ -2625,41 +2632,24 @@ function addMember(){
   if(!name){msg.textContent='Digite o nome.';msg.style.color='var(--terra)';return;}
   if(!email||!email.includes('@')){msg.textContent='E-mail inválido.';msg.style.color='var(--terra)';return;}
   if(pass.length<6){msg.textContent='Senha deve ter pelo menos 6 caracteres.';msg.style.color='var(--terra)';return;}
-  const team=JSON.parse(localStorage.getItem('np_team')||'{}');
-  if(team[email]||email===OWNER_EMAIL){msg.textContent='Este e-mail já tem acesso.';msg.style.color='var(--terra)';return;}
-  team[email]={name,pw:btoa(pass),role,createdAt:new Date().toISOString(),createdBy:user.email};
-  localStorage.setItem('np_team',JSON.stringify(team));
-  msg.textContent='✓ Membro adicionado com sucesso.';
-  msg.style.color='var(--sage)';
-  toggleAddMember();
-  loadEquipe();
-  setTimeout(()=>msg.textContent='',3000);
+  if(email===OWNER_EMAIL){msg.textContent='Este e-mail já tem acesso.';msg.style.color='var(--terra)';return;}
+  sb.from('team_members').insert({name,email,password_hash:pass,role,created_by:user?.email||''}).then(({error})=>{
+    if(error){msg.textContent=error.code==='23505'?'Este e-mail já tem acesso.':'Erro ao salvar.';msg.style.color='var(--terra)';return;}
+    msg.textContent='✓ Membro adicionado!';msg.style.color='var(--sage)';
+    toggleAddMember();loadEquipe();
+    setTimeout(()=>msg.textContent='',3000);
+  });
 }
 
 function removeMember(email){
   if(!confirm(`Remover acesso de ${email}?`))return;
-  const team=JSON.parse(localStorage.getItem('np_team')||'{}');
-  delete team[email];
-  localStorage.setItem('np_team',JSON.stringify(team));
-  loadEquipe();
+  sb.from('team_members').delete().eq('email',email).then(()=>loadEquipe());
 }
 
 function loadEquipe(){
-  const team=JSON.parse(localStorage.getItem('np_team')||'{}');
   const tbody=document.getElementById('equipe-tbody');
-  // Monta lista: owner primeiro + membros
-  const rows=[];
-  // Owner (você)
-  rows.push({
-    name:'Joice Almeida',email:OWNER_EMAIL,
-    role:'admin',isOwner:true,
-    createdAt:null
-  });
-  // Membros cadastrados
-  Object.entries(team).forEach(([email,m])=>{
-    rows.push({name:m.name,email,role:m.role,isOwner:false,createdAt:m.createdAt});
-  });
-  if(!rows.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--ink-lt);padding:24px">Nenhum membro.</td></tr>';return;}
+  sb.from('team_members').select('*').order('created_at',{ascending:true}).then(({data:members})=>{
+  const rows=[{name:'Joice Almeida',email:OWNER_EMAIL,role:'admin',isOwner:true,created_at:null},...(members||[])];
   const rl=ROLE_LABELS;
   tbody.innerHTML=rows.map(r=>`
     <tr>
@@ -2672,10 +2662,11 @@ function loadEquipe(){
       <td style="font-size:13px">${r.email}</td>
       <td><span class="${r.isOwner?'badge-owner':(rl[r.role]?.badge||'badge-editor')}">${r.isOwner?'Proprietária':(rl[r.role]?.label||r.role)}</span></td>
       <td class="access-list">${r.isOwner?'Acesso total ao painel':(rl[r.role]?.access||'—')}</td>
-      <td style="font-size:12px;color:var(--ink-lt)">${r.createdAt?new Date(r.createdAt).toLocaleDateString('pt-BR'):'—'}</td>
+      <td style="font-size:12px;color:var(--ink-lt)">${r.created_at?new Date(r.created_at).toLocaleDateString('pt-BR'):'—'}</td>
       <td>${r.isOwner?'':'<button class="btn-del" onclick="removeMember(\''+r.email+'\')">Remover</button>'}</td>
     </tr>
   `).join('');
+  });// end then
 }
 
 /* ══ CARROSSEL DE FOTOS DO PRODUTO ══ */
