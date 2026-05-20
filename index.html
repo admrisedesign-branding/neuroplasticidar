@@ -690,6 +690,13 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 .badge-editor{background:var(--sage-lt);color:var(--sage);font-size:10px;font-weight:600;padding:4px 10px;border-radius:50px;letter-spacing:.3px}
 .badge-owner{background:var(--gold-lt);color:var(--gold-dk);font-size:10px;font-weight:600;padding:4px 10px;border-radius:50px;letter-spacing:.3px}
 .access-list{font-size:11px;color:var(--ink-lt);font-weight:300;line-height:1.5}
+.photo-upload-zone{
+  height:90px;border:2px dashed var(--border);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;background:var(--white);
+  overflow:hidden;
+}
+.photo-upload-zone:hover{border-color:var(--blue);background:var(--blue-lt)}
 
 /* ── INTENT SELECTOR ── */
 .intent-btn{
@@ -1333,29 +1340,54 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
         </div>
         <div class="field"><label>Descrição</label><textarea id="adm-desc" style="min-height:80px" placeholder="Descreva o material..."></textarea></div>
         <div class="field"><label>Tags (separadas por vírgula)</label><input type="text" id="adm-tags" placeholder="PDF · 14 págs, Imprimível, Gratuito"></div>
-        <div class="field"><label>URL do arquivo (Google Drive, S3 ou similar)</label><input type="text" id="adm-url" placeholder="https://drive.google.com/..."></div>
+        <!-- UPLOAD DO ARQUIVO PDF -->
+        <div style="margin-bottom:16px">
+          <label style="display:block;font-size:12px;font-weight:500;color:var(--ink-md);margin-bottom:8px">Arquivo PDF</label>
+          <div id="upload-pdf-zone" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleFileDrop(event,'pdf')"
+            style="border:2px dashed var(--border);border-radius:var(--r);padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--cream)" onclick="document.getElementById('upload-pdf-input').click()">
+            <div id="upload-pdf-label">
+              <div style="font-size:28px;margin-bottom:8px">📄</div>
+              <p style="font-size:13px;font-weight:500;color:var(--ink-md)">Arraste o PDF aqui ou clique para selecionar</p>
+              <p style="font-size:11px;color:var(--ink-lt);margin-top:4px">Somente arquivos PDF</p>
+            </div>
+            <input type="file" id="upload-pdf-input" accept=".pdf" style="display:none" onchange="handleFileSelect(this,'pdf')">
+          </div>
+          <input type="text" id="adm-url" placeholder="ou cole uma URL existente (Google Drive, etc)" style="margin-top:8px;font-size:12px">
+        </div>
+
         <!-- FOTOS DO PRODUTO -->
         <div style="border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-bottom:16px;background:var(--cream)">
           <p style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Fotos do produto</p>
-          <p style="font-size:12px;color:var(--ink-lt);font-weight:300;margin-bottom:16px">Capa aparece no card. As demais aparecem no carrossel ao abrir o produto.</p>
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <div class="field" style="margin:0">
-              <label style="display:flex;align-items:center;gap:6px">
-                <span style="background:var(--blue);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:50px">CAPA</span>
-                URL da foto principal
-              </label>
-              <input type="text" id="adm-photo1" placeholder="https://... (aparece no card e como 1ª foto)">
+          <p style="font-size:12px;color:var(--ink-lt);font-weight:300;margin-bottom:16px">Arraste ou clique para selecionar. A capa aparece no card.</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+            <div>
+              <label style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--ink);margin-bottom:6px"><span style="background:var(--blue);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:50px">CAPA</span>Foto principal</label>
+              <div class="photo-upload-zone" id="zone-photo1" onclick="document.getElementById('upload-photo1').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleFileDrop(event,'photo1')">
+                <div id="preview-photo1" style="display:none;width:100%;height:100%;position:relative"><img style="width:100%;height:100%;object-fit:cover;border-radius:8px"><button onclick="clearPhoto('photo1',event)" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px">×</button></div>
+                <div id="label-photo1" style="font-size:11px;color:var(--ink-lt);text-align:center">📸<br>Capa</div>
+                <input type="file" id="upload-photo1" accept="image/*" style="display:none" onchange="handleFileSelect(this,'photo1')">
+              </div>
+              <input type="text" id="adm-photo1" placeholder="ou URL" style="margin-top:6px;font-size:11px" oninput="previewFromUrl('photo1',this.value)">
             </div>
-            <div class="field" style="margin:0">
-              <label>URL da 2ª foto <span style="font-weight:300;color:var(--ink-lt)">(opcional)</span></label>
-              <input type="text" id="adm-photo2" placeholder="https://... (carrossel na dialog)">
+            <div>
+              <label style="font-size:11px;font-weight:500;color:var(--ink-md);display:block;margin-bottom:6px">2ª foto</label>
+              <div class="photo-upload-zone" id="zone-photo2" onclick="document.getElementById('upload-photo2').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleFileDrop(event,'photo2')">
+                <div id="preview-photo2" style="display:none;width:100%;height:100%;position:relative"><img style="width:100%;height:100%;object-fit:cover;border-radius:8px"><button onclick="clearPhoto('photo2',event)" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px">×</button></div>
+                <div id="label-photo2" style="font-size:11px;color:var(--ink-lt);text-align:center">📸<br>2ª foto</div>
+                <input type="file" id="upload-photo2" accept="image/*" style="display:none" onchange="handleFileSelect(this,'photo2')">
+              </div>
+              <input type="text" id="adm-photo2" placeholder="ou URL" style="margin-top:6px;font-size:11px" oninput="previewFromUrl('photo2',this.value)">
             </div>
-            <div class="field" style="margin:0">
-              <label>URL da 3ª foto <span style="font-weight:300;color:var(--ink-lt)">(opcional)</span></label>
-              <input type="text" id="adm-photo3" placeholder="https://... (carrossel na dialog)">
+            <div>
+              <label style="font-size:11px;font-weight:500;color:var(--ink-md);display:block;margin-bottom:6px">3ª foto</label>
+              <div class="photo-upload-zone" id="zone-photo3" onclick="document.getElementById('upload-photo3').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleFileDrop(event,'photo3')">
+                <div id="preview-photo3" style="display:none;width:100%;height:100%;position:relative"><img style="width:100%;height:100%;object-fit:cover;border-radius:8px"><button onclick="clearPhoto('photo3',event)" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:12px">×</button></div>
+                <div id="label-photo3" style="font-size:11px;color:var(--ink-lt);text-align:center">📸<br>3ª foto</div>
+                <input type="file" id="upload-photo3" accept="image/*" style="display:none" onchange="handleFileSelect(this,'photo3')">
+              </div>
+              <input type="text" id="adm-photo3" placeholder="ou URL" style="margin-top:6px;font-size:11px" oninput="previewFromUrl('photo3',this.value)">
             </div>
           </div>
-          <p style="font-size:11px;color:var(--ink-lt);margin-top:10px;font-weight:300">💡 Use links do Google Drive, Supabase Storage ou qualquer URL pública de imagem.</p>
         </div>
         <button class="btn-save" onclick="saveMaterial()">Salvar material</button>
         <button onclick="cancelEditMaterial()" id="btn-cancel-mat" style="display:none;background:none;border:1px solid var(--border);color:var(--ink-lt);padding:10px 20px;border-radius:50px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-left:8px">Cancelar edição</button>
@@ -2768,7 +2800,82 @@ function loadEquipe(){
   });// end then
 }
 
-/* ══ CARROSSEL DE FOTOS DO PRODUTO ══ */
+/* ══ UPLOAD DE ARQUIVOS ══ */
+async function uploadToStorage(file, bucket, folder){
+  const ext=file.name.split('.').pop();
+  const name=`${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const{data,error}=await sb.storage.from(bucket).upload(name,file,{contentType:file.type,upsert:false});
+  if(error) throw error;
+  const{data:urlData}=sb.storage.from(bucket).getPublicUrl(name);
+  return urlData.publicUrl;
+}
+
+function handleFileDrop(e,target){
+  e.preventDefault();
+  const file=e.dataTransfer.files[0];
+  if(!file) return;
+  processUploadedFile(file,target);
+}
+
+function handleFileSelect(input,target){
+  const file=input.files[0];
+  if(!file) return;
+  processUploadedFile(file,target);
+}
+
+async function processUploadedFile(file,target){
+  if(target==='pdf'){
+    if(!file.name.endsWith('.pdf')){alert('Selecione um arquivo PDF.');return;}
+    const zone=document.getElementById('upload-pdf-zone');
+    const label=document.getElementById('upload-pdf-label');
+    label.innerHTML='<div style="font-size:20px">⏳</div><p style="font-size:12px;color:var(--blue)">Enviando...</p>';
+    try{
+      const url=await uploadToStorage(file,'materials','pdfs');
+      document.getElementById('adm-url').value=url;
+      label.innerHTML=`<div style="font-size:20px">✅</div><p style="font-size:12px;color:var(--sage);font-weight:500">${file.name}</p><p style="font-size:10px;color:var(--ink-lt)">Upload concluído</p>`;
+      zone.style.borderColor='var(--sage)';zone.style.background='var(--sage-lt)';
+    }catch(err){
+      label.innerHTML='<div style="font-size:20px">❌</div><p style="font-size:12px;color:var(--terra)">Erro no upload. Tente novamente.</p>';
+      console.error(err);
+    }
+  } else if(target.startsWith('photo')){
+    if(!file.type.startsWith('image/')){alert('Selecione uma imagem.');return;}
+    const num=target.replace('photo','');
+    const preview=document.getElementById('preview-photo'+num);
+    const lbl=document.getElementById('label-photo'+num);
+    lbl.innerHTML='<div style="font-size:14px">⏳</div>';
+    try{
+      const url=await uploadToStorage(file,'materials','photos');
+      document.getElementById('adm-photo'+num).value=url;
+      preview.querySelector('img').src=url;
+      preview.style.display='block';
+      lbl.style.display='none';
+    }catch(err){
+      lbl.innerHTML='<div style="font-size:14px">❌</div><p style="font-size:10px;color:var(--terra)">Erro</p>';
+      console.error(err);
+    }
+  }
+}
+
+function previewFromUrl(num,url){
+  if(!url) return;
+  const preview=document.getElementById('preview-photo'+num);
+  const lbl=document.getElementById('label-photo'+num);
+  if(preview&&url.startsWith('http')){
+    preview.querySelector('img').src=url;
+    preview.style.display='block';
+    lbl.style.display='none';
+  }
+}
+
+function clearPhoto(num,e){
+  e.stopPropagation();
+  document.getElementById('adm-photo'+num).value='';
+  const preview=document.getElementById('preview-photo'+num);
+  const lbl=document.getElementById('label-photo'+num);
+  preview.style.display='none';
+  lbl.style.display='flex';
+}
 let carIdx=0;
 let carPhotos=[];
 
