@@ -1556,9 +1556,9 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
         <div class="dlg-includes"><h4>O que você recebe</h4><ul id="dp-includes"></ul></div>
         <div class="dlg-footer">
           <div class="dlg-price"><span class="orig" id="dp-orig"></span><span class="amt" id="dp-price"></span></div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <button class="btn-prod-share" id="dp-share" onclick="shareProduct(event, currentProduct?.id)">📲 Compartilhar</button>
+          <div style="display:flex;flex-direction:column;gap:8px;align-items:stretch;min-width:160px">
             <button class="btn-dlg" id="dp-cta" onclick="handleCTA()"></button>
+            <button class="btn-prod-share" id="dp-share" onclick="copyMaterialLink(currentProduct?.id)">📲 Compartilhar material</button>
           </div>
         </div>
       </div>
@@ -1819,6 +1819,21 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
   </div>
 </div>
 
+<!-- TOAST de compartilhamento -->
+<div id="share-toast" style="
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--ink);color:#fff;
+  padding:12px 24px;border-radius:50px;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;
+  box-shadow:0 8px 32px rgba(0,0,0,0.2);
+  display:flex;align-items:center;gap:10px;
+  opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;z-index:9999;white-space:nowrap;
+">
+  <span style="font-size:16px">✅</span>
+  <span>Link copiado — pronto para compartilhar!</span>
+</div>
+
 <script>
 const SUPABASE_URL='https://cifndytwoehbnmjllrml.supabase.co';
 const SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpZm5keXR3b2VoYm5tamxscm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NjM1OTIsImV4cCI6MjA5NDUzOTU5Mn0.Rkd_5t52cuQEJVPPN3sXPUukL6aEcGrwLtR2qx78Rto';
@@ -2056,22 +2071,33 @@ function setChip(c,el){activeChip=c;document.querySelectorAll('.chip').forEach(x
 function slugify(text){
   return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 }
-function shareProduct(e, id){
-  e.stopPropagation();
+/* ── COMPARTILHAMENTO COM TOAST ── */
+let _toastTimer=null;
+function showToast(){
+  const t=document.getElementById('share-toast');
+  t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>{
+    t.style.opacity='0';t.style.transform='translateX(-50%) translateY(20px)';
+  },3000);
+}
+function copyMaterialLink(id){
   const p=materials.find(m=>m.id===id);if(!p)return;
-  const slug=slugify(p.title);
-  const url=`https://neuroplasticidar.vercel.app/m/${slug}`;
-  const preco=p.is_free?'Gratuito':`R$ ${Number(p.price).toFixed(2).replace('.',',')}`;
-  // Texto sem URL no corpo — o WhatsApp gera o preview automaticamente pelo link no final
-  const text=`${p.emoji} *${p.title}*\n${p.category} · ${p.age_range}\n${preco}\n\n${(p.description||'').slice(0,100)}...\n\n👉 ${url}`;
-  if(navigator.share){
-    // API nativa — passa só a URL para o WhatsApp gerar o preview
-    navigator.share({title:p.title+' — Neuroplasticidar',text:`${p.emoji} *${p.title}*\n${p.category} · ${p.age_range}\n${preco}`,url}).catch(()=>{});
-  } else {
-    // Fallback WhatsApp Web — texto limpo + URL só no final
-    const wppText=`${p.emoji} *${p.title}*\n${p.category} · ${p.age_range}\n${preco}\n\n${(p.description||'').slice(0,100)}...\n\n${url}`;
-    window.open('https://wa.me/?text='+encodeURIComponent(wppText),'_blank');
-  }
+  const url=`https://neuroplasticidar.vercel.app/m/${slugify(p.title)}`;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(url).then(showToast).catch(()=>fallbackCopy(url));
+  } else { fallbackCopy(url); }
+}
+function fallbackCopy(url){
+  const el=document.createElement('textarea');
+  el.value=url;el.style.cssText='position:fixed;opacity:0';
+  document.body.appendChild(el);el.select();
+  try{document.execCommand('copy');showToast();}catch(e){}
+  document.body.removeChild(el);
+}
+function shareProduct(e, id){
+  if(e) e.stopPropagation();
+  copyMaterialLink(id);
 }
 function openProduct(id){
   currentProduct=materials.find(p=>p.id===id);if(!currentProduct)return;
