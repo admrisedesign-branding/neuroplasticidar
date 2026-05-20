@@ -36,7 +36,15 @@ export default async function handler(req, res) {
 
   const pageUrl    = `${SITE_URL}/m/${slug}`;
   const siteUrl    = `${SITE_URL}/?material=${material.id}`;
-  const coverImage = material.cover_image || `${SITE_URL}/og-default.png`;
+  const CATEGORY_COVERS = {
+    'Redução de telas':    'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=1200&h=630&fit=crop&q=80',
+    'Funções executivas':  'https://images.unsplash.com/photo-1555009393-f20bdb245c4d?w=1200&h=630&fit=crop&q=80',
+    'Aprendizagem lúdica': 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=1200&h=630&fit=crop&q=80',
+    'Sono & Rotina':       'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=1200&h=630&fit=crop&q=80',
+    'Regulação emocional': 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=1200&h=630&fit=crop&q=80',
+    'Linguagem':           'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&h=630&fit=crop&q=80',
+  };
+  const coverImage = material.cover_image || CATEGORY_COVERS[material.category] || CATEGORY_COVERS['Aprendizagem lúdica'];
   const preco      = material.is_free ? 'Gratuito' : `R$ ${Number(material.price).toFixed(2).replace('.', ',')}`;
   const precoOrig  = material.original_price ? `~~R$ ${Number(material.original_price).toFixed(2).replace('.', ',')}~~` : '';
   const descShort  = (material.description || '').slice(0, 120) + (material.description?.length > 120 ? '...' : '');
