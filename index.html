@@ -668,17 +668,17 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 .admin-table td{padding:14px 18px;font-size:13px;color:var(--ink-md);border-top:1px solid var(--border);font-weight:300}
 .admin-table tr:hover td{background:var(--cream)}
 .badge-free{background:var(--sage-lt);color:var(--sage);font-size:10px;font-weight:500;padding:3px 9px;border-radius:50px}
-.btn-share{
-  position:absolute;top:10px;right:10px;
-  width:32px;height:32px;border-radius:50%;
-  background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);
-  border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;box-shadow:0 2px 10px rgba(0,0,0,0.12);
-  transition:all .2s;opacity:0;z-index:2;
-}
+.btn-share{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 10px rgba(0,0,0,0.12);transition:all .2s;opacity:0;z-index:2}
 .prod-card:hover .btn-share{opacity:1}
 .btn-share:hover{background:#fff;transform:scale(1.1)}
+.btn-prod-share{
+  background:none;border:1.5px solid var(--border);
+  color:var(--ink-md);font-size:12px;font-weight:500;
+  padding:8px 14px;border-radius:50px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:all .2s;
+  white-space:nowrap;display:flex;align-items:center;gap:4px;
+}
+.btn-prod-share:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt)}
 .badge-paid{background:var(--blue-lt);color:var(--blue-dk);font-size:10px;font-weight:500;padding:3px 9px;border-radius:50px}
 .badge-new{background:var(--gold-lt);color:var(--gold-dk);font-size:10px;font-weight:500;padding:3px 9px;border-radius:50px}
 .btn-del{background:none;border:1px solid var(--border);color:var(--ink-lt);font-size:11px;font-weight:400;padding:4px 12px;border-radius:50px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
@@ -1556,7 +1556,10 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
         <div class="dlg-includes"><h4>O que você recebe</h4><ul id="dp-includes"></ul></div>
         <div class="dlg-footer">
           <div class="dlg-price"><span class="orig" id="dp-orig"></span><span class="amt" id="dp-price"></span></div>
-          <button class="btn-dlg" id="dp-cta" onclick="handleCTA()"></button>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="btn-prod-share" id="dp-share" onclick="shareProduct(event, currentProduct?.id)">📲 Compartilhar</button>
+            <button class="btn-dlg" id="dp-cta" onclick="handleCTA()"></button>
+          </div>
         </div>
       </div>
     </div>
@@ -2022,7 +2025,6 @@ function renderProducts(){
   document.getElementById('no-results').style.display=list.length?'none':'block';
   document.getElementById('products-grid').innerHTML=list.map(p=>`
     <div class="prod-card" onclick="openProduct('${p.id}')">
-      <button class="btn-share" onclick="shareProduct(event,'${p.id}')" title="Compartilhar no WhatsApp">↗</button>
       <div class="prod-thumb" style="background:${p.cover_color||'#EEF2FF'};position:relative;overflow:hidden">
         <img src="${getCover(p)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
         <span class="prod-type-badge ${p.is_free?'type-free':'type-paid'}">${p.is_free?'Gratuito':'Completo'}</span>
@@ -2038,7 +2040,10 @@ function renderProducts(){
           ${p.original_price?`<span class="orig">R$ ${p.original_price},00</span>`:''}
           <span class="amt ${p.is_free?'free-p':''}">${p.is_free?'Gratuito':'R$ '+p.price+',00'}</span>
         </div>
-        <button class="btn-prod ${p.is_free?'free':''}">${p.is_free?'Baixar':'Comprar'}</button>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn-prod-share" onclick="event.stopPropagation();shareProduct(event,'${p.id}')" title="Compartilhar via WhatsApp">📲 Compartilhar</button>
+          <button class="btn-prod ${p.is_free?'free':''}">${p.is_free?'Baixar':'Comprar'}</button>
+        </div>
       </div>
     </div>
   `).join('');
