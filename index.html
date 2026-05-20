@@ -975,13 +975,6 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
             preload="none"
             id="bag-video">
           </video>
-          <!-- Fallback iframe caso o navegador bloqueie o link direto do Drive -->
-          <iframe id="bag-iframe"
-            src="https://cifndytwoehbnmjllrml.supabase.co/storage/v1/object/public/videos/copy_54B72248-C35B-46AA-9459-C2CE33B27A76.MOV"
-            style="display:none;position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none"
-            allow="autoplay; fullscreen"
-            allowfullscreen>
-          </iframe>
           <div class="bag-video-label">
             <div class="bvl-name">Kits Neuroplasticidar</div>
             <div class="bvl-area">Brinquedos pedagógicos personalizados</div>
@@ -2001,7 +1994,6 @@ function filterPedidos(s,el){
 async function updatePedidoStatus(id,status){await sb.from('leads').update({status}).eq('id',id);await loadDashboard();}
 function renderBag(){
   showKit(0);
-  // Src do vídeo só é definido quando a seção fica visível — evita download automático
   const vid=document.getElementById('bag-video');
   if(vid){
     let loaded=false;
@@ -2009,7 +2001,7 @@ function renderBag(){
       entries.forEach(e=>{
         if(e.isIntersecting){
           if(!loaded){
-            vid.src='https://cifndytwoehbnmjllrml.supabase.co/storage/v1/object/public/videos/copy_54B72248-C35B-46AA-9459-C2CE33B27A76.MOV';
+            vid.src='https://cifndytwoehbnmjllrml.supabase.co/storage/v1/object/public/videos/copy_54B72248-C35B-46AA-9459-C2CE33B27A76%20(22).mp4';
             vid.load();
             loaded=true;
           }
