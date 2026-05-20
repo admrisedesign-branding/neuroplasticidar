@@ -1357,6 +1357,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
           <p style="font-size:11px;color:var(--ink-lt);margin-top:10px;font-weight:300">💡 Use links do Google Drive, Supabase Storage ou qualquer URL pública de imagem.</p>
         </div>
         <button class="btn-save" onclick="saveMaterial()">Salvar material</button>
+        <button onclick="cancelEditMaterial()" id="btn-cancel-mat" style="display:none;background:none;border:1px solid var(--border);color:var(--ink-lt);padding:10px 20px;border-radius:50px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-left:8px">Cancelar edição</button>
         <span class="adm-msg" id="adm-mat-msg"></span>
       </div>
       <table class="admin-table">
@@ -2457,6 +2458,8 @@ async function loadDashboard(){
 }
 
 /* MATERIAIS ADMIN */
+let editingMaterialId=null;
+
 async function loadAdminMateriais(){
   const{data}=await sb.from('materials').select('*').order('created_at',{ascending:false});
   const tbody=document.getElementById('adm-mat-tbody');
@@ -2468,9 +2471,50 @@ async function loadAdminMateriais(){
     <td><span class="${m.is_free?'badge-free':'badge-paid'}">${m.is_free?'Gratuito':'Pago'}</span></td>
     <td>${m.is_free?'—':'R$ '+m.price}</td>
     <td>—</td>
-    <td><button class="btn-del" onclick="deleteMaterial('${m.id}')">Remover</button></td>
+    <td style="display:flex;gap:6px">
+      <button class="btn-wpp-sm" style="background:var(--blue-lt);color:var(--blue-dk)" onclick="editMaterial(${JSON.stringify(m).replace(/"/g,'&quot;')})">Editar</button>
+      <button class="btn-del" onclick="deleteMaterial('${m.id}')">Remover</button>
+    </td>
   </tr>`).join('');
 }
+
+function editMaterial(m){
+  // Preenche o formulário com os dados do material
+  editingMaterialId=m.id;
+  document.getElementById('adm-title').value=m.title||'';
+  document.getElementById('adm-desc').value=m.description||'';
+  document.getElementById('adm-cat').value=m.category||'Redução de telas';
+  document.getElementById('adm-age').value=m.age_range||'';
+  document.getElementById('adm-emoji').value=m.emoji||'';
+  document.getElementById('adm-price').value=m.price||0;
+  document.getElementById('adm-orig-price').value=m.original_price||'';
+  document.getElementById('adm-tags').value=(m.tags||[]).join(', ');
+  document.getElementById('adm-url').value=m.file_url||'';
+  document.getElementById('adm-photo1').value=m.cover_image||'';
+  document.getElementById('adm-photo2').value=(m.images&&m.images[1])||'';
+  document.getElementById('adm-photo3').value=(m.images&&m.images[2])||'';
+  // Atualiza botão e título do form
+  const btn=document.querySelector('button[onclick="saveMaterial()"]');
+  if(btn) btn.textContent='Atualizar material';
+  const h3=document.querySelector('#adm-materiais .admin-form h3');
+  if(h3) h3.textContent='Editando: '+m.title;
+  // Rola até o formulário
+  document.querySelector('#adm-materiais .admin-form').scrollIntoView({behavior:'smooth'});
+  document.getElementById('btn-cancel-mat').style.display='inline-flex';
+}
+
+function cancelEditMaterial(){
+  editingMaterialId=null;
+  const btn=document.querySelector('button[onclick="saveMaterial()"]');
+  if(btn) btn.textContent='Salvar material';
+  const h3=document.querySelector('#adm-materiais .admin-form h3');
+  if(h3) h3.textContent='Novo material digital';
+  document.getElementById('btn-cancel-mat').style.display='none';
+  ['adm-title','adm-desc','adm-age','adm-emoji','adm-tags','adm-url','adm-photo1','adm-photo2','adm-photo3'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('adm-price').value='0';
+  document.getElementById('adm-orig-price').value='';
+}
+
 async function saveMaterial(){
   const msg=document.getElementById('adm-mat-msg');
   const price=parseFloat(document.getElementById('adm-price').value)||0;
@@ -2480,7 +2524,7 @@ async function saveMaterial(){
   const photo2=document.getElementById('adm-photo2').value.trim();
   const photo3=document.getElementById('adm-photo3').value.trim();
   const photos=[photo1,photo2,photo3].filter(Boolean);
-  const{error}=await sb.from('materials').insert({
+  const payload={
     title:document.getElementById('adm-title').value.trim(),
     description:document.getElementById('adm-desc').value.trim(),
     category:document.getElementById('adm-cat').value,
@@ -2491,12 +2535,19 @@ async function saveMaterial(){
     cover_image:photo1||null,
     images:photos.length?photos:null,
     active:true
-  });
-  msg.textContent=error?'Erro: '+error.message:'✓ Material salvo!';
+  };
+  let error;
+  if(editingMaterialId){
+    // ATUALIZAR
+    ({error}=await sb.from('materials').update(payload).eq('id',editingMaterialId));
+    if(!error) cancelEditMaterial();
+  } else {
+    // INSERIR
+    ({error}=await sb.from('materials').insert(payload));
+  }
+  msg.textContent=error?'Erro: '+error.message:(editingMaterialId?'✓ Material atualizado!':'✓ Material salvo!');
   msg.style.color=error?'var(--terra)':'var(--sage)';
   if(!error){
-    // Limpa campos de foto
-    ['adm-photo1','adm-photo2','adm-photo3'].forEach(id=>document.getElementById(id).value='');
     await loadAdminMateriais();await loadMaterials();renderProducts();
   }
   setTimeout(()=>msg.textContent='',4000);
