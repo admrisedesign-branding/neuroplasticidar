@@ -668,6 +668,17 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 .admin-table td{padding:14px 18px;font-size:13px;color:var(--ink-md);border-top:1px solid var(--border);font-weight:300}
 .admin-table tr:hover td{background:var(--cream)}
 .badge-free{background:var(--sage-lt);color:var(--sage);font-size:10px;font-weight:500;padding:3px 9px;border-radius:50px}
+.btn-share{
+  position:absolute;top:10px;right:10px;
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;box-shadow:0 2px 10px rgba(0,0,0,0.12);
+  transition:all .2s;opacity:0;z-index:2;
+}
+.prod-card:hover .btn-share{opacity:1}
+.btn-share:hover{background:#fff;transform:scale(1.1)}
 .badge-paid{background:var(--blue-lt);color:var(--blue-dk);font-size:10px;font-weight:500;padding:3px 9px;border-radius:50px}
 .badge-new{background:var(--gold-lt);color:var(--gold-dk);font-size:10px;font-weight:500;padding:3px 9px;border-radius:50px}
 .btn-del{background:none;border:1px solid var(--border);color:var(--ink-lt);font-size:11px;font-weight:400;padding:4px 12px;border-radius:50px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
@@ -1986,8 +1997,12 @@ function renderProducts(){
   document.getElementById('no-results').style.display=list.length?'none':'block';
   document.getElementById('products-grid').innerHTML=list.map(p=>`
     <div class="prod-card" onclick="openProduct('${p.id}')">
-      <div class="prod-thumb" style="background:${p.cover_color||'#EEF2FF'}">
-        ${p.emoji||'📄'}
+      <button class="btn-share" onclick="shareProduct(event,'${p.id}')" title="Compartilhar no WhatsApp">↗</button>
+      <div class="prod-thumb" style="background:${p.cover_color||'#EEF2FF'};position:relative;overflow:hidden">
+        ${p.cover_image
+          ? `<img src="${p.cover_image}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
+          : ''}
+        <span style="position:relative;z-index:1">${p.emoji||'📄'}</span>
         <span class="prod-type-badge ${p.is_free?'type-free':'type-paid'}">${p.is_free?'Gratuito':'Completo'}</span>
       </div>
       <div class="prod-body">
@@ -2011,6 +2026,22 @@ function setTab(t,el){activeTab=t;document.querySelectorAll('.tab').forEach(x=>x
 function setChip(c,el){activeChip=c;document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));el.classList.add('active');renderProducts();}
 
 /* PRODUTO DIALOG */
+function slugify(text){
+  return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+}
+function shareProduct(e, id){
+  e.stopPropagation();
+  const p=materials.find(m=>m.id===id);if(!p)return;
+  const slug=slugify(p.title);
+  const url=`https://neuroplasticidar.vercel.app/m/${slug}`;
+  const preco=p.is_free?'Gratuito':`R$ ${Number(p.price).toFixed(2).replace('.',',')}`;
+  const text=`${p.emoji} *${p.title}*\n${p.category} · ${p.age_range}\n${preco}\n\n${(p.description||'').slice(0,100)}...\n\n👉 ${url}`;
+  if(navigator.share){
+    navigator.share({title:p.title+' — Neuroplasticidar',text,url}).catch(()=>{});
+  } else {
+    window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+  }
+}
 function openProduct(id){
   currentProduct=materials.find(p=>p.id===id);if(!currentProduct)return;
   const p=currentProduct;
