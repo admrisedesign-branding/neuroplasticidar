@@ -2047,11 +2047,15 @@ function shareProduct(e, id){
   const slug=slugify(p.title);
   const url=`https://neuroplasticidar.vercel.app/m/${slug}`;
   const preco=p.is_free?'Gratuito':`R$ ${Number(p.price).toFixed(2).replace('.',',')}`;
+  // Texto sem URL no corpo — o WhatsApp gera o preview automaticamente pelo link no final
   const text=`${p.emoji} *${p.title}*\n${p.category} · ${p.age_range}\n${preco}\n\n${(p.description||'').slice(0,100)}...\n\n👉 ${url}`;
   if(navigator.share){
-    navigator.share({title:p.title+' — Neuroplasticidar',text,url}).catch(()=>{});
+    // API nativa — passa só a URL para o WhatsApp gerar o preview
+    navigator.share({title:p.title+' — Neuroplasticidar',text:`${p.emoji} *${p.title}*\n${p.category} · ${p.age_range}\n${preco}`,url}).catch(()=>{});
   } else {
-    window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+    // Fallback WhatsApp Web — texto limpo + URL só no final
+    const wppText=`${p.emoji} *${p.title}*\n${p.category} · ${p.age_range}\n${preco}\n\n${(p.description||'').slice(0,100)}...\n\n${url}`;
+    window.open('https://wa.me/?text='+encodeURIComponent(wppText),'_blank');
   }
 }
 function openProduct(id){
