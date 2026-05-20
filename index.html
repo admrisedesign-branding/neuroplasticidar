@@ -1850,6 +1850,19 @@ const KITS=[
   {name:'Kit Foco',area:'Funções Executivas',desc:'Para crianças impulsivas, dispersas ou que não conseguem terminar o que começam.',toys:['⭕','🎴','🧩','⚙️'],syms:['impulsivo','concentracao']},
 ];
 
+
+const CATEGORY_COVERS = {
+  'Redução de telas':    'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=400&fit=crop&q=80',
+  'Funções executivas':  'https://images.unsplash.com/photo-1555009393-f20bdb245c4d?w=600&h=400&fit=crop&q=80',
+  'Aprendizagem lúdica': 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=600&h=400&fit=crop&q=80',
+  'Sono & Rotina':       'https://images.unsplash.com/photo-1519689680058-324335c77eba?w=600&h=400&fit=crop&q=80',
+  'Regulação emocional': 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=600&h=400&fit=crop&q=80',
+  'Linguagem':           'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=400&fit=crop&q=80',
+};
+function getCover(material){
+  if(material.cover_image) return material.cover_image;
+  return CATEGORY_COVERS[material.category] || CATEGORY_COVERS['Aprendizagem lúdica'];
+}
 const FALLBACK_MATERIALS=[
   {id:'p1',title:'Guia: Menos Tela, Mais Conexão',description:'Rotinas, atividades e estratégias práticas para reduzir o tempo de tela e criar alternativas significativas no dia a dia.',category:'Redução de telas',age_range:'2–8 anos',tags:['PDF · 14 páginas','Imprimível','Gratuito'],emoji:'📱',cover_color:'#FEF3C7',is_free:true,price:0,original_price:null,file_url:'#'},
   {id:'p2',title:'Mini-guia: Atenção e Foco em Casa',description:'Cinco atividades simples para estimular a atenção e o foco infantil sem precisar de materiais especiais.',category:'Funções executivas',age_range:'3–7 anos',tags:['PDF · 8 páginas','Imprimível','Gratuito'],emoji:'🧩',cover_color:'#D1FAE5',is_free:true,price:0,original_price:null,file_url:'#'},
@@ -2011,10 +2024,7 @@ function renderProducts(){
     <div class="prod-card" onclick="openProduct('${p.id}')">
       <button class="btn-share" onclick="shareProduct(event,'${p.id}')" title="Compartilhar no WhatsApp">↗</button>
       <div class="prod-thumb" style="background:${p.cover_color||'#EEF2FF'};position:relative;overflow:hidden">
-        ${p.cover_image
-          ? `<img src="${p.cover_image}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
-          : ''}
-        <span style="position:relative;z-index:1">${p.emoji||'📄'}</span>
+        <img src="${getCover(p)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
         <span class="prod-type-badge ${p.is_free?'type-free':'type-paid'}">${p.is_free?'Gratuito':'Completo'}</span>
       </div>
       <div class="prod-body">
