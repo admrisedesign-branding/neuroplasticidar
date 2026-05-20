@@ -819,7 +819,8 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 
 <!-- HERO -->
 <section id="hero">
-  <video id="hero-video" autoplay muted loop playsinline
+  <video id="hero-video" muted loop playsinline
+    preload="none"
     src="https://cifndytwoehbnmjllrml.supabase.co/storage/v1/object/public/videos/6264294-uhd_3840_2160_25fps.mp4"
     poster="">
   </video>
@@ -1896,7 +1897,6 @@ document.addEventListener('DOMContentLoaded',async()=>{
   if(_p.get('payment')==='success'){
     const _pid=_p.get('preference_id')||'';
     window.history.replaceState({},'','/');
-    // Exibe tela de sucesso
     if(currentProduct){releaseDownload();ckStep(3);openDialog('dlg-checkout');}
   }
   loadSession();
@@ -1905,6 +1905,12 @@ document.addEventListener('DOMContentLoaded',async()=>{
   renderBag();
   renderKitsList();
   window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>20));
+  // Inicia vídeo do hero após carregamento — preload=none evita download automático
+  const heroVid=document.getElementById('hero-video');
+  if(heroVid){
+    heroVid.load();
+    heroVid.play().catch(()=>{});
+  }
 });
 
 function loadSession(){const s=localStorage.getItem('np_user');if(s){user=JSON.parse(s);purchases=JSON.parse(localStorage.getItem('np_p_'+user.email)||'[]');updateNavUI();}}
