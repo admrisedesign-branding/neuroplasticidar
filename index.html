@@ -1242,6 +1242,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     <div style="display:flex;align-items:center;gap:12px">
       <span class="admin-badge" id="admin-role-badge">Administrador</span>
       <span id="admin-user-name" style="font-size:13px;color:rgba(255,255,255,0.5)"></span>
+      <button onclick="toggleSitePreview()" id="btn-preview-site" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);font-size:12px;font-weight:500;padding:7px 14px;border-radius:50px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s">👁 Ver site</button>
       <button class="btn-logout" style="color:rgba(255,255,255,0.4)" onclick="logout()">Sair</button>
     </div>
   </div>
@@ -1905,9 +1906,51 @@ document.addEventListener('DOMContentLoaded',async()=>{
   }
 });
 
-function loadSession(){const s=localStorage.getItem('np_user');if(s){user=JSON.parse(s);purchases=JSON.parse(localStorage.getItem('np_p_'+user.email)||'[]');updateNavUI();}}
-function saveSession(){localStorage.setItem('np_user',JSON.stringify(user));localStorage.setItem('np_p_'+user.email,JSON.stringify(purchases));}
+function loadSession(){
+  const s=localStorage.getItem('np_user');
+  if(s){
+    try{
+      const data=JSON.parse(s);
+      // Verifica expiração — 30 dias
+      if(data.expires&&Date.now()>data.expires){localStorage.removeItem('np_user');return;}
+      user=data.user||data;
+      purchases=JSON.parse(localStorage.getItem('np_p_'+(user.email||''))||'[]');
+      updateNavUI();
+      // Se era admin, volta para o admin automaticamente
+      if(user.role==='admin'||user.role==='editor'){showAdmin();}
+    }catch(e){localStorage.removeItem('np_user');}
+  }
+}
+function saveSession(){
+  const expires=Date.now()+(30*24*60*60*1000); // 30 dias
+  localStorage.setItem('np_user',JSON.stringify({user,expires}));
+  localStorage.setItem('np_p_'+(user.email||''),JSON.stringify(purchases));
+}
 function logout(){user=null;purchases=[];localStorage.removeItem('np_user');updateNavUI();showSite();}
+let _previewingsite=false;
+function toggleSitePreview(){
+  _previewingsite=!_previewingsite;
+  if(_previewingsite){
+    document.getElementById('admin-panel').style.display='none';
+    document.getElementById('site-main').style.display='block';
+    document.getElementById('nav').style.display='flex';
+    if(!document.getElementById('back-to-admin')){
+      const fab=document.createElement('button');
+      fab.id='back-to-admin';
+      fab.textContent='⚙️ Voltar ao Admin';
+      fab.style.cssText='position:fixed;bottom:24px;right:24px;z-index:9999;background:#0F0E0C;color:#fff;border:none;padding:12px 20px;border-radius:50px;font-family:"DM Sans",sans-serif;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.3)';
+      fab.onclick=()=>toggleSitePreview();
+      document.body.appendChild(fab);
+    }
+    document.getElementById('back-to-admin').style.display='block';
+  } else {
+    document.getElementById('site-main').style.display='none';
+    document.getElementById('nav').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    const fab=document.getElementById('back-to-admin');
+    if(fab) fab.style.display='none';
+  }
+}
 function showSite(){document.getElementById('site-main').style.display='block';document.getElementById('admin-panel').style.display='none';document.getElementById('nav').style.display='flex';}
 function updateNavUI(){
   const li=!!user;
@@ -2401,9 +2444,14 @@ function selectIntent(el,v){
 }
 
 /* ADMIN */
-async function loadMaterials(){
-  try{const{data,error}=await sb.from('materials').select('*').eq('active',true).order('created_at',{ascending:false});if(!error&&data&&data.length)materials=data;else materials=FALLBACK_MATERIALS;}
-  catch(e){materials=FALLBACK_MATERIALS;}
+async function loadMaterials(force=false){
+  try{
+    // Adiciona timestamp para evitar cache quando force=true
+    const query=sb.from('materials').select('*').eq('active',true).order('created_at',{ascending:false});
+    const{data,error}=await query;
+    if(!error&&data&&data.length){materials=data;}
+    else{materials=FALLBACK_MATERIALS;}
+  }catch(e){materials=FALLBACK_MATERIALS;}
 }
 
 /* BOLSA */
@@ -2548,7 +2596,7 @@ async function saveMaterial(){
   msg.textContent=error?'Erro: '+error.message:(editingMaterialId?'✓ Material atualizado!':'✓ Material salvo!');
   msg.style.color=error?'var(--terra)':'var(--sage)';
   if(!error){
-    await loadAdminMateriais();await loadMaterials();renderProducts();
+    await loadAdminMateriais();await loadMaterials(true);renderProducts();
   }
   setTimeout(()=>msg.textContent='',4000);
 }
