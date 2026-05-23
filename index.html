@@ -1980,6 +1980,32 @@ document.addEventListener('DOMContentLoaded',async()=>{
     window.history.replaceState({},'','/');
     if(currentProduct){releaseDownload();ckStep(3);openDialog('dlg-checkout');}
   }
+  // Abre produto direto via ?open=ID (da página de compartilhamento)
+  const _openId=_p.get('open');
+  const _buyId=_p.get('buy');
+  if(_openId||_buyId){
+    window.history.replaceState({},'','/');
+    // Aguarda materiais carregarem para abrir o produto
+    const _targetId=_openId||_buyId;
+    const _isBuy=!!_buyId;
+    const _waitAndOpen=setInterval(()=>{
+      if(materials.length>0){
+        clearInterval(_waitAndOpen);
+        currentProduct=materials.find(m=>m.id===_targetId);
+        if(currentProduct){
+          if(_isBuy){
+            // Comprar direto
+            if(user){openCheckout();}
+            else{openDialog('dlg-auth');}
+          } else {
+            // Abrir dialog do produto
+            openProduct(_targetId);
+          }
+        }
+      }
+    },200);
+    setTimeout(()=>clearInterval(_waitAndOpen),5000);
+  }
   loadSession();
   await loadMaterials();
   renderProducts();
