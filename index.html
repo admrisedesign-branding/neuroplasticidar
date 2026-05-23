@@ -571,7 +571,21 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 /* Dialog produto */
 #dlg-produto .dialog{max-width:820px;width:100%}
 .dlg-prod-inner{display:grid;grid-template-columns:1fr 1fr;min-height:400px}
-.dlg-prod-preview{border-radius:var(--r-lg) 0 0 var(--r-lg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:40px;font-size:80px}
+.dlg-prod-preview{border-radius:var(--r-lg) 0 0 var(--r-lg);position:relative;overflow:hidden;min-height:400px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:40px;font-size:80px}
+.dlg-prod-preview img.cover-fill{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.dlg-prod-preview .dp-emoji{position:relative;z-index:1}
+/* Carrossel sobreposto na preview */
+.dlg-carousel-overlay{position:absolute;inset:0;z-index:2;display:none}
+.dlg-carousel-overlay.active{display:block}
+.dlg-carousel-inner{display:flex;height:100%;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform}
+.dlg-carousel-slide{min-width:100%;height:100%;flex-shrink:0}
+.dlg-carousel-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.dlg-carousel-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:3}
+.dlg-carousel-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer;transition:all .25s;border:none;padding:0}
+.dlg-carousel-dot.active{background:#fff;width:18px;border-radius:3px}
+.dlg-carousel-btn{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.85);border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+.dlg-carousel-btn.prev{left:10px}
+.dlg-carousel-btn.next{right:10px}
 .dlg-preview-label{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(0,0,0,0.3);background:rgba(255,255,255,0.6);padding:4px 12px;border-radius:50px}
 .dlg-prod-info{padding:40px;display:flex;flex-direction:column}
 .dlg-prod-cat{font-size:10px;font-weight:500;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
@@ -1572,7 +1586,15 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
   <div class="dialog">
     <button class="dlg-close" onclick="closeDialog('dlg-produto')">✕</button>
     <div class="dlg-prod-inner">
-      <div class="dlg-prod-preview" id="dp-preview"></div>
+      <div class="dlg-prod-preview" id="dp-preview">
+        <!-- Carrossel de fotos sobreposto na área esquerda -->
+        <div class="dlg-carousel-overlay" id="dlg-carousel-wrap">
+          <div class="dlg-carousel-inner" id="dlg-carousel"></div>
+          <div class="dlg-carousel-dots" id="dlg-carousel-dots"></div>
+          <button class="dlg-carousel-btn prev" id="dlg-carr-prev" onclick="dlgCarouselNav(-1)">‹</button>
+          <button class="dlg-carousel-btn next" id="dlg-carr-next" onclick="dlgCarouselNav(1)">›</button>
+        </div>
+      </div>
       <div class="dlg-prod-info">
         <p class="dlg-prod-cat" id="dp-cat"></p>
         <h2 id="dp-title"></h2>
@@ -2199,14 +2221,42 @@ function openProduct(id){
   currentProduct=materials.find(p=>p.id===id);if(!currentProduct)return;
   const p=currentProduct;
   const prev=document.getElementById('dp-preview');
-  // Se tem foto capa, usa ela; senão usa emoji
-  if(p.cover_image){
-    prev.style.background='#000';
-    prev.innerHTML=`<img src="${p.cover_image}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit" onerror="this.parentElement.innerHTML='<span style=font-size:80px>${p.emoji}</span>'">`;
+
+  // Limpa estado anterior
+  prev.style.background=p.cover_color||'#EEF2FF';
+  // Remove old cover img if exists
+  const oldImg=prev.querySelector('img.cover-fill');
+  if(oldImg) oldImg.remove();
+  const oldEmoji=prev.querySelector('.dp-emoji');
+  if(oldEmoji) oldEmoji.remove();
+
+  // Monta lista de fotos
+  const photos=[p.cover_image,...(p.images||[])].filter(Boolean);
+
+  if(photos.length>0){
+    // Mostra primeira foto como cover de fundo
+    const img=document.createElement('img');
+    img.className='cover-fill';
+    img.src=getCover(p);
+    img.alt=p.title;
+    prev.insertBefore(img,prev.firstChild);
+
+    // Ativa carrossel se tiver mais de 1 foto
+    const wrap=document.getElementById('dlg-carousel-wrap');
+    if(photos.length>1){
+      wrap.classList.add('active');
+      dlgCarouselInit(photos);
+    } else {
+      wrap.classList.remove('active');
+    }
   } else {
-    prev.style.background=p.cover_color||'#EEF2FF';
-    prev.innerHTML=`<span style="font-size:80px">${p.emoji}</span><span class="dlg-preview-label">Prévia</span>`;
+    // Sem foto — mostra emoji
+    document.getElementById('dlg-carousel-wrap').classList.remove('active');
+    const em=document.createElement('span');
+    em.className='dp-emoji';em.textContent=p.emoji||'📄';
+    prev.appendChild(em);
   }
+
   document.getElementById('dp-cat').textContent=p.category;
   document.getElementById('dp-title').textContent=p.title;
   document.getElementById('dp-for').textContent=p.age_range+' · Pais e cuidadores';
@@ -2893,6 +2943,31 @@ function clearPhoto(num,e){
   preview.style.display='none';
   lbl.style.display='flex';
 }
+
+/* ══ CARROSSEL DA DIALOG DO PRODUTO ══ */
+let dlgCarIdx=0,dlgCarPhotos=[];
+function dlgCarouselInit(photos){
+  dlgCarPhotos=photos;dlgCarIdx=0;
+  document.getElementById('dlg-carousel').innerHTML=photos.map(src=>`<div class="dlg-carousel-slide"><img src="${src}" onerror="this.parentElement.style.display='none'"></div>`).join('');
+  document.getElementById('dlg-carousel-dots').innerHTML=photos.map((_,i)=>`<button class="dlg-carousel-dot${i===0?' active':''}" onclick="dlgCarouselGo(${i})"></button>`).join('');
+  document.getElementById('dlg-carr-prev').style.display=photos.length>1?'flex':'none';
+  document.getElementById('dlg-carr-next').style.display=photos.length>1?'flex':'none';
+  dlgCarouselUpdate();
+}
+function dlgCarouselNav(dir){dlgCarIdx=(dlgCarIdx+dir+dlgCarPhotos.length)%dlgCarPhotos.length;dlgCarouselUpdate();}
+function dlgCarouselGo(i){dlgCarIdx=i;dlgCarouselUpdate();}
+function dlgCarouselUpdate(){
+  document.getElementById('dlg-carousel').style.transform=`translateX(-${dlgCarIdx*100}%)`;
+  document.querySelectorAll('.dlg-carousel-dot').forEach((d,i)=>d.classList.toggle('active',i===dlgCarIdx));
+  const img=document.querySelector('#dp-preview img.cover-fill');
+  if(img&&dlgCarPhotos[dlgCarIdx])img.src=dlgCarPhotos[dlgCarIdx];
+}
+(function(){
+  let _sx=0;
+  document.addEventListener('touchstart',e=>{if(e.target.closest('#dlg-carousel-wrap'))_sx=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',e=>{if(!e.target.closest('#dlg-carousel-wrap'))return;const dx=e.changedTouches[0].clientX-_sx;if(Math.abs(dx)>40)dlgCarouselNav(dx<0?1:-1);});
+})();
+
 let carIdx=0;
 let carPhotos=[];
 
