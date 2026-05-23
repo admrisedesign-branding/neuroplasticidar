@@ -35,7 +35,8 @@ export default async function handler(req, res) {
   }
 
   const pageUrl    = `${SITE_URL}/m/${slug}`;
-  const siteUrl    = `${SITE_URL}/?material=${material.id}`;
+  const siteUrl    = `${SITE_URL}/?open=${material.id}`;
+  const buyUrl     = `${SITE_URL}/?buy=${material.id}`;
   const TITLE_COVERS = {
     'menos tela':        'https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=1200&h=630&fit=crop&q=80',
     'atenção':           'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=1200&h=630&fit=crop&q=80',
@@ -79,13 +80,15 @@ export default async function handler(req, res) {
   <title>${material.title} — Neuroplasticidar</title>
 
   <!-- Open Graph (WhatsApp, Instagram, Facebook, Telegram) -->
-  <meta property="og:type"        content="product">
+  <meta property="og:type"        content="website">
   <meta property="og:url"         content="${pageUrl}">
-  <meta property="og:title"       content="${material.title}">
+  <meta property="og:title"       content="${material.title} — Neuroplasticidar">
   <meta property="og:description" content="${descShort}">
   <meta property="og:image"       content="${coverImage}">
+  <meta property="og:image:secure_url" content="${coverImage}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:type"  content="image/jpeg">
   <meta property="og:site_name"   content="Neuroplasticidar">
   <meta property="og:locale"      content="pt_BR">
 
@@ -145,7 +148,7 @@ export default async function handler(req, res) {
         <span class="price ${material.is_free ? 'free' : ''}">${preco}</span>
         ${material.original_price ? `<span class="price-orig">R$ ${Number(material.original_price).toFixed(2).replace('.', ',')}</span>` : ''}
       </div>
-      <a href="${siteUrl}" class="btn ${material.is_free ? 'free' : ''}">
+      <a href="${material.is_free ? siteUrl : buyUrl}" class="btn ${material.is_free ? 'free' : ''}">
         ${material.is_free ? '📥 Baixar gratuitamente' : `🛒 Comprar — ${preco}`}
       </a>
     </div>
@@ -182,7 +185,8 @@ export default async function handler(req, res) {
 </html>`;
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
   res.status(200).send(html);
 }
 
