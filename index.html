@@ -2245,7 +2245,8 @@ function showToast(){
 }
 function copyMaterialLink(id){
   const p=materials.find(m=>m.id===id);if(!p)return;
-  const url=`https://neuroplasticidar.vercel.app/m/${slugify(p.title)}`;
+  // Usa o ID do produto na URL — mais confiável que o slug do título
+  const url=`https://neuroplasticidar.vercel.app/m/${id}`;
   if(navigator.clipboard){
     navigator.clipboard.writeText(url).then(showToast).catch(()=>fallbackCopy(url));
   } else { fallbackCopy(url); }
