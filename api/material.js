@@ -13,18 +13,33 @@ export default async function handler(req, res) {
     return;
   }
 
-  // Buscar material no Supabase pelo slug (título normalizado)
+  // Buscar material no Supabase — tenta por ID primeiro, depois por slug
   let material = null;
   try {
-    const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/materials?active=eq.true&select=*`,
-      { headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` } }
-    );
-    const materials = await response.json();
-
-    // Achar pelo slug gerado do título
-    material = materials.find(m => slugify(m.title) === slug);
-    if (!material) material = materials[0]; // fallback
+    // Verifica se o slug é um UUID (ID direto)
+    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(slug);
+    
+    let response;
+    if (isUUID) {
+      // Busca direto por ID
+      response = await fetch(
+        `${SUPABASE_URL}/rest/v1/materials?id=eq.${slug}&select=*&limit=1`,
+        { headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` } }
+      );
+      const data = await response.json();
+      material = data[0] || null;
+    }
+    
+    // Se não achou por ID, busca todos e filtra por slug do título
+    if (!material) {
+      response = await fetch(
+        `${SUPABASE_URL}/rest/v1/materials?active=eq.true&select=*`,
+        { headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` } }
+      );
+      const materials = await response.json();
+      material = materials.find(m => slugify(m.title) === slug);
+      if (!material && materials.length > 0) material = materials[0];
+    }
   } catch (e) {
     console.error(e);
   }
