@@ -2316,24 +2316,32 @@ function openProduct(id){
   openDialog('dlg-produto');
 }
 function openCheckout(){
-  ckStep(1);
+  if(!currentProduct)return;
   const p=currentProduct;
-  // Carrossel de fotos no checkout
+  // Gratuito — nunca mostra checkout de pagamento
+  if(p.is_free){releaseDownload();return;}
+  ckStep(1);
   const photos=p.images||[p.cover_image].filter(Boolean);
   initCarousel(photos);
-  // Summary
   document.getElementById('ck-summary').innerHTML=`
     <div class="th">${p.emoji}</div>
     <div class="inf"><h4>${p.title}</h4><p>${p.category} · ${p.age_range}</p></div>
-    <div class="pr">${p.is_free?'Grátis':'R$ '+p.price}</div>`;
+    <div class="pr">R$ ${p.price}</div>`;
   document.getElementById('dl-email').textContent=user?.email||'';
   openDialog('dlg-checkout');
 }
 function handleCTA(){
   if(!currentProduct)return;
-  closeDialog('dlg-produto');
-  if(currentProduct.is_free){if(!user){pendingAction='free';openAuth();}else releaseDownload();}
-  else{if(!user){pendingAction='pay';openAuth();}else openCheckout();}
+  if(currentProduct.is_free){
+    // Gratuito — precisa de login mas sem pagamento
+    if(!user){pendingAction='free';closeDialog('dlg-produto');openAuth();}
+    else{releaseDownload();}
+  } else {
+    // Pago — fecha dialog e abre checkout
+    closeDialog('dlg-produto');
+    if(!user){pendingAction='pay';openAuth();}
+    else openCheckout();
+  }
 }
 
 /* AUTH */
@@ -2397,7 +2405,15 @@ async function doLogin(){
   purchases=JSON.parse(localStorage.getItem('np_p_'+email)||'[]');
   saveSession();closeDialog('dlg-auth');updateNavUI();afterAuth();
 }
-function afterAuth(){if(!currentProduct)return;if(pendingAction==='free')releaseDownload();else if(pendingAction==='pay')openCheckout();pendingAction=null;}
+function afterAuth(){
+  if(!currentProduct)return;
+  if(pendingAction==='free'){
+    releaseDownload();
+  } else if(pendingAction==='pay'){
+    openCheckout();
+  }
+  pendingAction=null;
+}
 
 /* CHECKOUT */
 function ckStep(n){
@@ -2471,11 +2487,48 @@ function loadScript(src){
 function releaseDownload(){
   if(!currentProduct||!user)return;
   const p=currentProduct;
-  if(!purchases.find(x=>x.id===p.id)){purchases.unshift({id:p.id,title:p.title,emoji:p.emoji,price:p.price,is_free:p.is_free,date:new Date().toLocaleDateString('pt-BR'),file_url:p.file_url});saveSession();}
-  if(p.is_free)alert(`Download disponível!\n\n"${p.title}"\n\nEm produção, o arquivo abrirá automaticamente.`);
-  else document.getElementById('dl-email').textContent=user.email;
+  // Registra download
+  if(!purchases.find(x=>x.id===p.id)){
+    purchases.unshift({id:p.id,title:p.title,emoji:p.emoji,price:p.price,is_free:p.is_free,date:new Date().toLocaleDateString('pt-BR'),file_url:p.file_url});
+    saveSession();
+  }
+  // Para gratuitos — abre dialog de sucesso com download automático
+  if(p.is_free){
+    // Auto-download se tiver URL
+    if(p.file_url&&p.file_url!=='#'){
+      const a=document.createElement('a');
+      a.href=p.file_url;a.download='';a.target='_blank';
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+    }
+    // Mostra tela de sucesso na dialog de checkout
+    openDialog('dlg-checkout');
+    ckStep(3); // Vai direto para step 3 (download)
+    document.getElementById('dl-email').textContent=user.email;
+    // Atualiza step 3 para mostrar mensagem de gratuito
+    const dlStep=document.getElementById('ck-step3');
+    if(dlStep){
+      dlStep.innerHTML=`
+        <div class="success-sc">
+          <div class="success-mark">✓</div>
+          <h3>Download disponível!</h3>
+          <p>${p.emoji} <strong>${p.title}</strong></p>
+          <p style="font-size:13px;color:var(--ink-lt);margin-top:8px">O arquivo foi aberto automaticamente. Se não abriu, clique abaixo.</p>
+          ${p.file_url&&p.file_url!=='#'?`<a href="${p.file_url}" target="_blank" class="btn-pay" style="display:inline-flex;margin-top:20px;text-decoration:none">📥 Baixar novamente</a>`:''}
+          <button onclick="closeDialog('dlg-checkout')" style="display:block;margin-top:12px;background:none;border:none;font-size:13px;color:var(--ink-lt);cursor:pointer;font-family:'DM Sans',sans-serif">Fechar</button>
+        </div>`;
+    }
+  } else {
+    // Pago — mostra email do download
+    document.getElementById('dl-email').textContent=user.email;
+  }
 }
-function doDownload(){if(currentProduct?.file_url&&currentProduct.file_url!=='#')window.open(currentProduct.file_url,'_blank');else alert('Em produção, o arquivo será baixado automaticamente.');}
+function doDownload(){
+  if(currentProduct?.file_url&&currentProduct.file_url!=='#'){
+    window.open(currentProduct.file_url,'_blank');
+  } else {
+    alert('O arquivo estará disponível em breve.');
+  }
+}
 
 /* QUIZ */
 function toggleOpt(el,v){
@@ -2612,8 +2665,15 @@ function aplicarCupomContato(){
 function directCheckout(id){
   currentProduct=materials.find(p=>p.id===id);
   if(!currentProduct)return;
-  if(!user){openDialog('dlg-auth');return;}
-  openCheckout();
+  if(currentProduct.is_free){
+    // Gratuito — precisa de login, sem pagamento
+    if(!user){pendingAction='free';openAuth();}
+    else{releaseDownload();}
+  } else {
+    // Pago — checkout normal
+    if(!user){pendingAction='pay';openAuth();}
+    else openCheckout();
+  }
 }
 
 /* ADMIN */
