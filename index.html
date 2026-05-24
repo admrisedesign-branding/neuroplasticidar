@@ -2211,7 +2211,6 @@ function updateNavUI(){
   document.getElementById('nav-login-btn').style.display=li?'none':'block';
   if(li){document.getElementById('nav-av').textContent=user.name.charAt(0).toUpperCase();document.getElementById('nav-un').textContent=user.name.split(' ')[0];}
 }
-function showSite(){document.getElementById('site-main').style.display='block';document.getElementById('admin-panel').style.display='none';}
 function showAdmin(){
   document.getElementById('site-main').style.display='none';
   document.getElementById('admin-panel').style.display='block';
@@ -2803,62 +2802,10 @@ async function gerarBoleto(){
 }
 
 async function processPayment(){
-  // Legacy — redireciona para método selecionado
+  // Redireciona para método selecionado
   if(currentPayMethod==='pix') await gerarPix();
   else if(currentPayMethod==='cartao') await pagarCartao();
   else await gerarBoleto();
-}
-  const btn=document.getElementById('btn-pay-go');
-  btn.disabled=true;btn.innerHTML='<span class="spin"></span>&nbsp;Processando…';
-  try{
-    // Chama Edge Function do Supabase para criar preferência no MP
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'apikey':SUPABASE_ANON,
-        'Authorization':'Bearer '+SUPABASE_ANON
-      },
-      body:JSON.stringify({
-        action:'create_preference',
-        payload:{
-          product:{
-            id:currentProduct.id,
-            title:currentProduct.title,
-            description:currentProduct.description||currentProduct.title,
-            price:currentProduct.price
-          },
-          user_email:user.email,
-          user_name:user.name
-        }
-      })
-    });
-    const data = await res.json();
-    if(data.preference_id){
-      // Carrega SDK do Mercado Pago e abre checkout
-      if(!window.MercadoPago){
-        await loadScript('https://sdk.mercadopago.com/js/v2');
-      }
-      const mp = new window.MercadoPago(MP_PUBLIC_KEY,{locale:'pt-BR'});
-      mp.checkout({
-        preference:{id:data.preference_id},
-        autoOpen:true,
-        render:{
-          container:'.mp-checkout-container',
-          label:'Pagar agora'
-        }
-      });
-      // Após pagamento aprovado, MP redireciona para back_url com ?payment=success
-      // O webhook do Supabase registra a compra automaticamente
-      btn.disabled=false;btn.innerHTML='Pagar agora';
-    } else {
-      throw new Error(data.error||'Erro ao iniciar pagamento');
-    }
-  }catch(e){
-    console.error(e);
-    btn.disabled=false;btn.innerHTML='Pagar agora';
-    alert('Erro ao conectar com o Mercado Pago. Tente novamente.');
-  }
 }
 function loadScript(src){
   return new Promise((resolve,reject)=>{
