@@ -2863,7 +2863,6 @@ async function loadAdminMateriais(){
 }
 
 function editMaterial(m){
-  // Preenche o formulário com os dados do material
   editingMaterialId=m.id;
   document.getElementById('adm-title').value=m.title||'';
   document.getElementById('adm-desc').value=m.description||'';
@@ -2874,17 +2873,37 @@ function editMaterial(m){
   document.getElementById('adm-orig-price').value=m.original_price||'';
   document.getElementById('adm-tags').value=(m.tags||[]).join(', ');
   document.getElementById('adm-url').value=m.file_url||'';
-  document.getElementById('adm-photo1').value=m.cover_image||'';
-  document.getElementById('adm-photo2').value=(m.images&&m.images[1])||'';
-  document.getElementById('adm-photo3').value=(m.images&&m.images[2])||'';
-  // Atualiza botão e título do form
+  // Fotos — preenche campos e mostra previews
+  const photos=[m.cover_image,...(m.images||[])].filter(Boolean);
+  [1,2,3].forEach(n=>{
+    const url=photos[n-1]||'';
+    document.getElementById('adm-photo'+n).value=url;
+    const preview=document.getElementById('preview-photo'+n);
+    const lbl=document.getElementById('label-photo'+n);
+    if(url&&preview){
+      const img=preview.querySelector('img');
+      if(img) img.src=url;
+      preview.style.display='block';
+      if(lbl) lbl.style.display='none';
+    } else if(preview){
+      preview.style.display='none';
+      if(lbl){lbl.style.display='flex';}
+    }
+  });
+  // PDF — mostra nome se tiver URL
+  if(m.file_url&&m.file_url!=='#'){
+    const label=document.getElementById('upload-pdf-label');
+    const zone=document.getElementById('upload-pdf-zone');
+    if(label) label.innerHTML=`<div style="font-size:20px">✅</div><p style="font-size:12px;color:var(--sage);font-weight:500">Arquivo cadastrado</p><p style="font-size:10px;color:var(--ink-lt)">Arraste novo PDF para substituir</p>`;
+    if(zone){zone.style.borderColor='var(--sage)';zone.style.background='var(--sage-lt)';}
+  }
+  // Botão e título
   const btn=document.querySelector('button[onclick="saveMaterial()"]');
   if(btn) btn.textContent='Atualizar material';
   const h3=document.querySelector('#adm-materiais .admin-form h3');
   if(h3) h3.textContent='Editando: '+m.title;
-  // Rola até o formulário
-  document.querySelector('#adm-materiais .admin-form').scrollIntoView({behavior:'smooth'});
   document.getElementById('btn-cancel-mat').style.display='inline-flex';
+  document.querySelector('#adm-materiais .admin-form').scrollIntoView({behavior:'smooth'});
 }
 
 function cancelEditMaterial(){
