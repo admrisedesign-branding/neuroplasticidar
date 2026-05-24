@@ -655,6 +655,10 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 .pay-opt.sel .po-radio{border-color:var(--blue);background:var(--blue)}
 .pay-opt.sel .po-radio::after{content:'';width:7px;height:7px;border-radius:50%;background:#fff}
 .secure-note{font-size:11px;color:var(--ink-lt);display:flex;align-items:center;gap:6px;margin-bottom:16px;font-weight:300}
+.pay-method-btn{flex:1;padding:10px 8px;border-radius:var(--r);border:2px solid var(--border);background:var(--white);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--ink-md);display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .2s}
+.pay-method-btn:hover{border-color:var(--blue-mid)}
+.pay-method-btn.active{border-color:var(--blue);background:var(--blue-lt);color:var(--blue-dk)}
+.pay-section{animation:fadeIn .2s ease}
 .btn-pay{width:100%;padding:14px;background:var(--gold);color:#fff;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;letter-spacing:.01em}
 .btn-pay:hover{background:var(--gold-dk)}
 .btn-pay:disabled{opacity:.5;cursor:not-allowed}
@@ -1736,14 +1740,96 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     </div>
     <div class="step-panel" id="ck-step2">
       <h3 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--ink);margin-bottom:5px">Forma de pagamento</h3>
-      <p style="font-size:12px;color:var(--ink-lt);margin-bottom:18px;font-weight:300">Pagamento seguro via Mercado Pago.</p>
-      <div class="pay-opts">
-        <div class="pay-opt sel" onclick="selPay(this,'pix')"><span class="po-icon">⚡</span><div><span class="po-label">PIX</span><span class="po-sub">Aprovação imediata — sem taxas</span></div><div class="po-radio"></div></div>
-        <div class="pay-opt" onclick="selPay(this,'cartao')"><span class="po-icon">💳</span><div><span class="po-label">Cartão de crédito</span><span class="po-sub">Até 12x — Visa, Master, Elo</span></div><div class="po-radio"></div></div>
-        <div class="pay-opt" onclick="selPay(this,'boleto')"><span class="po-icon">📄</span><div><span class="po-label">Boleto bancário</span><span class="po-sub">Vence em 3 dias úteis</span></div><div class="po-radio"></div></div>
+      <p style="font-size:12px;color:var(--ink-lt);margin-bottom:16px;font-weight:300">Pagamento seguro via Mercado Pago.</p>
+
+      <!-- Seletor de método -->
+      <div style="display:flex;gap:8px;margin-bottom:20px">
+        <button class="pay-method-btn active" onclick="selectPayMethod('pix',this)" id="pmb-pix">
+          <span style="font-size:18px">⚡</span><span>PIX</span>
+        </button>
+        <button class="pay-method-btn" onclick="selectPayMethod('cartao',this)" id="pmb-cartao">
+          <span style="font-size:18px">💳</span><span>Cartão</span>
+        </button>
+        <button class="pay-method-btn" onclick="selectPayMethod('boleto',this)" id="pmb-boleto">
+          <span style="font-size:18px">📄</span><span>Boleto</span>
+        </button>
       </div>
-      <div class="secure-note">🔒 Pagamento 100% seguro via Mercado Pago</div>
-      <button class="btn-pay" id="btn-pay-go" onclick="processPayment()">Pagar agora</button>
+
+      <!-- PIX -->
+      <div id="pay-pix" class="pay-section">
+        <div id="pix-qr-wrap" style="display:none;text-align:center;padding:20px;background:var(--parchment);border-radius:var(--r);margin-bottom:16px">
+          <p style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:12px">Escaneie o QR Code com seu banco</p>
+          <div id="pix-qr-img" style="margin:0 auto 12px"></div>
+          <p style="font-size:11px;color:var(--ink-lt);margin-bottom:8px">Ou copie o código PIX:</p>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="text" id="pix-copy-code" readonly style="flex:1;font-size:11px;padding:8px;border-radius:var(--r);border:1px solid var(--border);background:#fff">
+            <button onclick="copyPixCode()" style="padding:8px 14px;border-radius:var(--r);border:none;background:var(--blue);color:#fff;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap">Copiar</button>
+          </div>
+          <p style="font-size:11px;color:var(--sage);margin-top:10px;font-weight:500">⏱ Aguardando pagamento... O download será liberado automaticamente.</p>
+        </div>
+        <button class="btn-pay" id="btn-gerar-pix" onclick="gerarPix()">Gerar QR Code PIX</button>
+      </div>
+
+      <!-- CARTÃO -->
+      <div id="pay-cartao" class="pay-section" style="display:none">
+        <div class="field">
+          <label>Número do cartão</label>
+          <input type="text" id="card-number" placeholder="0000 0000 0000 0000" maxlength="19" oninput="maskCard(this)">
+        </div>
+        <div class="field">
+          <label>Nome no cartão</label>
+          <input type="text" id="card-name" placeholder="Como está no cartão" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="field" style="margin:0">
+            <label>Validade</label>
+            <input type="text" id="card-exp" placeholder="MM/AA" maxlength="5" oninput="maskExp(this)">
+          </div>
+          <div class="field" style="margin:0">
+            <label>CVV</label>
+            <input type="text" id="card-cvv" placeholder="123" maxlength="4" oninput="this.value=this.value.replace(/\D/g,'')">
+          </div>
+        </div>
+        <div class="field">
+          <label>CPF do titular</label>
+          <input type="text" id="card-cpf" placeholder="000.000.000-00" maxlength="14" oninput="maskCPF(this)">
+        </div>
+        <div class="field">
+          <label>Parcelas</label>
+          <select id="card-parcelas">
+            <option value="1">1x sem juros</option>
+            <option value="2">2x sem juros</option>
+            <option value="3">3x sem juros</option>
+            <option value="6">6x sem juros</option>
+            <option value="12">12x com juros</option>
+          </select>
+        </div>
+        <button class="btn-pay" onclick="pagarCartao()">Pagar agora</button>
+      </div>
+
+      <!-- BOLETO -->
+      <div id="pay-boleto" class="pay-section" style="display:none">
+        <div style="background:var(--parchment);border-radius:var(--r);padding:16px;margin-bottom:16px;font-size:13px;color:var(--ink-md);line-height:1.7">
+          <p style="font-weight:600;margin-bottom:6px">📄 Boleto bancário</p>
+          <p style="font-weight:300">Vence em 3 dias úteis. O download será liberado após a confirmação do pagamento (pode levar até 2 dias úteis).</p>
+        </div>
+        <div class="field">
+          <label>CPF</label>
+          <input type="text" id="boleto-cpf" placeholder="000.000.000-00" maxlength="14" oninput="maskCPF(this)">
+        </div>
+        <div class="field">
+          <label>Nome completo</label>
+          <input type="text" id="boleto-nome" placeholder="Seu nome completo">
+        </div>
+        <div id="boleto-result" style="display:none;margin-bottom:16px">
+          <p style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px">Boleto gerado!</p>
+          <input type="text" id="boleto-code" readonly style="font-size:11px;width:100%;padding:8px;border-radius:var(--r);border:1px solid var(--border);background:#fff;margin-bottom:8px">
+          <a id="boleto-link" href="#" target="_blank" class="btn-pay" style="display:block;text-align:center;text-decoration:none;background:var(--ink)">📄 Abrir boleto</a>
+        </div>
+        <button class="btn-pay" id="btn-gerar-boleto" onclick="gerarBoleto()">Gerar boleto</button>
+      </div>
+
+      <div class="secure-note" style="margin-top:16px">🔒 Pagamento 100% seguro via Mercado Pago</div>
       <button class="btn-back-step" onclick="ckStep(1)">← Voltar</button>
     </div>
     <div class="step-panel" id="ck-step3">
@@ -2525,7 +2611,203 @@ function ckStep(n){
   });
 }
 function selPay(el,m){document.querySelectorAll('.pay-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');payMethod=m;}
+/* ── CHECKOUT TRANSPARENTE ── */
+let currentPayMethod='pix';
+let pixPaymentId=null;
+let pixPollInterval=null;
+
+function selectPayMethod(method, btn){
+  currentPayMethod=method;
+  document.querySelectorAll('.pay-method-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['pix','cartao','boleto'].forEach(m=>{
+    document.getElementById('pay-'+m).style.display=m===method?'block':'none';
+  });
+}
+
+function maskCard(el){
+  let v=el.value.replace(/\D/g,'').slice(0,16);
+  el.value=v.replace(/(\d{4})(?=\d)/g,'$1 ');
+}
+function maskExp(el){
+  let v=el.value.replace(/\D/g,'').slice(0,4);
+  if(v.length>2) v=v.slice(0,2)+'/'+v.slice(2);
+  el.value=v;
+}
+
+async function gerarPix(){
+  const btn=document.getElementById('btn-gerar-pix');
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span> Gerando...';
+  try{
+    const res=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON},
+      body:JSON.stringify({
+        action:'create_pix',
+        payload:{
+          product:{id:currentProduct.id,title:currentProduct.title,price:currentProduct.price},
+          user_email:user.email,user_name:user.name
+        }
+      })
+    });
+    const data=await res.json();
+    if(data.qr_code){
+      // Mostra QR Code
+      const wrap=document.getElementById('pix-qr-wrap');
+      const qrImg=document.getElementById('pix-qr-img');
+      const codeInput=document.getElementById('pix-copy-code');
+      qrImg.innerHTML=`<img src="data:image/png;base64,${data.qr_code_base64}" style="width:180px;height:180px">`;
+      codeInput.value=data.qr_code;
+      wrap.style.display='block';
+      btn.style.display='none';
+      pixPaymentId=data.payment_id;
+      // Poll para verificar pagamento
+      pollPixPayment(data.payment_id);
+    } else {
+      throw new Error(data.error||'Erro ao gerar PIX');
+    }
+  }catch(e){
+    btn.disabled=false;btn.innerHTML='Gerar QR Code PIX';
+    alert('Erro ao gerar PIX. Tente novamente.');
+  }
+}
+
+function copyPixCode(){
+  const code=document.getElementById('pix-copy-code').value;
+  navigator.clipboard?.writeText(code).then(()=>showToast('Código PIX copiado!')).catch(()=>{
+    const el=document.createElement('textarea');
+    el.value=code;document.body.appendChild(el);el.select();
+    document.execCommand('copy');document.body.removeChild(el);
+    showToast('Código PIX copiado!');
+  });
+}
+
+function pollPixPayment(paymentId){
+  clearInterval(pixPollInterval);
+  let attempts=0;
+  pixPollInterval=setInterval(async()=>{
+    attempts++;
+    if(attempts>60){clearInterval(pixPollInterval);return;}
+    try{
+      const res=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON},
+        body:JSON.stringify({action:'check_payment',payload:{payment_id:paymentId}})
+      });
+      const data=await res.json();
+      if(data.status==='approved'){
+        clearInterval(pixPollInterval);
+        releaseDownload();
+        ckStep(3);
+      }
+    }catch(e){}
+  },5000); // verifica a cada 5s
+}
+
+async function pagarCartao(){
+  const number=document.getElementById('card-number').value.replace(/\s/g,'');
+  const name=document.getElementById('card-name').value.trim();
+  const exp=document.getElementById('card-exp').value;
+  const cvv=document.getElementById('card-cvv').value;
+  const cpf=document.getElementById('card-cpf').value.replace(/\D/g,'');
+  const parcelas=document.getElementById('card-parcelas').value;
+  if(!number||number.length<16){alert('Número do cartão inválido.');return;}
+  if(!name){alert('Digite o nome como está no cartão.');return;}
+  if(!exp||exp.length<5){alert('Data de validade inválida.');return;}
+  if(!cvv){alert('CVV inválido.');return;}
+  if(!cpf||cpf.length<11){alert('CPF inválido.');return;}
+
+  const btn=document.querySelector('#pay-cartao .btn-pay');
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span> Processando...';
+
+  try{
+    // Tokeniza o cartão com o MP SDK
+    if(!window.MercadoPago) await loadScript('https://sdk.mercadopago.com/js/v2');
+    const mp=new window.MercadoPago(MP_PUBLIC_KEY,{locale:'pt-BR'});
+    const [expMonth,expYear]=exp.split('/');
+    const cardToken=await mp.createCardToken({
+      cardNumber:number,
+      cardholderName:name,
+      cardExpirationMonth:expMonth,
+      cardExpirationYear:'20'+expYear,
+      securityCode:cvv,
+      identificationType:'CPF',
+      identificationNumber:cpf,
+    });
+    if(!cardToken.id) throw new Error('Erro ao tokenizar cartão');
+
+    // Envia para a Edge Function
+    const res=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON},
+      body:JSON.stringify({
+        action:'pay_card',
+        payload:{
+          token:cardToken.id,
+          installments:parseInt(parcelas),
+          payment_method_id:cardToken.payment_method_id||'visa',
+          product:{id:currentProduct.id,title:currentProduct.title,price:currentProduct.price},
+          user_email:user.email,user_name:user.name,cpf
+        }
+      })
+    });
+    const data=await res.json();
+    if(data.status==='approved'){
+      releaseDownload();ckStep(3);
+    } else if(data.status==='in_process'){
+      alert('Pagamento em análise. Você receberá um e-mail quando aprovado.');
+      closeDialog('dlg-checkout');
+    } else {
+      throw new Error(data.status_detail||'Pagamento não aprovado');
+    }
+  }catch(e){
+    btn.disabled=false;btn.innerHTML='Pagar agora';
+    alert('Erro: '+e.message+'. Verifique os dados e tente novamente.');
+  }
+}
+
+async function gerarBoleto(){
+  const cpf=document.getElementById('boleto-cpf').value.replace(/\D/g,'');
+  const nome=document.getElementById('boleto-nome').value.trim();
+  if(!cpf||cpf.length<11){alert('CPF inválido.');return;}
+  if(!nome){alert('Digite seu nome completo.');return;}
+
+  const btn=document.getElementById('btn-gerar-boleto');
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span> Gerando...';
+
+  try{
+    const res=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON},
+      body:JSON.stringify({
+        action:'create_boleto',
+        payload:{
+          product:{id:currentProduct.id,title:currentProduct.title,price:currentProduct.price},
+          user_email:user.email,user_name:nome,cpf
+        }
+      })
+    });
+    const data=await res.json();
+    if(data.barcode){
+      document.getElementById('boleto-code').value=data.barcode;
+      document.getElementById('boleto-link').href=data.boleto_url||'#';
+      document.getElementById('boleto-result').style.display='block';
+      btn.style.display='none';
+    } else {
+      throw new Error(data.error||'Erro ao gerar boleto');
+    }
+  }catch(e){
+    btn.disabled=false;btn.innerHTML='Gerar boleto';
+    alert('Erro ao gerar boleto: '+e.message);
+  }
+}
+
 async function processPayment(){
+  // Legacy — redireciona para método selecionado
+  if(currentPayMethod==='pix') await gerarPix();
+  else if(currentPayMethod==='cartao') await pagarCartao();
+  else await gerarBoleto();
+}
   const btn=document.getElementById('btn-pay-go');
   btn.disabled=true;btn.innerHTML='<span class="spin"></span>&nbsp;Processando…';
   try{
