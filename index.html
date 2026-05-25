@@ -2742,6 +2742,17 @@ async function pagarCartao(){
     if(!window.MercadoPago) await loadScript('https://sdk.mercadopago.com/js/v2');
     const mp=new window.MercadoPago(MP_PUBLIC_KEY,{locale:'pt-BR'});
     const [expMonth,expYear]=exp.split('/');
+  // Detecta bandeira do cartão (Visa, Master, Elo, etc) pelo BIN
+    const bin=number.substring(0,6);
+    let paymentMethodId='visa';
+    try{
+      const pmRes=await fetch(`https://api.mercadopago.com/v1/payment_methods/search?public_key=${MP_PUBLIC_KEY}&bin=${bin}`);
+      const pmData=await pmRes.json();
+      if(pmData.results&&pmData.results.length>0){
+        paymentMethodId=pmData.results[0].id;
+      }
+    }catch(e){console.warn('PM detect error:',e);}
+
     const cardToken=await mp.createCardToken({
       cardNumber:number,
       cardholderName:name,
@@ -2754,7 +2765,7 @@ async function pagarCartao(){
     if(!cardToken.id) throw new Error('Erro ao tokenizar cartão');
 
     // Envia para a Edge Function
-  const res=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
+    const res=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON},
       body:JSON.stringify({
@@ -2762,7 +2773,7 @@ async function pagarCartao(){
         payload:{
           card_token:cardToken.id,
           installments:parseInt(parcelas),
-          payment_method_id:cardToken.payment_method_id||'visa',
+          payment_method_id:paymentMethodId,
           product:{id:currentProduct.id,title:currentProduct.title,price:currentProduct.price},
           user_email:user.email,user_name:user.name,cpf
         }
