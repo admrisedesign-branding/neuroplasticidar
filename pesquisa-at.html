@@ -336,10 +336,41 @@ body{font-family:'DM Sans',sans-serif;background:var(--parchment);color:var(--in
         </div>
       </div>
 
-      <!-- BLOCO 4: CONTATO -->
+      <!-- BLOCO 4: CRIADORES -->
       <div class="form-card">
         <div class="section-header">
           <div class="section-num">4</div>
+          <h2>Você também cria? ✨</h2>
+          <p>Estamos construindo um espaço para que profissionais como você possam divulgar e vender seus próprios materiais.</p>
+        </div>
+
+        <div class="question">
+          <label><span class="emoji">🎨</span>Você já cria ou tem vontade de criar materiais digitais para vender?</label>
+          <div class="opts">
+            <div class="opt-item"><input type="radio" name="cria_materiais" id="cm1" value="Sim, já crio e vendo"><label for="cm1"><div class="opt-radio"></div>Sim, já crio e vendo</label></div>
+            <div class="opt-item"><input type="radio" name="cria_materiais" id="cm2" value="Sim, já crio mas não vendo ainda"><label for="cm2"><div class="opt-radio"></div>Sim, já crio mas não vendo ainda</label></div>
+            <div class="opt-item"><input type="radio" name="cria_materiais" id="cm3" value="Não crio mas tenho vontade"><label for="cm3"><div class="opt-radio"></div>Não crio, mas tenho vontade</label></div>
+            <div class="opt-item"><input type="radio" name="cria_materiais" id="cm4" value="Não tenho interesse em criar"><label for="cm4"><div class="opt-radio"></div>Não tenho interesse em criar</label></div>
+          </div>
+        </div>
+
+        <div class="question">
+          <label><span class="emoji">🏪</span>Teria interesse em divulgar seus materiais no marketplace da Neuroplasticidar?</label>
+          <div style="background:var(--blue-lt);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;font-size:13px;color:var(--blue-dk);line-height:1.6;font-weight:400">
+            💡 <strong>Como funcionaria:</strong> você cadastra seu material, a gente divulga para nossa base de pais e profissionais, e você recebe uma parte de cada venda diretamente no Mercado Pago.
+          </div>
+          <div class="opts">
+            <div class="opt-item"><input type="radio" name="interesse_marketplace" id="im1" value="Sim, muito interesse"><label for="im1"><div class="opt-radio"></div>Sim, tenho muito interesse!</label></div>
+            <div class="opt-item"><input type="radio" name="interesse_marketplace" id="im2" value="Talvez, quero saber mais"><label for="im2"><div class="opt-radio"></div>Talvez, quero saber mais primeiro</label></div>
+            <div class="opt-item"><input type="radio" name="interesse_marketplace" id="im3" value="Não tenho interesse"><label for="im3"><div class="opt-radio"></div>Não tenho interesse por enquanto</label></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCO 5: CONTATO -->
+      <div class="form-card">
+        <div class="section-header">
+          <div class="section-num">5</div>
           <h2>Receba o presente 🎁</h2>
           <p>Informe seu e-mail para receber o guia gratuito assim que enviar a pesquisa.</p>
         </div>
@@ -458,12 +489,15 @@ async function submitForm(e){
 
   try{
     // Salva no Supabase
+    const cria=document.querySelector('[name="cria_materiais"]:checked')?.value||null;
+    const marketplace=document.querySelector('[name="interesse_marketplace"]:checked')?.value||null;
     await sb.from('pesquisa_at').insert({
       nome,email,whatsapp:wpp||null,
       area,experiencia:exp,
       usa_pdf:pdf,ja_pagou:pagou,faixa_preco:preco,
       temas_interesse:temas,formatos_preferidos:formato,
       nps:npsVal,sugestao:sugestao||null,
+      cria_materiais:cria,interesse_marketplace:marketplace,
       origem:'grupo_at',
     });
 
