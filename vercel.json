@@ -1,5 +1,6 @@
 {
   "rewrites": [
     { "source": "/m/:slug", "destination": "/api/material?slug=:slug" }
-  ]
+  ],
+  "cleanUrls": true
 }
