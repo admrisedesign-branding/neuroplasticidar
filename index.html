@@ -2742,14 +2742,13 @@ async function pagarCartao(){
     if(!window.MercadoPago) await loadScript('https://sdk.mercadopago.com/js/v2');
     const mp=new window.MercadoPago(MP_PUBLIC_KEY,{locale:'pt-BR'});
     const [expMonth,expYear]=exp.split('/');
-  // Detecta bandeira do cartão (Visa, Master, Elo, etc) pelo BIN
-    const bin=number.substring(0,6);
+// Detecta bandeira do cartão usando o próprio SDK do MP (evita CORS)
     let paymentMethodId='visa';
     try{
-      const pmRes=await fetch(`https://api.mercadopago.com/v1/payment_methods/search?public_key=${MP_PUBLIC_KEY}&bin=${bin}`);
-      const pmData=await pmRes.json();
-      if(pmData.results&&pmData.results.length>0){
-        paymentMethodId=pmData.results[0].id;
+      const bin=number.substring(0,6);
+      const pmResult=await mp.getPaymentMethods({bin});
+      if(pmResult.results&&pmResult.results.length>0){
+        paymentMethodId=pmResult.results[0].id;
       }
     }catch(e){console.warn('PM detect error:',e);}
 
