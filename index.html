@@ -2754,13 +2754,13 @@ async function pagarCartao(){
     if(!cardToken.id) throw new Error('Erro ao tokenizar cartão');
 
     // Envia para a Edge Function
-    const res=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
+  const res=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON},
       body:JSON.stringify({
-        action:'pay_card',
+        action:'create_card',
         payload:{
-          token:cardToken.id,
+          card_token:cardToken.id,
           installments:parseInt(parcelas),
           payment_method_id:cardToken.payment_method_id||'visa',
           product:{id:currentProduct.id,title:currentProduct.title,price:currentProduct.price},
@@ -3657,8 +3657,9 @@ async function processKitPayment(){
         }
       })
     });
-    const data=await res.json();
-    if(data.preference_id){
+  const data=await res.json();
+    const initPoint = data.init_point || data.sandbox_init_point;
+    if(initPoint){
       // Salvar pedido no Supabase
       await sb.from('leads').insert({
         name:kitOrder.nome,email,whatsapp:kitOrder.wpp,
@@ -3670,13 +3671,10 @@ async function processKitPayment(){
           endereco:`${kitOrder.rua}, ${kitOrder.num} ${kitOrder.comp} — ${kitOrder.bairro} — CEP ${kitOrder.cep}`,
           cpf:kitOrder.cpf,wpp:kitOrder.wpp,
           entrega:proximaSexta(),
-          preference_id:data.preference_id
+          checkout_url:initPoint
         })
       });
-      if(!window.MercadoPago) await loadScript('https://sdk.mercadopago.com/js/v2');
-      const mp=new window.MercadoPago(MP_PUBLIC_KEY,{locale:'pt-BR'});
-      mp.checkout({preference:{id:data.preference_id},autoOpen:true});
-      btn.disabled=false;btn.innerHTML='Pagar agora';
+      window.location.href = initPoint;
     } else {throw new Error(data.error||'Erro');}
   }catch(e){
     btn.disabled=false;btn.innerHTML='Pagar agora';
