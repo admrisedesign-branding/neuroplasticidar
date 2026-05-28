@@ -1645,7 +1645,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       </div>
 
       <div style="background:#F9FAFB;border-radius:12px;padding:16px;margin-bottom:16px;font-size:13px;color:var(--ink-lt);line-height:1.6">
-        <strong style="color:var(--ink)">📐 Como o cálculo funciona:</strong> Materiais digitais: <strong>70% pra Jaque</strong>. Kits físicos e sessões: <strong>85% pra Jaque</strong>. O valor mostrado já desconta sua comissão automaticamente.
+        <strong style="color:var(--ink)">📐 Como o cálculo funciona:</strong> Sobre o valor <strong>líquido</strong> (já descontada a taxa do Mercado Pago) — Materiais digitais: <strong>70% pra Jaque</strong>. Kits físicos e sessões: <strong>85% pra Jaque</strong>.
       </div>
 
       <table class="admin-table">
@@ -2338,6 +2338,19 @@ function adminTab(tab,el){
   if(el) el.classList.add('active');
   document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
   document.getElementById('adm-'+tab)?.classList.add('active');
+  // Recarrega dados da aba clicada (mantém tudo conectado e fresco)
+  const reloaders={
+    'dashboard':loadDashboard,
+    'leads':loadAdminLeads,
+    'sessoes':loadAdminSessoes,
+    'compras':loadAdminCompras,
+    'pedidos':loadAdminPedidos,
+    'repasse':loadAdminRepasse,
+    'equipe':loadEquipe,
+    'materiais':loadAdminMateriais,
+    'kits':loadAdminKits
+  };
+  if(reloaders[tab])try{reloaders[tab]();}catch(e){console.error('Erro carregando aba',tab,e);}
 }
 async function loadAdminData(){
   const isAdmin=user?.role==='admin';
@@ -3126,7 +3139,19 @@ async function loadMaterials(force=false){
 /* BOLSA */
 
 /* DASHBOARD */
+// Cache global de compras reais (Supabase)
+let _purchasesCache=[];
+async function loadPurchasesFromDB(){
+  try{
+    const{data,error}=await sb.from('purchases').select('*').eq('payment_status','approved').order('created_at',{ascending:false});
+    if(error){console.error('[purchases] erro:',error);return [];}
+    _purchasesCache=data||[];
+    return _purchasesCache;
+  }catch(e){console.error('[purchases] exceção:',e);return [];}
+}
 function getAllPurchases(){
+  // Retorna o cache do banco. Se vazio, retorna localStorage como fallback transitório.
+  if(_purchasesCache.length)return _purchasesCache;
   const all=[];
   for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('np_p_')){try{JSON.parse(localStorage.getItem(k)||'[]').forEach(p=>all.push(p));}catch(e){}}}
   return all;
@@ -3146,8 +3171,8 @@ async function loadDashboard(){
     const{data:mats}=await sb.from('materials').select('*').eq('active',true);
     const allM=mats||[];document.getElementById('ds-materiais').textContent=allM.length;
     document.getElementById('ds-mat-free').textContent=allM.filter(m=>m.is_free).length+' gratuitos';
-    const purch=getAllPurchases();
-    const rev=purch.reduce((s,p)=>s+(parseFloat(p.price)||0),0);
+    const purch=await loadPurchasesFromDB();
+    const rev=purch.reduce((s,p)=>s+(parseFloat(p.amount||p.price||0)),0);
     document.getElementById('ds-revenue').textContent='R$ '+rev.toFixed(2).replace('.',',');
     document.getElementById('ds-purchases').textContent=purch.length+' compras';
     // leads list
@@ -3399,17 +3424,48 @@ async function deleteSessao(id){if(!confirm('Remover?'))return;await sb.from('le
 
 /* COMPRAS */
 async function loadAdminCompras(){
-  const all=getAllPurchases();
+  const all=await loadPurchasesFromDB();
   const tbody=document.getElementById('adm-compras-tbody');
-  if(!all.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhuma compra registrada ainda. As compras aparecerão aqui após integração com Mercado Pago.</td></tr>';return;}
-  tbody.innerHTML=all.map(p=>`<tr>
-    <td style="font-weight:500">—</td>
-    <td>${p.title||p.name||'—'}</td>
-    <td style="font-family:'Playfair Display',serif;font-weight:700">R$ ${parseFloat(p.price||0).toFixed(2).replace('.',',')}</td>
-    <td>${p.is_free?'Gratuito':'Pago'}</td>
-    <td>${p.date||'—'}</td>
-    <td><span class="badge-free">Aprovado</span></td>
-  </tr>`).join('');
+
+  // Atualiza estatísticas dos 3 cards
+  const total=all.reduce((s,p)=>s+parseFloat(p.amount||0),0);
+  const cnt=all.length;
+  const ticket=cnt?total/cnt:0;
+  const elT=document.getElementById('cp-total');if(elT)elT.textContent='R$ '+total.toFixed(2).replace('.',',');
+  const elC=document.getElementById('cp-count');if(elC)elC.textContent=cnt;
+  const elTk=document.getElementById('cp-ticket');if(elTk)elTk.textContent='R$ '+ticket.toFixed(2).replace('.',',');
+
+  if(!all.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhuma compra registrada ainda. As compras aparecerão aqui após o cliente pagar via Mercado Pago.</td></tr>';return;}
+
+  // Enriquece com nome do material
+  const matIds=[...new Set(all.filter(p=>p.material_id).map(p=>p.material_id))];
+  let matMap={};
+  if(matIds.length){
+    const{data:mats}=await sb.from('materials').select('id,title').in('id',matIds);
+    matMap=Object.fromEntries((mats||[]).map(m=>[m.id,m.title]));
+  }
+
+  // Enriquece com email do user
+  const userIds=[...new Set(all.filter(p=>p.user_id).map(p=>p.user_id))];
+  let userMap={};
+  if(userIds.length){
+    const{data:users}=await sb.from('users').select('id,email,name').in('id',userIds);
+    userMap=Object.fromEntries((users||[]).map(u=>[u.id,u]));
+  }
+
+  tbody.innerHTML=all.map(p=>{
+    const u=userMap[p.user_id]||{};
+    const matTitle=matMap[p.material_id]||'—';
+    const dt=new Date(p.created_at).toLocaleDateString('pt-BR');
+    return `<tr>
+      <td style="font-weight:500">${u.name||u.email||'Visitante'}<div style="font-size:11px;color:var(--ink-lt)">${u.email||''}</div></td>
+      <td>${matTitle}</td>
+      <td style="font-family:'Playfair Display',serif;font-weight:700">R$ ${parseFloat(p.amount||0).toFixed(2).replace('.',',')}</td>
+      <td>${p.payment_method||'—'}</td>
+      <td style="font-size:12px">${dt}</td>
+      <td><span class="badge-free">Aprovado</span></td>
+    </tr>`;
+  }).join('');
 }
 
 /* ══ REPASSE JAQUE ══ */
@@ -3419,8 +3475,15 @@ let allRepasseData=[];
 let currentRepasseFilter='month';
 
 async function loadAdminRepasse(){
-  const{data}=await sb.from('purchases').select('*').eq('payment_status','approved').order('created_at',{ascending:false});
+  const{data,error}=await sb.from('purchases').select('*').eq('payment_status','approved').order('created_at',{ascending:false});
+  if(error){
+    console.error('[repasse] erro consultando purchases:',error);
+    allRepasseData=[];
+    renderRepasse();
+    return;
+  }
   allRepasseData=data||[];
+  console.log('[repasse] '+allRepasseData.length+' compras carregadas');
   // Tenta enriquecer com título do material
   if(allRepasseData.length){
     const matIds=[...new Set(allRepasseData.filter(p=>p.material_id).map(p=>p.material_id))];
@@ -3444,9 +3507,12 @@ function calcJaquePart(row){
   if(row.application_fee&&row.application_fee>0){
     return parseFloat(row.amount)-parseFloat(row.application_fee);
   }
-  // Senão calcula pela tabela
+  // Senão calcula pela tabela usando o VALOR LÍQUIDO (descontada taxa MP)
+  // net_amount = o que realmente caiu na conta (preferencial)
+  // se não tiver, usa amount como fallback (compras antigas)
+  const base=row.net_amount!=null?parseFloat(row.net_amount):parseFloat(row.amount);
   const rate=getRepasseRate(row);
-  return parseFloat(row.amount)*rate;
+  return base*rate;
 }
 
 function filterByPeriod(list){
@@ -3496,11 +3562,13 @@ function renderRepasse(){
     const jaque=calcJaquePart(p);
     const dt=new Date(p.created_at).toLocaleDateString('pt-BR');
     const pago=p.repasse_paid;
+    const liquido=p.net_amount!=null?parseFloat(p.net_amount):parseFloat(p.amount);
+    const taxa=parseFloat(p.amount)-liquido;
     return `<tr style="${pago?'opacity:0.5':''}">
       <td style="font-size:12px">${dt}</td>
       <td>${p._title||p.material_id||'—'}</td>
       <td><span style="font-size:11px;padding:3px 8px;background:#EEF2FF;color:#1e3a5f;border-radius:6px">Material</span></td>
-      <td style="font-family:'Playfair Display',serif;font-weight:700">R$ ${fmt(parseFloat(p.amount))}</td>
+      <td style="font-family:'Playfair Display',serif;font-weight:700">R$ ${fmt(parseFloat(p.amount))}<br><span style="font-size:10px;color:var(--ink-lt);font-family:'DM Sans',sans-serif;font-weight:400">líq: R$ ${fmt(liquido)}${taxa>0?` (-${fmt(taxa)})`:''}</span></td>
       <td style="font-family:'Playfair Display',serif;font-weight:700;color:#92400E">R$ ${fmt(jaque)}</td>
       <td>${pago?'<span class="badge-free">✓ Repassado</span>':'<span style="font-size:11px;padding:3px 8px;background:#FEF3C7;color:#92400E;border-radius:6px">A repassar</span>'}</td>
       <td>${pago?`<button class="btn-del" onclick="unmarkRepasse('${p.id}')" title="Desmarcar">↺</button>`:`<button onclick="markRepasse('${p.id}')" style="background:#10b981;color:white;border:none;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600">✓ Pago</button>`}</td>
