@@ -1705,27 +1705,35 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     </div>
     <div class="auth-error" id="auth-error"></div>
     <div id="panel-cad">
-      <div class="field"><label>Nome</label><input type="text" id="cad-name" placeholder="Como posso te chamar?"></div>
-      <div class="field"><label>E-mail</label><input type="email" id="cad-email" placeholder="seu@email.com"></div>
+      <form id="cad-form" onsubmit="event.preventDefault();doCad();" autocomplete="on">
+      <div class="field"><label>Nome</label><input type="text" id="cad-name" name="name" autocomplete="name" placeholder="Como posso te chamar?"></div>
+      <div class="field"><label>E-mail</label><input type="email" id="cad-email" name="email" autocomplete="username" placeholder="seu@email.com"></div>
       <div class="field"><label>Senha</label>
       <div class="pass-wrap">
-        <input type="password" id="cad-pass" placeholder="Mínimo 6 caracteres">
+        <input type="password" id="cad-pass" name="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres">
         <button type="button" class="btn-eye" onclick="togglePass('cad-pass',this)" tabindex="-1">
           <svg id="eye-cad-pass" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
       </div></div>
-      <button class="btn-auth" onclick="doCad()">Criar conta e continuar</button>
+      <button class="btn-auth" type="submit">Criar conta e continuar</button>
+      </form>
     </div>
     <div id="panel-login" style="display:none">
-      <div class="field"><label>E-mail</label><input type="email" id="lg-email" placeholder="seu@email.com"></div>
+      <form id="login-form" onsubmit="event.preventDefault();doLogin();" autocomplete="on">
+      <div class="field"><label>E-mail</label><input type="email" id="lg-email" name="email" autocomplete="username" placeholder="seu@email.com"></div>
       <div class="field"><label>Senha</label>
       <div class="pass-wrap">
-        <input type="password" id="lg-pass" placeholder="Sua senha">
+        <input type="password" id="lg-pass" name="password" autocomplete="current-password" placeholder="Sua senha">
         <button type="button" class="btn-eye" onclick="togglePass('lg-pass',this)" tabindex="-1">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
       </div></div>
-      <button class="btn-auth" onclick="doLogin()">Entrar</button>
+      <label style="display:flex;align-items:center;gap:8px;margin:-4px 0 12px;font-size:13px;color:var(--ink-lt);cursor:pointer;user-select:none">
+        <input type="checkbox" id="lg-remember" checked style="width:16px;height:16px;cursor:pointer">
+        Manter-me conectado por 30 dias
+      </label>
+      <button class="btn-auth" type="submit">Entrar</button>
+      </form>
     </div>
   </div>
 </div>
@@ -3755,7 +3763,7 @@ async function loadAdminPedidosKit(){
 /* DIALOGS */
 function openDialog(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
 function closeDialog(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
-document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeDialog(o.id);}));
+document.querySelectorAll('.overlay').forEach(o=>{let mDown=null;o.addEventListener('mousedown',e=>{mDown=e.target===o?o:null;});o.addEventListener('mouseup',e=>{if(mDown===o&&e.target===o)closeDialog(o.id);mDown=null;});});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.overlay.open').forEach(o=>closeDialog(o.id));});
 </script>
 </body>
