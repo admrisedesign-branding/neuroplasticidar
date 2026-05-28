@@ -1342,6 +1342,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     <button class="admin-tab-btn" id="tab-sessoes" onclick="adminTab('sessoes',this)">Sessões</button>
     <button class="admin-tab-btn" id="tab-pedidos" onclick="adminTab('pedidos',this)">Pedidos Kits</button>
     <button class="admin-tab-btn" id="tab-compras" onclick="adminTab('compras',this)">Compras</button>
+    <button class="admin-tab-btn" id="tab-repasse" onclick="adminTab('repasse',this)">Repasse Jaque</button>
     <button class="admin-tab-btn" id="tab-equipe" onclick="adminTab('equipe',this)">Equipe</button>
   </div>
   <div class="admin-content">
@@ -1593,6 +1594,73 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       <table class="admin-table">
         <thead><tr><th>Cliente</th><th>Kit</th><th>Endereço</th><th>Total</th><th>Entrega</th><th>WhatsApp</th><th>Status</th></tr></thead>
         <tbody id="adm-pedidos-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- REPASSE JAQUE -->
+    <div class="admin-section" id="adm-repasse">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-bottom:24px">
+        <div>
+          <p style="font-size:22px;font-family:'Playfair Display',serif;font-weight:700;color:var(--ink)">Repasse Jaque</p>
+          <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Cálculo automático do quanto repassar via PIX</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="adm-filter-btn active" onclick="filterRepasse('month',this)">Este mês</button>
+          <button class="adm-filter-btn" onclick="filterRepasse('lastmonth',this)">Mês passado</button>
+          <button class="adm-filter-btn" onclick="filterRepasse('all',this)">Tudo</button>
+          <button class="adm-filter-btn" onclick="filterRepasse('pending',this)">A pagar</button>
+        </div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,#FEF3C7 0%,#FDE68A 100%);border-radius:16px;padding:24px;margin-bottom:24px;border:1px solid #F59E0B33">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+          <span style="font-size:24px">💸</span>
+          <p style="font-size:13px;color:#92400E;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin:0">Total a repassar pra Jaque</p>
+        </div>
+        <p style="font-size:42px;font-family:'Playfair Display',serif;font-weight:700;color:#78350F;margin:8px 0">R$ <span id="rp-total-jaque">0,00</span></p>
+        <p style="font-size:13px;color:#92400E;margin:0" id="rp-period">Calculando...</p>
+        <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+          <button onclick="copyPixToJaque()" style="background:#78350F;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px">📋 Copiar valor</button>
+          <a id="rp-pix-link" href="#" target="_blank" style="background:#FBBF24;color:#78350F;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;text-decoration:none;display:inline-block">💜 Abrir PIX no app</a>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px">
+        <div class="adm-stat-card" style="padding:18px">
+          <div class="adm-stat-val" id="rp-receita" style="font-size:22px">R$ —</div>
+          <div class="adm-stat-lbl">Receita bruta</div>
+        </div>
+        <div class="adm-stat-card" style="padding:18px">
+          <div class="adm-stat-val" id="rp-plataforma" style="font-size:22px;color:#1e3a5f">R$ —</div>
+          <div class="adm-stat-lbl">Sua parte (Joice)</div>
+        </div>
+        <div class="adm-stat-card" style="padding:18px">
+          <div class="adm-stat-val" id="rp-vendas" style="font-size:22px">—</div>
+          <div class="adm-stat-lbl">Vendas no período</div>
+        </div>
+        <div class="adm-stat-card" style="padding:18px">
+          <div class="adm-stat-val" id="rp-pago" style="font-size:22px;color:#10b981">R$ —</div>
+          <div class="adm-stat-lbl">Já repassado</div>
+        </div>
+      </div>
+
+      <div style="background:#F9FAFB;border-radius:12px;padding:16px;margin-bottom:16px;font-size:13px;color:var(--ink-lt);line-height:1.6">
+        <strong style="color:var(--ink)">📐 Como o cálculo funciona:</strong> Materiais digitais: <strong>70% pra Jaque</strong>. Kits físicos e sessões: <strong>85% pra Jaque</strong>. O valor mostrado já desconta sua comissão automaticamente.
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Produto</th>
+            <th>Tipo</th>
+            <th>Valor venda</th>
+            <th>Parte Jaque</th>
+            <th>Status</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="adm-repasse-tbody"></tbody>
       </table>
     </div>
 
@@ -2276,7 +2344,7 @@ async function loadAdminData(){
   await loadAdminMateriais();
   await loadAdminKits();
   if(isAdmin){
-    await Promise.all([loadDashboard(),loadAdminLeads(),loadAdminSessoes(),loadAdminCompras(),loadAdminPedidos(),loadEquipe()]);
+    await Promise.all([loadDashboard(),loadAdminLeads(),loadAdminSessoes(),loadAdminCompras(),loadAdminPedidos(),loadAdminRepasse(),loadEquipe()]);
   }
 }
 
@@ -3342,6 +3410,131 @@ async function loadAdminCompras(){
     <td>${p.date||'—'}</td>
     <td><span class="badge-free">Aprovado</span></td>
   </tr>`).join('');
+}
+
+/* ══ REPASSE JAQUE ══ */
+const JAQUE_PIX='jaquelineaten@gmail.com';
+const SPLIT_RATES={material:0.70,kit:0.85,sessao:0.85};
+let allRepasseData=[];
+let currentRepasseFilter='month';
+
+async function loadAdminRepasse(){
+  const{data}=await sb.from('purchases').select('*').eq('payment_status','approved').order('created_at',{ascending:false});
+  allRepasseData=data||[];
+  // Tenta enriquecer com título do material
+  if(allRepasseData.length){
+    const matIds=[...new Set(allRepasseData.filter(p=>p.material_id).map(p=>p.material_id))];
+    if(matIds.length){
+      const{data:mats}=await sb.from('materials').select('id,title,category').in('id',matIds);
+      const mp=Object.fromEntries((mats||[]).map(m=>[m.id,m]));
+      allRepasseData.forEach(p=>{p._title=mp[p.material_id]?.title||'Material';p._cat=mp[p.material_id]?.category||'';});
+    }
+  }
+  renderRepasse();
+}
+
+function getRepasseRate(row){
+  // Materiais digitais: 70%. Kits e sessões: 85%.
+  // Por enquanto tudo que está em purchases é material — kits/sessões vêm de leads
+  return SPLIT_RATES.material;
+}
+
+function calcJaquePart(row){
+  // Se já tem application_fee gravado (split automático funcionou), usa o resto
+  if(row.application_fee&&row.application_fee>0){
+    return parseFloat(row.amount)-parseFloat(row.application_fee);
+  }
+  // Senão calcula pela tabela
+  const rate=getRepasseRate(row);
+  return parseFloat(row.amount)*rate;
+}
+
+function filterByPeriod(list){
+  const now=new Date();
+  if(currentRepasseFilter==='month'){
+    const y=now.getFullYear(),m=now.getMonth();
+    return list.filter(p=>{const d=new Date(p.created_at);return d.getFullYear()===y&&d.getMonth()===m;});
+  }
+  if(currentRepasseFilter==='lastmonth'){
+    const lm=new Date(now.getFullYear(),now.getMonth()-1,1);
+    const y=lm.getFullYear(),m=lm.getMonth();
+    return list.filter(p=>{const d=new Date(p.created_at);return d.getFullYear()===y&&d.getMonth()===m;});
+  }
+  if(currentRepasseFilter==='pending'){
+    return list.filter(p=>!p.repasse_paid);
+  }
+  return list;
+}
+
+function renderRepasse(){
+  const list=filterByPeriod(allRepasseData);
+  const totalReceita=list.reduce((s,p)=>s+parseFloat(p.amount||0),0);
+  const totalPago=list.filter(p=>p.repasse_paid).reduce((s,p)=>s+calcJaquePart(p),0);
+  const aPagar=list.filter(p=>!p.repasse_paid).reduce((s,p)=>s+calcJaquePart(p),0);
+  const plataforma=totalReceita-list.reduce((s,p)=>s+calcJaquePart(p),0);
+
+  const fmt=v=>v.toFixed(2).replace('.',',');
+  document.getElementById('rp-total-jaque').textContent=fmt(aPagar);
+  document.getElementById('rp-receita').textContent='R$ '+fmt(totalReceita);
+  document.getElementById('rp-plataforma').textContent='R$ '+fmt(plataforma);
+  document.getElementById('rp-vendas').textContent=list.length;
+  document.getElementById('rp-pago').textContent='R$ '+fmt(totalPago);
+
+  const periodLabels={month:'Este mês',lastmonth:'Mês passado',all:'Histórico completo',pending:'Pendente de repasse'};
+  document.getElementById('rp-period').textContent=periodLabels[currentRepasseFilter]+' • '+list.length+' venda(s)';
+
+  // Link PIX
+  const pixUrl=`https://api.whatsapp.com/send?phone=5592991479457&text=${encodeURIComponent(`Oi Jaque! Repasse de hoje: R$ ${fmt(aPagar)} via PIX (${JAQUE_PIX}). 💜`)}`;
+  document.getElementById('rp-pix-link').href=pixUrl;
+
+  const tbody=document.getElementById('adm-repasse-tbody');
+  if(!list.length){
+    tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhuma venda no período selecionado.</td></tr>';
+    return;
+  }
+  tbody.innerHTML=list.map(p=>{
+    const jaque=calcJaquePart(p);
+    const dt=new Date(p.created_at).toLocaleDateString('pt-BR');
+    const pago=p.repasse_paid;
+    return `<tr style="${pago?'opacity:0.5':''}">
+      <td style="font-size:12px">${dt}</td>
+      <td>${p._title||p.material_id||'—'}</td>
+      <td><span style="font-size:11px;padding:3px 8px;background:#EEF2FF;color:#1e3a5f;border-radius:6px">Material</span></td>
+      <td style="font-family:'Playfair Display',serif;font-weight:700">R$ ${fmt(parseFloat(p.amount))}</td>
+      <td style="font-family:'Playfair Display',serif;font-weight:700;color:#92400E">R$ ${fmt(jaque)}</td>
+      <td>${pago?'<span class="badge-free">✓ Repassado</span>':'<span style="font-size:11px;padding:3px 8px;background:#FEF3C7;color:#92400E;border-radius:6px">A repassar</span>'}</td>
+      <td>${pago?`<button class="btn-del" onclick="unmarkRepasse('${p.id}')" title="Desmarcar">↺</button>`:`<button onclick="markRepasse('${p.id}')" style="background:#10b981;color:white;border:none;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600">✓ Pago</button>`}</td>
+    </tr>`;
+  }).join('');
+}
+
+function filterRepasse(p,el){
+  document.querySelectorAll('#adm-repasse .adm-filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  currentRepasseFilter=p;
+  renderRepasse();
+}
+
+async function markRepasse(id){
+  if(!confirm('Marcar como repassado?'))return;
+  await sb.from('purchases').update({repasse_paid:true,repasse_paid_at:new Date().toISOString()}).eq('id',id);
+  await loadAdminRepasse();
+}
+
+async function unmarkRepasse(id){
+  if(!confirm('Desmarcar repasse?'))return;
+  await sb.from('purchases').update({repasse_paid:false,repasse_paid_at:null}).eq('id',id);
+  await loadAdminRepasse();
+}
+
+function copyPixToJaque(){
+  const v=document.getElementById('rp-total-jaque').textContent;
+  navigator.clipboard.writeText(v).then(()=>{
+    const btn=event.target;
+    const orig=btn.textContent;
+    btn.textContent='✓ Copiado!';
+    setTimeout(()=>btn.textContent=orig,2000);
+  });
 }
 
 /* ══ EQUIPE ══ */
