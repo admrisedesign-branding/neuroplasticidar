@@ -291,6 +291,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--parchment);color:var(--in
           </div>
           <div class="error-msg" id="err-preco">Selecione uma faixa de preço.</div>
         </div>
+
+        <div class="question">
+          <label><span class="emoji">🔎</span>Onde você costuma pesquisar e descobrir materiais para seu trabalho? <span style="font-weight:400;color:var(--ink-lt);font-size:13px">(pode marcar várias)</span></label>
+          <div class="opts">
+            <div class="opt-item"><input type="checkbox" name="onde_pesquisa" id="op1" value="Google"><label for="op1"><div class="opt-check"></div>Google</label></div>
+            <div class="opt-item"><input type="checkbox" name="onde_pesquisa" id="op2" value="Instagram"><label for="op2"><div class="opt-check"></div>Instagram</label></div>
+            <div class="opt-item"><input type="checkbox" name="onde_pesquisa" id="op3" value="Pinterest"><label for="op3"><div class="opt-check"></div>Pinterest</label></div>
+            <div class="opt-item"><input type="checkbox" name="onde_pesquisa" id="op4" value="YouTube"><label for="op4"><div class="opt-check"></div>YouTube</label></div>
+            <div class="opt-item"><input type="checkbox" name="onde_pesquisa" id="op5" value="TikTok"><label for="op5"><div class="opt-check"></div>TikTok</label></div>
+            <div class="opt-item"><input type="checkbox" name="onde_pesquisa" id="op6" value="Indicação de colegas"><label for="op6"><div class="opt-check"></div>Indicação de colegas</label></div>
+            <div class="opt-item"><input type="checkbox" name="onde_pesquisa" id="op7" value="Grupos no WhatsApp/Telegram"><label for="op7"><div class="opt-check"></div>Grupos no WhatsApp/Telegram</label></div>
+            <div class="opt-item"><input type="checkbox" name="onde_pesquisa" id="op8" value="Cursos e formações"><label for="op8"><div class="opt-check"></div>Cursos e formações</label></div>
+            <div class="opt-item"><input type="checkbox" name="onde_pesquisa" id="op9" value="Lojas/marketplaces específicos"><label for="op9"><div class="opt-check"></div>Lojas/marketplaces específicos</label></div>
+          </div>
+        </div>
+
+        <div class="question">
+          <label><span class="emoji">🛒</span>Tem algum site, loja ou perfil de onde você já baixou ou comprou materiais? <span style="font-weight:400;color:var(--ink-lt);font-size:13px">(opcional — escreva os nomes que lembrar)</span></label>
+          <div class="field">
+            <textarea name="sites_compra" id="sites_compra" rows="3" placeholder="Ex: Elo7, Loja da fulana no Insta, site X..."></textarea>
+          </div>
+        </div>
       </div>
 
       <!-- BLOCO 3: O QUE FALTA -->
@@ -480,6 +502,8 @@ async function submitForm(e){
   const email=document.getElementById('email-input').value.trim();
   const wpp=document.getElementById('wpp-input').value.trim();
   const sugestao=document.getElementById('sugestao-input').value.trim();
+  const ondePesquisa=Array.from(document.querySelectorAll('[name="onde_pesquisa"]:checked')).map(e=>e.value);
+  const sitesCompra=document.getElementById('sites_compra').value.trim();
 
   if(!nome||!email){document.getElementById('err-contato').style.display='block';ok=false;}
   else{document.getElementById('err-contato').style.display='none';}
@@ -498,6 +522,7 @@ async function submitForm(e){
       area,experiencia:exp,
       usa_pdf:pdf,ja_pagou:pagou,faixa_preco:preco,
       temas_interesse:temas,formatos_preferidos:formato,
+      onde_pesquisa:ondePesquisa,sites_compra:sitesCompra||null,
       nps:npsVal,sugestao:sugestao||null,
       cria_materiais:cria,interesse_marketplace:marketplace,
       origem:'grupo_at',
