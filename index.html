@@ -2243,6 +2243,75 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
   </div>
 </div>
 
+<!-- ADMIN: Gerar Link de Sessão -->
+<div class="overlay" id="dlg-gerar-link">
+  <div class="dialog" style="max-width:520px;width:100%;padding:32px">
+    <button class="dlg-close" onclick="closeDialog('dlg-gerar-link')">✕</button>
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px">🔗 Gerar link de pagamento</h3>
+    <p style="font-size:13px;color:var(--ink-lt);margin-bottom:20px;font-weight:300">Cliente recebe email com link pra pagar 50% de sinal.</p>
+
+    <div class="field" style="margin-bottom:12px">
+      <label>Nome do cliente</label>
+      <input type="text" id="gl-nome">
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>E-mail</label>
+      <input type="email" id="gl-email">
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>WhatsApp</label>
+      <input type="text" id="gl-wpp">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="field" style="margin-bottom:12px">
+        <label>Data da sessão</label>
+        <input type="date" id="gl-data">
+      </div>
+      <div class="field" style="margin-bottom:12px">
+        <label>Horário</label>
+        <input type="text" id="gl-hora" placeholder="Ex: 14:00">
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>Bairro</label>
+      <input type="text" id="gl-bairro">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="field" style="margin-bottom:12px">
+        <label>Idade da criança</label>
+        <input type="text" id="gl-idade">
+      </div>
+      <div class="field" style="margin-bottom:12px">
+        <label>Cupom (opcional)</label>
+        <input type="text" id="gl-cupom" placeholder="BEMVINDA..." style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>Preocupação principal</label>
+      <textarea id="gl-preocup" style="min-height:50px"></textarea>
+    </div>
+    <div class="field" style="margin-bottom:16px">
+      <label>Valor total (R$)</label>
+      <input type="number" id="gl-valor" value="200" step="10">
+    </div>
+
+    <div style="background:var(--blue-lt);border-radius:var(--r);padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--blue-dk)">
+      💡 Cliente paga <strong>50% de sinal</strong> agora e o restante no dia da sessão.
+    </div>
+
+    <button class="btn-pay" id="gl-btn" onclick="gerarLinkSessao()">📧 Criar link e enviar por e-mail</button>
+
+    <!-- Resultado -->
+    <div id="gl-result" style="display:none;margin-top:18px;background:var(--sage-lt);border-radius:var(--r);padding:16px">
+      <p style="font-size:13px;color:var(--sage);font-weight:600;margin-bottom:8px">✅ Link gerado!</p>
+      <p style="font-size:11px;color:#666;margin-bottom:6px">Link enviado por email. Você também pode copiar e mandar via WhatsApp:</p>
+      <input type="text" id="gl-link" readonly style="width:100%;font-size:11px;padding:8px;border-radius:6px;border:1px solid var(--border);background:#fff;margin-bottom:8px">
+      <button onclick="copyLink()" style="padding:8px 14px;border-radius:6px;border:none;background:var(--blue);color:#fff;font-size:12px;cursor:pointer">📋 Copiar link</button>
+      <button id="gl-wpp-btn" onclick="enviarLinkWhatsApp()" style="padding:8px 14px;border-radius:6px;border:none;background:#25D366;color:#fff;font-size:12px;cursor:pointer;margin-left:6px">💬 Enviar WhatsApp</button>
+    </div>
+  </div>
+</div>
+
 <!-- TERMOS DE USO -->
 <div class="overlay" id="dlg-termos">
   <div class="dialog" style="max-width:680px;width:100%;padding:48px;max-height:85vh;overflow-y:auto">
@@ -3640,7 +3709,10 @@ function renderSessoesTable(list){
       <option value="contacted" ${l.status==='contacted'?'selected':''}>Agendada</option>
       <option value="converted" ${l.status==='converted'?'selected':''}>Realizada</option>
     </select></td>
-    <td><button class="btn-del" onclick="deleteSessao('${l.id}')">×</button></td>
+    <td style="white-space:nowrap">
+      <button onclick='openGerarLinkSessao(${JSON.stringify(l).replace(/'/g,"&apos;")})' style="background:var(--blue);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-size:11px;cursor:pointer;margin-right:4px;font-family:'DM Sans',sans-serif;font-weight:500">🔗 Link</button>
+      <button class="btn-del" onclick="deleteSessao('${l.id}')">×</button>
+    </td>
   </tr>`).join('');
 }
 function filterSessoes(s,el){
@@ -3648,6 +3720,102 @@ function filterSessoes(s,el){
   const m={pending:'new',scheduled:'contacted',done:'converted'};
   renderSessoesTable(s==='all'?allSessoesData:allSessoesData.filter(l=>(l.status||'new')===(m[s]||s)));
 }
+/* === GERAR LINK DE SESSÃO (admin) === */
+let glLinkAtual=null;
+let glClienteAtual=null;
+
+function openGerarLinkSessao(lead){
+  glLinkAtual=null;
+  glClienteAtual=lead;
+  document.getElementById('gl-result').style.display='none';
+  const btn=document.getElementById('gl-btn');
+  btn.disabled=false;btn.textContent='📧 Criar link e enviar por e-mail';
+
+  // Pré-preenche com dados do lead
+  document.getElementById('gl-nome').value=lead.name||'';
+  document.getElementById('gl-email').value=lead.email||'';
+  document.getElementById('gl-wpp').value=lead.whatsapp||'';
+
+  // Tenta extrair detalhes do JSON salvo em child_age
+  let detalhes={};
+  try{detalhes=typeof lead.child_age==='string'&&lead.child_age.startsWith('{')?JSON.parse(lead.child_age):{};}catch(e){}
+  document.getElementById('gl-bairro').value=detalhes.bairro||'';
+  document.getElementById('gl-idade').value=detalhes.idade||(typeof lead.child_age==='string'&&!lead.child_age.startsWith('{')?lead.child_age:'')||'';
+  document.getElementById('gl-cupom').value=detalhes.cupom||'';
+  document.getElementById('gl-preocup').value=detalhes.preocupacao||(lead.symptoms||[]).join(', ')||'';
+  document.getElementById('gl-data').value='';
+  document.getElementById('gl-hora').value='';
+  document.getElementById('gl-valor').value='200';
+
+  openDialog('dlg-gerar-link');
+}
+
+async function gerarLinkSessao(){
+  const btn=document.getElementById('gl-btn');
+  const nome=document.getElementById('gl-nome').value.trim();
+  const email=document.getElementById('gl-email').value.trim();
+  if(!nome||!email){alert('Preencha nome e e-mail.');return;}
+
+  btn.disabled=true;btn.innerHTML='<span class="spin" style="display:inline-block;width:12px;height:12px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;margin-right:6px;vertical-align:middle"></span> Gerando...';
+
+  const payload={
+    cliente_nome:nome,
+    cliente_email:email,
+    cliente_whatsapp:document.getElementById('gl-wpp').value.trim(),
+    endereco_bairro:document.getElementById('gl-bairro').value.trim(),
+    crianca_idade:document.getElementById('gl-idade').value.trim(),
+    preocupacao:document.getElementById('gl-preocup').value.trim(),
+    data_sessao:document.getElementById('gl-data').value||null,
+    hora_sessao:document.getElementById('gl-hora').value.trim(),
+    cupom_codigo:document.getElementById('gl-cupom').value.trim().toUpperCase(),
+    valor_total:parseFloat(document.getElementById('gl-valor').value)||200,
+  };
+
+  try{
+    const r=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON},
+      body:JSON.stringify({action:'create_sessao_link',payload})
+    });
+    const data=await r.json();
+    if(!data.ok){alert('Erro: '+(data.error||'tente novamente'));btn.disabled=false;btn.textContent='📧 Criar link e enviar por e-mail';return;}
+    glLinkAtual=data.link;
+    document.getElementById('gl-link').value=data.link;
+    document.getElementById('gl-result').style.display='block';
+    btn.textContent='✅ Link enviado!';
+    // Atualiza status do lead pra "agendada"
+    if(glClienteAtual?.id){
+      await sb.from('leads').update({status:'contacted'}).eq('id',glClienteAtual.id);
+      await loadAdminSessoes();
+    }
+  }catch(e){alert('Erro: '+e.message);btn.disabled=false;btn.textContent='📧 Criar link e enviar por e-mail';}
+}
+
+function copyLink(){
+  navigator.clipboard.writeText(glLinkAtual||document.getElementById('gl-link').value);
+  alert('Link copiado!');
+}
+
+function enviarLinkWhatsApp(){
+  const wpp=document.getElementById('gl-wpp').value.replace(/\D/g,'');
+  if(!wpp){alert('WhatsApp não informado.');return;}
+  const nome=document.getElementById('gl-nome').value.trim().split(' ')[0];
+  const valor=document.getElementById('gl-valor').value;
+  const data=document.getElementById('gl-data').value;
+  const hora=document.getElementById('gl-hora').value;
+  const msg=`Oi ${nome}! 💜
+
+Aqui está o link pra confirmar sua sessão presencial:
+
+${glLinkAtual}
+
+${data?`📅 Data: ${data}${hora?' às '+hora:''}\n`:''}💰 Sinal: R$ ${(parseFloat(valor)*0.5).toFixed(2)} (50%)
+Restante R$ ${(parseFloat(valor)*0.5).toFixed(2)} pago no dia.
+
+Qualquer dúvida é só chamar!`;
+  window.open(`https://wa.me/55${wpp}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
 async function updateSessaoStatus(id,status){await sb.from('leads').update({status}).eq('id',id);await loadDashboard();}
 async function deleteSessao(id){if(!confirm('Remover?'))return;await sb.from('leads').delete().eq('id',id);await loadAdminSessoes();await loadDashboard();}
 
