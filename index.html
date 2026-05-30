@@ -4957,15 +4957,28 @@ async function agendarSessao(){
   const desc=cupomAplicado?cupomAplicado.desc:'';
   const precoFinal=cupomAplicado?SESSAO_PRICE-Math.round(SESSAO_PRICE*cupomAplicado.desconto):SESSAO_PRICE;
 
-  // Salva lead no banco com dados completos
+  // Salva lead no banco — com log explícito do erro
+  console.log('[sessao] tentando salvar lead...',{nome,email,bairro,idade});
+  let leadSalvo=false;
   try{
-    await sb.from('leads').insert({
+    const{data,error}=await sb.from('leads').insert({
       name:nome,email,whatsapp:wpp,symptoms:preocup?[preocup]:[],
       contact_preference:'sessao_presencial',
       recommended_kit:'sessao',status:'new',
       child_age:JSON.stringify({idade,bairro,cidade,uf,cupom,desconto:desc,preco_final:precoFinal,preocupacao:preocup})
-    });
-  }catch(e){}
+    }).select();
+    if(error){
+      const errInfo={message:error.message,code:error.code,details:error.details,hint:error.hint};
+      console.error('[sessao] ❌ ERRO ao salvar lead:',JSON.stringify(errInfo));
+      alert('⚠️ Erro ao salvar sua solicitação:\n\n'+(error.message||JSON.stringify(errInfo))+'\n\nMesmo assim, vou abrir o WhatsApp pra você conversar com a equipe.');
+    } else {
+      leadSalvo=true;
+      console.log('[sessao] ✅ lead salvo:',data);
+    }
+  }catch(e){
+    console.error('[sessao] ❌ exceção:',e);
+    alert('⚠️ Erro técnico ao salvar. Vou abrir o WhatsApp mesmo assim.');
+  }
 
   // Slugify pra hashtags
   const slugify=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'');
@@ -4975,7 +4988,6 @@ async function agendarSessao(){
   const cupomLine=cupom?`\n🎟️ Apliquei o cupom: ${cupom}${desc?` (${desc})`:''}`:'';
   const valorLine=cupom?`💰 Valor com cupom: R$ ${precoFinal}`:`💰 Valor: R$ ${SESSAO_PRICE}/hora`;
 
-  // Mensagem em 1ª pessoa (cliente falando) — sem palavra "lead"
   const whatsappMsg=`Oi, equipe Neuroplasticidar! 💜
 
 Tenho interesse em agendar uma sessão presencial em casa.
