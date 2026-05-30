@@ -1079,7 +1079,6 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
         <li>Relatório de evolução ao final de cada encontro</li>
         <li>Indicação de materiais complementares para continuar em casa</li>
       </ul>
-      <a href="javascript:void(0)" onclick="openSessaoDialog()" class="btn-gold">Agendar uma sessão</a>
     </div>
     <div class="esp-card">
       <div class="esp-price-block">
@@ -2167,9 +2166,47 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       <label>E-mail</label>
       <input type="email" id="sess-email" placeholder="seu@email.com">
     </div>
-    <div class="field" style="margin-bottom:16px">
+    <div class="field" style="margin-bottom:12px">
       <label>WhatsApp <span style="font-weight:300;color:var(--ink-lt)">(opcional)</span></label>
       <input type="text" id="sess-wpp" placeholder="(92) 99999-9999">
+    </div>
+    <!-- Localização -->
+    <div style="display:grid;grid-template-columns:90px 1fr;gap:8px;margin-bottom:12px">
+      <div class="field" style="margin-bottom:0">
+        <label>Estado</label>
+        <select id="sess-uf">
+          <option value="AM" selected>AM</option>
+          <option>AC</option><option>AL</option><option>AP</option><option>BA</option>
+          <option>CE</option><option>DF</option><option>ES</option><option>GO</option>
+          <option>MA</option><option>MG</option><option>MS</option><option>MT</option>
+          <option>PA</option><option>PB</option><option>PE</option><option>PI</option>
+          <option>PR</option><option>RJ</option><option>RN</option><option>RO</option>
+          <option>RR</option><option>RS</option><option>SC</option><option>SE</option>
+          <option>SP</option><option>TO</option>
+        </select>
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>Cidade</label>
+        <input type="text" id="sess-cidade" placeholder="Manaus" value="Manaus">
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>Bairro</label>
+      <input type="text" id="sess-bairro" placeholder="Ex: Adrianópolis">
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>Idade da criança</label>
+      <select id="sess-idade">
+        <option value="">Selecione...</option>
+        <option value="0 a 2 anos">0 a 2 anos</option>
+        <option value="3 a 5 anos">3 a 5 anos</option>
+        <option value="6 a 9 anos">6 a 9 anos</option>
+        <option value="10 anos ou mais">10 anos ou mais</option>
+      </select>
+    </div>
+    <div class="field" style="margin-bottom:16px">
+      <label>Principal preocupação</label>
+      <textarea id="sess-preocup" placeholder="Ex: dificuldade de concentração, excesso de telas, atraso na fala..." style="min-height:60px"></textarea>
     </div>
     <!-- Cupom -->
     <div class="field" style="margin-bottom:16px">
@@ -3160,31 +3197,55 @@ async function submitQuiz(){
     ? 'Temos guias práticos, fichas de atividades e roteiros prontos para você aplicar em casa. Alguns são gratuitos — acesse agora mesmo.'
     : kit.desc+' Nossa equipe entrará em contato em até 48 horas com mais detalhes.';
 
-  // Monta a URL do WhatsApp com mensagem estruturada (formato CRM-ready)
+  // Monta a URL do WhatsApp com mensagem natural em 1ª pessoa
   const slugify=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'');
-  const categoria=pref==='acomp'?'SESSAO':pref==='digital'?'MATERIAL':'KIT';
+  const categoria=pref==='acomp'?'Sessao':pref==='digital'?'Material':'Kit';
   const kitFinalNome=pref==='acomp'?'Sessão Presencial em Manaus':pref==='digital'?'Materiais Digitais':kit.name;
-  const sintomasText=(quizAnswers.symptoms||[]).length?quizAnswers.symptoms.join(', '):'preocupações gerais';
-  const ageText=quizAnswers.age||'não informada';
+  const sintomasLista=(quizAnswers.symptoms||[]);
+  const sintomasFrase=sintomasLista.length?sintomasLista.join(', '):'gostaria de conversar sobre como podem me ajudar';
+  const ageText=quizAnswers.age||'idade não informada';
   const ageTag=slugify(ageText)||'Indefinida';
   const kitTag=slugify(kitFinalNome);
-  const wppLine=wpp?`\n📱 WhatsApp: ${wpp}`:'';
-  const whatsappMsg=`👋 Olá, equipe Neuroplasticidar!
+  const firstName=name.split(' ')[0];
+  const sintomasHashtags=sintomasLista.map(s=>'#'+slugify(s)).join(' ');
+  const wppLine=wpp?`\n📱 ${wpp}`:'';
 
-Acabei de fazer o quiz no site e gostaria de saber mais sobre o resultado.
+  // Mensagem por tipo de interesse — em 1ª pessoa
+  let introMsg;
+  if(pref==='acomp'){
+    introMsg=`Oi, equipe Neuroplasticidar! 💜
 
-━━━ 📋 DADOS DO LEAD ━━━
-🏷️ Categoria: ${categoria}
-👤 Nome: ${name}
-📧 Email: ${email}${wppLine}
-👶 Idade da criança: ${ageText}
-🎯 Preocupações: ${sintomasText}
-✨ Recomendação: ${kitFinalNome}
-━━━━━━━━━━━━━━━━━━━━
+Fiz o quiz no site e o resultado me indicou a sessão presencial. Tenho interesse em saber mais.
 
-Aguardo retorno! 💜
+Sou ${firstName} e estou acompanhando uma criança de ${ageText}. Minhas principais preocupações são: ${sintomasFrase}.
 
-#NeuroLead #Quiz #${kitTag} #Idade${ageTag}`;
+Gostaria de saber sobre como funciona a sessão, disponibilidade e detalhes do atendimento.`;
+  } else if(pref==='digital'){
+    introMsg=`Oi, equipe Neuroplasticidar! 💜
+
+Fiz o quiz no site e gostaria de conversar sobre os materiais digitais que vocês oferecem.
+
+Sou ${firstName} e estou acompanhando uma criança de ${ageText}. Minhas principais preocupações são: ${sintomasFrase}.
+
+Quero saber quais materiais combinam mais com o que estou buscando.`;
+  } else {
+    introMsg=`Oi, equipe Neuroplasticidar! 💜
+
+Fiz o quiz no site e o resultado me indicou o ${kitFinalNome}. Gostaria de saber mais detalhes sobre ele.
+
+Sou ${firstName} e estou acompanhando uma criança de ${ageText}. Minhas principais preocupações são: ${sintomasFrase}.
+
+Quero saber como funciona, como recebo e o investimento.`;
+  }
+
+  const whatsappMsg=`${introMsg}
+
+📧 ${email}${wppLine}
+
+Aguardo retorno!
+
+—
+#${categoria} #${kitTag} #Idade${ageTag}${sintomasHashtags?' '+sintomasHashtags:''}`;
   const whatsappUrl=`https://wa.me/5592991479457?text=${encodeURIComponent(whatsappMsg)}`;
 
   // Botões dinâmicos por destino — Kit e Sessão vão direto pro WhatsApp
@@ -4354,6 +4415,9 @@ function openSessaoDialog(){
   document.getElementById('cupom-msg').textContent='';
   document.getElementById('sess-desconto-row').style.display='none';
   document.getElementById('sess-total-row').style.display='none';
+  document.getElementById('sess-bairro').value='';
+  document.getElementById('sess-idade').value='';
+  document.getElementById('sess-preocup').value='';
   cupomAplicado=null;
   // Pré-preenche se logada
   if(user){
@@ -4371,42 +4435,55 @@ async function agendarSessao(){
   const nome=document.getElementById('sess-nome').value.trim();
   const email=document.getElementById('sess-email').value.trim();
   const wpp=document.getElementById('sess-wpp').value.trim();
+  const uf=document.getElementById('sess-uf').value;
+  const cidade=document.getElementById('sess-cidade').value.trim();
+  const bairro=document.getElementById('sess-bairro').value.trim();
+  const idade=document.getElementById('sess-idade').value;
+  const preocup=document.getElementById('sess-preocup').value.trim();
   const cupom=document.getElementById('sess-cupom').value.trim().toUpperCase();
 
-  if(!nome||!email){alert('Preencha nome e e-mail.');return;}
+  if(!nome||!email){alert('Preencha pelo menos nome e e-mail.');return;}
+  if(!idade){alert('Selecione a idade da criança.');return;}
+  if(!bairro){alert('Informe o bairro pra sabermos a região.');return;}
 
   const desc=cupomAplicado?cupomAplicado.desc:'';
   const precoFinal=cupomAplicado?SESSAO_PRICE-Math.round(SESSAO_PRICE*cupomAplicado.desconto):SESSAO_PRICE;
 
-  // Salva lead no banco
+  // Salva lead no banco com dados completos
   try{
     await sb.from('leads').insert({
-      name:nome,email,whatsapp:wpp,symptoms:[],
+      name:nome,email,whatsapp:wpp,symptoms:preocup?[preocup]:[],
       contact_preference:'sessao_presencial',
       recommended_kit:'sessao',status:'new',
-      child_age:JSON.stringify({cupom,desconto:desc,preco_final:precoFinal})
+      child_age:JSON.stringify({idade,bairro,cidade,uf,cupom,desconto:desc,preco_final:precoFinal,preocupacao:preocup})
     });
   }catch(e){}
 
-  // Monta mensagem do WhatsApp (formato CRM-ready)
-  const cupomLine=cupom?`\n🎟️ Cupom: ${cupom}${desc?` (${desc})`:''}`:'';
-  const wppLine=wpp?`\n📱 WhatsApp: ${wpp}`:'';
-  const valorLine=cupom?`R$ ${precoFinal} (com cupom, de R$ ${SESSAO_PRICE})`:`R$ ${SESSAO_PRICE}/hora`;
-  const whatsappMsg=`👋 Olá, equipe Neuroplasticidar!
+  // Slugify pra hashtags
+  const slugify=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'');
+  const firstName=nome.split(' ')[0];
+  const localStr=`${cidade}/${uf}, bairro ${bairro}`;
+  const preocupTxt=preocup||'gostaria de conversar sobre como a sessão presencial pode ajudar';
+  const cupomLine=cupom?`\n🎟️ Apliquei o cupom: ${cupom}${desc?` (${desc})`:''}`:'';
+  const valorLine=cupom?`💰 Valor com cupom: R$ ${precoFinal}`:`💰 Valor: R$ ${SESSAO_PRICE}/hora`;
 
-Tenho interesse em agendar uma sessão presencial.
+  // Mensagem em 1ª pessoa (cliente falando) — sem palavra "lead"
+  const whatsappMsg=`Oi, equipe Neuroplasticidar! 💜
 
-━━━ 📋 DADOS DO LEAD ━━━
-🏷️ Categoria: SESSAO
-👤 Nome: ${nome}
-📧 Email: ${email}${wppLine}
-💰 Valor: ${valorLine}
-📍 Local: Manaus, AM${cupomLine}
-━━━━━━━━━━━━━━━━━━━━
+Tenho interesse em agendar uma sessão presencial em casa.
 
-Aguardo retorno pra agendarmos! 💜
+Sou ${firstName}, moro em ${localStr} e estou acompanhando uma criança de ${idade}. A minha principal preocupação é: ${preocupTxt}.
 
-#NeuroLead #SessaoPresencial #Sessao`;
+Gostaria de saber sobre disponibilidade de horários e detalhes do atendimento.
+
+${valorLine}${cupomLine}
+
+📧 ${email}${wpp?`\n📱 ${wpp}`:''}
+
+Aguardo retorno!
+
+—
+#Sessao #${slugify(cidade)} #${slugify(bairro)} #Idade${slugify(idade)}`;
   const whatsappUrl=`https://wa.me/5592991479457?text=${encodeURIComponent(whatsappMsg)}`;
 
   closeDialog('dlg-sessao');
