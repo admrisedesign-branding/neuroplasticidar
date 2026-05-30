@@ -1554,17 +1554,23 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
         <div>
           <p style="font-size:22px;font-family:'Playfair Display',serif;font-weight:700;color:var(--ink)">Leads do Quiz</p>
-          <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Pessoas que fizeram o quiz e deixaram contato</p>
+          <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Quem fez o quiz e demonstrou interesse em kit ou material — não inclui sessões nem compras já realizadas</p>
         </div>
-        <div style="display:flex;gap:8px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="adm-filter-btn active" onclick="filterLeads('all',this)">Todos</button>
           <button class="adm-filter-btn" onclick="filterLeads('new',this)">Novos</button>
           <button class="adm-filter-btn" onclick="filterLeads('contacted',this)">Contatados</button>
           <button class="adm-filter-btn" onclick="filterLeads('converted',this)">Convertidos</button>
         </div>
       </div>
+      <!-- Stats rápidas -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="lq-total" style="font-size:22px">—</div><div class="adm-stat-lbl">Total de leads</div></div>
+        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="lq-novos" style="font-size:22px">—</div><div class="adm-stat-lbl">Novos (não contatados)</div></div>
+        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="lq-convertidos" style="font-size:22px">—</div><div class="adm-stat-lbl">Convertidos</div></div>
+      </div>
       <table class="admin-table">
-        <thead><tr><th>Nome</th><th>E-mail</th><th>WhatsApp</th><th>Kit indicado</th><th>Interesse</th><th>Data</th><th>Status</th><th></th></tr></thead>
+        <thead><tr><th>Nome</th><th>E-mail / WhatsApp</th><th>Faixa etária</th><th>Recomendação</th><th>Preocupações</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead>
         <tbody id="adm-leads-tbody"></tbody>
       </table>
     </div>
@@ -1573,44 +1579,81 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     <div class="admin-section" id="adm-sessoes">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
         <div>
-          <p style="font-size:22px;font-family:'Playfair Display',serif;font-weight:700;color:var(--ink)">Solicitações de Sessão</p>
-          <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Agendamentos via formulário de contato</p>
+          <p style="font-size:22px;font-family:'Playfair Display',serif;font-weight:700;color:var(--ink)">Sessões Presenciais</p>
+          <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Fluxo completo: solicitação → link enviado → sinal pago → realizada</p>
         </div>
-        <div style="display:flex;gap:8px">
+      </div>
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="se-aguardando" style="font-size:22px">—</div><div class="adm-stat-lbl">Aguardando contato</div></div>
+        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="se-link-enviado" style="font-size:22px">—</div><div class="adm-stat-lbl">Link enviado</div></div>
+        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="se-pagas" style="font-size:22px">—</div><div class="adm-stat-lbl">Sinal pago</div></div>
+        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="se-realizadas" style="font-size:22px">—</div><div class="adm-stat-lbl">Realizadas</div></div>
+      </div>
+
+      <!-- Sub-abas -->
+      <div style="display:flex;gap:6px;border-bottom:1px solid var(--border);margin-bottom:16px">
+        <button class="sub-tab-btn active" onclick="subTabSessoes('aguardando',this)" style="padding:10px 16px;background:none;border:none;border-bottom:2px solid var(--blue);font-size:13px;font-weight:500;color:var(--blue);cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:-1px">📥 Solicitações ({{ag-count}})</button>
+        <button class="sub-tab-btn" onclick="subTabSessoes('confirmadas',this)" style="padding:10px 16px;background:none;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:var(--ink-lt);cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:-1px">✅ Confirmadas ({{co-count}})</button>
+      </div>
+
+      <!-- Sub-aba 1: solicitações (vindas do formulário) -->
+      <div id="sub-aguardando">
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
           <button class="adm-filter-btn active" onclick="filterSessoes('all',this)">Todas</button>
           <button class="adm-filter-btn" onclick="filterSessoes('pending',this)">Pendentes</button>
           <button class="adm-filter-btn" onclick="filterSessoes('scheduled',this)">Agendadas</button>
-          <button class="adm-filter-btn" onclick="filterSessoes('done',this)">Realizadas</button>
         </div>
+        <table class="admin-table">
+          <thead><tr><th>Nome</th><th>Contato</th><th>Localização</th><th>Idade</th><th>Preocupações</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="adm-sessoes-tbody"></tbody>
+        </table>
       </div>
-      <table class="admin-table">
-        <thead><tr><th>Nome</th><th>E-mail</th><th>WhatsApp</th><th>Perfil</th><th>Mensagem</th><th>Data</th><th>Status</th><th></th></tr></thead>
-        <tbody id="adm-sessoes-tbody"></tbody>
-      </table>
+
+      <!-- Sub-aba 2: confirmadas (com pagamento) -->
+      <div id="sub-confirmadas" style="display:none">
+        <table class="admin-table">
+          <thead><tr><th>Cliente</th><th>Data/Hora</th><th>Local</th><th>Valor</th><th>Sinal</th><th>Status pagamento</th><th>Pago em</th><th>Ações</th></tr></thead>
+          <tbody id="adm-confirmadas-tbody"></tbody>
+        </table>
+      </div>
     </div>
 
     <!-- COMPRAS -->
     <div class="admin-section" id="adm-compras">
-      <div style="margin-bottom:20px">
-        <p style="font-size:22px;font-family:'Playfair Display',serif;font-weight:700;color:var(--ink)">Histórico de Compras</p>
-        <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Pagamentos aprovados via Mercado Pago</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+        <div>
+          <p style="font-size:22px;font-family:'Playfair Display',serif;font-weight:700;color:var(--ink)">Histórico de Compras</p>
+          <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Todas as compras pagas via Mercado Pago — materiais, kits e sessões</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="adm-filter-btn active" onclick="filterCompras('all',this)">Todas</button>
+          <button class="adm-filter-btn" onclick="filterCompras('material',this)">📄 Materiais</button>
+          <button class="adm-filter-btn" onclick="filterCompras('kit',this)">🎒 Kits</button>
+          <button class="adm-filter-btn" onclick="filterCompras('sessao',this)">🏠 Sessões</button>
+        </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px">
-        <div class="adm-stat-card" style="padding:20px">
-          <div class="adm-stat-val" id="cp-total" style="font-size:28px">R$ —</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+        <div class="adm-stat-card" style="padding:18px">
+          <div class="adm-stat-val" id="cp-total" style="font-size:24px">R$ —</div>
           <div class="adm-stat-lbl">Receita total</div>
         </div>
-        <div class="adm-stat-card" style="padding:20px">
-          <div class="adm-stat-val" id="cp-count" style="font-size:28px">—</div>
+        <div class="adm-stat-card" style="padding:18px">
+          <div class="adm-stat-val" id="cp-count" style="font-size:24px">—</div>
           <div class="adm-stat-lbl">Compras realizadas</div>
         </div>
-        <div class="adm-stat-card" style="padding:20px">
-          <div class="adm-stat-val" id="cp-ticket" style="font-size:28px">R$ —</div>
+        <div class="adm-stat-card" style="padding:18px">
+          <div class="adm-stat-val" id="cp-ticket" style="font-size:24px">R$ —</div>
           <div class="adm-stat-lbl">Ticket médio</div>
+        </div>
+        <div class="adm-stat-card" style="padding:18px">
+          <div class="adm-stat-val" id="cp-cupons" style="font-size:24px">—</div>
+          <div class="adm-stat-lbl">Cupons usados</div>
         </div>
       </div>
       <table class="admin-table">
-        <thead><tr><th>Cliente</th><th>Material</th><th>Valor</th><th>Método</th><th>Data</th><th>Status</th></tr></thead>
+        <thead><tr><th>Cliente</th><th>Tipo</th><th>Item</th><th>Valor</th><th>Cupom</th><th>Método</th><th>Data</th></tr></thead>
         <tbody id="adm-compras-tbody"></tbody>
       </table>
     </div>
@@ -1620,17 +1663,23 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
         <div>
           <p style="font-size:22px;font-family:'Playfair Display',serif;font-weight:700;color:var(--ink)">Pedidos de Kits</p>
-          <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Pedidos realizados com endereço de entrega</p>
+          <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Kits comprados via Mercado Pago — confira endereço de entrega e atualize status</p>
         </div>
-        <div style="display:flex;gap:8px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="adm-filter-btn active" onclick="filterPedidos('all',this)">Todos</button>
-          <button class="adm-filter-btn" onclick="filterPedidos('new',this)">Novos</button>
-          <button class="adm-filter-btn" onclick="filterPedidos('contacted',this)">Em preparo</button>
-          <button class="adm-filter-btn" onclick="filterPedidos('converted',this)">Entregues</button>
+          <button class="adm-filter-btn" onclick="filterPedidos('preparando',this)">Em preparo</button>
+          <button class="adm-filter-btn" onclick="filterPedidos('enviado',this)">Enviado</button>
+          <button class="adm-filter-btn" onclick="filterPedidos('entregue',this)">Entregue</button>
         </div>
       </div>
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="pk-total" style="font-size:22px">—</div><div class="adm-stat-lbl">Pedidos pagos</div></div>
+        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="pk-preparando" style="font-size:22px">—</div><div class="adm-stat-lbl">Em preparo</div></div>
+        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="pk-receita" style="font-size:22px">R$ —</div><div class="adm-stat-lbl">Receita de kits</div></div>
+      </div>
       <table class="admin-table">
-        <thead><tr><th>Cliente</th><th>Kit</th><th>Endereço</th><th>Total</th><th>Entrega</th><th>WhatsApp</th><th>Status</th></tr></thead>
+        <thead><tr><th>Cliente</th><th>Kit</th><th>Valor pago</th><th>Endereço</th><th>WhatsApp</th><th>Pago em</th><th>Status entrega</th><th>Ações</th></tr></thead>
         <tbody id="adm-pedidos-tbody"></tbody>
       </table>
     </div>
@@ -2601,36 +2650,71 @@ async function loadAdminData(){
 
 /* PEDIDOS KITS */
 let allPedidosData=[];
+
 async function loadAdminPedidos(){
-  const{data}=await sb.from('leads').select('*').eq('contact_preference','kit').order('created_at',{ascending:false});
-  allPedidosData=data||[];
+  // Junta: compras pagas de kits (purchases) + intenções (leads kit) que ainda não pagaram
+  const{data:compras}=await sb.from('purchases')
+    .select('*,users(name,email,whatsapp)')
+    .eq('payment_status','approved')
+    .order('created_at',{ascending:false});
+
+  // Filtra só os que têm dados típicos de kit (material_id null = era kit, ou amount alto)
+  const kitsPagos=(compras||[]).filter(c=>!c.material_id);
+
+  allPedidosData=kitsPagos.map(c=>({
+    ...c,
+    _tipo:'pago',
+    nome:c.users?.name||c.payer_name||'Cliente',
+    email:c.users?.email||c.payer_email||'—',
+    whatsapp:c.users?.whatsapp||'',
+    valor:c.amount,
+    pago_em:c.created_at,
+    delivery_status:c.delivery_status||'preparando',
+  }));
+
+  // Stats
+  const total=allPedidosData.length;
+  const preparando=allPedidosData.filter(p=>p.delivery_status==='preparando'||!p.delivery_status).length;
+  const receita=allPedidosData.reduce((s,p)=>s+Number(p.valor||0),0);
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set('pk-total',total);
+  set('pk-preparando',preparando);
+  set('pk-receita','R$ '+receita.toFixed(2).replace('.',','));
+
   renderPedidosTable(allPedidosData);
 }
+
 function renderPedidosTable(list){
   const tbody=document.getElementById('adm-pedidos-tbody');
-  if(!list.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhum pedido de kit ainda.</td></tr>';return;}
+  if(!list.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhum kit pago ainda. Quando alguém comprar um kit, ele aparecerá aqui.</td></tr>';return;}
   tbody.innerHTML=list.map(p=>{
-    let info={};
-    try{info=JSON.parse(p.child_age||'{}');}catch(e){}
+    const dia=new Date(p.pago_em||p.created_at);
+    const dataStr=dia.toLocaleDateString('pt-BR')+' '+dia.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    const endereco=p.delivery_address||p.endereco||'—';
+    const statusLabel={'preparando':'📦 Em preparo','enviado':'🚚 Enviado','entregue':'✅ Entregue'}[p.delivery_status||'preparando']||p.delivery_status;
     return `<tr>
-      <td style="font-weight:500">${p.name||'—'}<div style="font-size:11px;color:var(--ink-lt)">${p.email||''}</div></td>
-      <td><strong>${p.recommended_kit||'—'}</strong></td>
-      <td style="font-size:11px;color:var(--ink-md);max-width:160px">${info.endereco||'—'}<div style="margin-top:2px">CPF: ${info.cpf||'—'}</div></td>
-      <td style="font-family:'Playfair Display',serif;font-weight:700">R$ ${info.total||'—'}</td>
-      <td style="font-size:12px">${info.entrega||'—'}</td>
-      <td>${info.wpp?`<a class="btn-wpp-sm" href="https://wa.me/55${info.wpp.replace(/\D/g,'')}" target="_blank">💬 ${info.wpp}</a>`:'—'}</td>
-      <td><select class="status-sel" onchange="updatePedidoStatus('${p.id}',this.value)">
-        <option value="new" ${(!p.status||p.status==='new')?'selected':''}>Novo</option>
-        <option value="contacted" ${p.status==='contacted'?'selected':''}>Em preparo</option>
-        <option value="converted" ${p.status==='converted'?'selected':''}>Entregue</option>
-      </select></td>
-    </tr>`;
-  }).join('');
+    <td style="font-weight:500">${p.nome}<div style="font-size:11px;color:var(--ink-lt)">${p.email}</div></td>
+    <td><strong>${p.kit_name||'Kit'}</strong></td>
+    <td style="font-family:'Playfair Display',serif;font-weight:700">R$ ${Number(p.valor).toFixed(2)}</td>
+    <td style="font-size:11px;color:var(--ink-md);max-width:160px">${endereco}</td>
+    <td>${p.whatsapp?`<a class="btn-wpp-sm" href="https://wa.me/55${p.whatsapp.replace(/\D/g,'')}" target="_blank" style="font-size:11px">💬 ${p.whatsapp}</a>`:'—'}</td>
+    <td style="font-size:11px;color:var(--ink-lt)">${dataStr}</td>
+    <td><select class="status-sel" onchange="updateKitDeliveryStatus('${p.id}',this.value)">
+      <option value="preparando" ${(p.delivery_status==='preparando'||!p.delivery_status)?'selected':''}>📦 Em preparo</option>
+      <option value="enviado" ${p.delivery_status==='enviado'?'selected':''}>🚚 Enviado</option>
+      <option value="entregue" ${p.delivery_status==='entregue'?'selected':''}>✅ Entregue</option>
+    </select></td>
+    <td>${p.whatsapp?`<a href="https://wa.me/55${p.whatsapp.replace(/\D/g,'')}" target="_blank" style="background:#25D366;color:#fff;padding:5px 9px;border-radius:5px;font-size:11px;text-decoration:none">💬</a>`:''}</td>
+  </tr>`;}).join('');
 }
 function filterPedidos(s,el){
   document.querySelectorAll('#adm-pedidos .adm-filter-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
-  renderPedidosTable(s==='all'?allPedidosData:allPedidosData.filter(p=>(p.status||'new')===s));
+  renderPedidosTable(s==='all'?allPedidosData:allPedidosData.filter(p=>(p.delivery_status||'preparando')===s));
+}
+async function updateKitDeliveryStatus(id,status){
+  await sb.from('purchases').update({delivery_status:status}).eq('id',id);
+  await loadAdminPedidos();
 }
 async function updatePedidoStatus(id,status){await sb.from('leads').update({status}).eq('id',id);await loadDashboard();}
 function renderBag(){
@@ -3662,27 +3746,49 @@ async function deleteKit(id){if(!confirm('Remover este kit?'))return;await sb.fr
 /* LEADS */
 let allLeadsData=[];
 async function loadAdminLeads(){
+  // Quem fez quiz/contato (não-sessão, não-pedido-pago)
   const{data}=await sb.from('leads').select('*').order('created_at',{ascending:false});
-  allLeadsData=(data||[]).filter(l=>l.recommended_kit!=='sessao'&&l.contact_preference!=='sessao_presencial');
+  // Filtra: tira sessões (aparecem em outra aba)
+  allLeadsData=(data||[]).filter(l=>
+    l.recommended_kit!=='sessao' &&
+    l.contact_preference!=='sessao_presencial'
+  );
+  // Stats
+  const total=allLeadsData.length;
+  const novos=allLeadsData.filter(l=>!l.status||l.status==='new').length;
+  const conv=allLeadsData.filter(l=>l.status==='converted').length;
+  const elT=document.getElementById('lq-total'); if(elT)elT.textContent=total;
+  const elN=document.getElementById('lq-novos'); if(elN)elN.textContent=novos;
+  const elC=document.getElementById('lq-convertidos'); if(elC)elC.textContent=conv;
   renderLeadsTable(allLeadsData);
 }
 function renderLeadsTable(list){
   const tbody=document.getElementById('adm-leads-tbody');
   if(!list.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhum lead ainda.</td></tr>';return;}
-  tbody.innerHTML=list.map(l=>`<tr>
+  tbody.innerHTML=list.map(l=>{
+    const dia=new Date(l.created_at);
+    const dataStr=dia.toLocaleDateString('pt-BR')+' '+dia.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    const faixa=l.child_age&&typeof l.child_age==='string'&&!l.child_age.startsWith('{')?l.child_age:'—';
+    const sintomas=(l.symptoms||[]).slice(0,2).join(', ')||'—';
+    const wppFmt=l.whatsapp?`<br><a class="btn-wpp-sm" href="https://wa.me/55${l.whatsapp.replace(/\D/g,'')}" target="_blank" style="font-size:11px">💬 ${l.whatsapp}</a>`:'';
+    const tipoLabel=l.contact_preference==='kit'?'🎒 Kit':l.contact_preference==='material'?'📄 Material':l.contact_preference==='duvida_geral'?'💬 Contato':'—';
+    return `<tr>
     <td style="font-weight:500">${l.name||'—'}</td>
-    <td style="font-size:12px">${l.email||'—'}</td>
-    <td>${l.whatsapp?`<a class="btn-wpp-sm" href="https://wa.me/55${l.whatsapp.replace(/\D/g,'')}" target="_blank">💬 ${l.whatsapp}</a>`:'—'}</td>
-    <td><strong>${l.recommended_kit||'—'}</strong></td>
-    <td style="font-size:12px">${l.contact_preference==='kit'?'🎒 Kit':l.contact_preference==='material'?'📄 Material':'—'}</td>
-    <td style="font-size:12px">${new Date(l.created_at).toLocaleDateString('pt-BR')}</td>
+    <td style="font-size:12px"><a href="mailto:${l.email}" style="color:var(--blue)">${l.email||'—'}</a>${wppFmt}</td>
+    <td style="font-size:12px">${faixa}</td>
+    <td style="font-size:12px"><strong>${l.recommended_kit||'—'}</strong><div style="font-size:10px;color:var(--ink-lt);margin-top:2px">${tipoLabel}</div></td>
+    <td style="font-size:11px;color:var(--ink-md);max-width:180px">${sintomas}</td>
+    <td style="font-size:11px;color:var(--ink-lt)">${dataStr}</td>
     <td><select class="status-sel" onchange="updateLeadStatus('${l.id}',this.value)">
       <option value="new" ${(!l.status||l.status==='new')?'selected':''}>Novo</option>
       <option value="contacted" ${l.status==='contacted'?'selected':''}>Contatado</option>
       <option value="converted" ${l.status==='converted'?'selected':''}>Convertido</option>
     </select></td>
-    <td><button class="btn-del" onclick="deleteLead('${l.id}')">×</button></td>
-  </tr>`).join('');
+    <td style="white-space:nowrap">
+      ${l.whatsapp?`<a href="https://wa.me/55${l.whatsapp.replace(/\D/g,'')}" target="_blank" style="background:#25D366;color:#fff;padding:5px 9px;border-radius:5px;font-size:11px;text-decoration:none;margin-right:4px">💬</a>`:''}
+      <button class="btn-del" onclick="deleteLead('${l.id}')">×</button>
+    </td>
+  </tr>`;}).join('');
 }
 function filterLeads(s,el){document.querySelectorAll('#adm-leads .adm-filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderLeadsTable(s==='all'?allLeadsData:allLeadsData.filter(l=>(l.status||'new')===s));}
 async function updateLeadStatus(id,status){await sb.from('leads').update({status}).eq('id',id);await loadDashboard();}
@@ -3690,30 +3796,114 @@ async function deleteLead(id){if(!confirm('Remover?'))return;await sb.from('lead
 
 /* SESSÕES */
 let allSessoesData=[];
+let allConfirmadasData=[];
+
 async function loadAdminSessoes(){
-  const{data}=await sb.from('leads').select('*').or('contact_preference.eq.sessao_presencial,recommended_kit.eq.sessao').order('created_at',{ascending:false});
-  allSessoesData=data||[];renderSessoesTable(allSessoesData);
+  // Solicitações (leads de sessão)
+  const{data:leads}=await sb.from('leads').select('*').or('contact_preference.eq.sessao_presencial,recommended_kit.eq.sessao').order('created_at',{ascending:false});
+  allSessoesData=leads||[];
+
+  // Confirmadas (sessoes_agendadas)
+  const{data:confirm}=await sb.from('sessoes_agendadas').select('*').order('created_at',{ascending:false});
+  allConfirmadasData=confirm||[];
+
+  // Stats
+  const aguardando=allSessoesData.filter(l=>!l.status||l.status==='new').length;
+  const linkEnv=allSessoesData.filter(l=>l.status==='contacted').length;
+  const pagas=allConfirmadasData.filter(s=>s.status==='sinal_pago').length;
+  const realizadas=allConfirmadasData.filter(s=>s.status==='realizada').length;
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set('se-aguardando',aguardando);
+  set('se-link-enviado',linkEnv);
+  set('se-pagas',pagas);
+  set('se-realizadas',realizadas);
+
+  // Sub-aba labels
+  const agBtn=document.querySelector('#adm-sessoes .sub-tab-btn:nth-child(1)');
+  const coBtn=document.querySelector('#adm-sessoes .sub-tab-btn:nth-child(2)');
+  if(agBtn)agBtn.innerHTML=`📥 Solicitações (${allSessoesData.length})`;
+  if(coBtn)coBtn.innerHTML=`✅ Confirmadas (${allConfirmadasData.length})`;
+
+  renderSessoesTable(allSessoesData);
+  renderConfirmadasTable(allConfirmadasData);
 }
+
 function renderSessoesTable(list){
   const tbody=document.getElementById('adm-sessoes-tbody');
   if(!list.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhuma solicitação de sessão ainda.</td></tr>';return;}
-  tbody.innerHTML=list.map(l=>`<tr>
+  tbody.innerHTML=list.map(l=>{
+    let det={};try{det=typeof l.child_age==='string'&&l.child_age.startsWith('{')?JSON.parse(l.child_age):{};}catch(e){}
+    const local=det.cidade||det.bairro?`${det.cidade||'—'}${det.bairro?' / '+det.bairro:''}`:'—';
+    const idade=det.idade||(typeof l.child_age==='string'&&!l.child_age.startsWith('{')?l.child_age:'—');
+    const preocup=det.preocupacao||(l.symptoms||[]).slice(0,2).join(', ')||'—';
+    const dia=new Date(l.created_at);
+    const dataStr=dia.toLocaleDateString('pt-BR')+' '+dia.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    return `<tr>
     <td style="font-weight:500">${l.name||'—'}</td>
-    <td style="font-size:12px">${l.email||'—'}</td>
-    <td>${l.whatsapp?`<a class="btn-wpp-sm" href="https://wa.me/55${l.whatsapp.replace(/\D/g,'')}" target="_blank">💬 ${l.whatsapp}</a>`:'—'}</td>
-    <td style="font-size:12px">${l.child_age||l.contact_preference||'—'}</td>
-    <td style="font-size:11px;color:var(--ink-lt);max-width:160px">${(l.symptoms||[]).slice(0,2).join(', ')||'—'}</td>
-    <td style="font-size:12px">${new Date(l.created_at).toLocaleDateString('pt-BR')}</td>
+    <td style="font-size:12px"><a href="mailto:${l.email}" style="color:var(--blue)">${l.email||'—'}</a>${l.whatsapp?`<br><a class="btn-wpp-sm" href="https://wa.me/55${l.whatsapp.replace(/\D/g,'')}" target="_blank" style="font-size:11px">💬 ${l.whatsapp}</a>`:''}</td>
+    <td style="font-size:12px">${local}</td>
+    <td style="font-size:12px">${idade}</td>
+    <td style="font-size:11px;color:var(--ink-md);max-width:180px">${preocup}</td>
+    <td style="font-size:11px;color:var(--ink-lt)">${dataStr}</td>
     <td><select class="status-sel" onchange="updateSessaoStatus('${l.id}',this.value)">
       <option value="new" ${(!l.status||l.status==='new')?'selected':''}>Pendente</option>
-      <option value="contacted" ${l.status==='contacted'?'selected':''}>Agendada</option>
-      <option value="converted" ${l.status==='converted'?'selected':''}>Realizada</option>
+      <option value="contacted" ${l.status==='contacted'?'selected':''}>Link enviado</option>
+      <option value="converted" ${l.status==='converted'?'selected':''}>Convertida</option>
     </select></td>
     <td style="white-space:nowrap">
-      <button onclick='openGerarLinkSessao(${JSON.stringify(l).replace(/'/g,"&apos;")})' style="background:var(--blue);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-size:11px;cursor:pointer;margin-right:4px;font-family:'DM Sans',sans-serif;font-weight:500">🔗 Link</button>
+      <button onclick='openGerarLinkSessao(${JSON.stringify(l).replace(/'/g,"&apos;")})' style="background:var(--blue);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-size:11px;cursor:pointer;margin-right:4px;font-family:'DM Sans',sans-serif;font-weight:500" title="Gerar link de pagamento">🔗</button>
+      ${l.whatsapp?`<a href="https://wa.me/55${l.whatsapp.replace(/\D/g,'')}" target="_blank" style="background:#25D366;color:#fff;padding:6px 10px;border-radius:6px;font-size:11px;text-decoration:none;margin-right:4px">💬</a>`:''}
       <button class="btn-del" onclick="deleteSessao('${l.id}')">×</button>
     </td>
-  </tr>`).join('');
+  </tr>`;}).join('');
+}
+
+function renderConfirmadasTable(list){
+  const tbody=document.getElementById('adm-confirmadas-tbody');
+  if(!tbody)return;
+  if(!list.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhuma sessão confirmada ainda.</td></tr>';return;}
+  tbody.innerHTML=list.map(s=>{
+    const data=s.data_sessao?`${s.data_sessao}${s.hora_sessao?' '+s.hora_sessao:''}`:'A combinar';
+    const local=`${s.endereco_cidade||'—'}/${s.endereco_uf||'—'}${s.endereco_bairro?', '+s.endereco_bairro:''}`;
+    const statusLabel={'aguardando_pagamento':'⏳ Aguardando pagamento','sinal_pago':'💰 Sinal pago','realizada':'✅ Realizada','cancelada':'❌ Cancelada'}[s.status]||s.status;
+    const statusColor={'aguardando_pagamento':'#92400E','sinal_pago':'#16A34A','realizada':'#1A3FBF','cancelada':'#B45309'}[s.status]||'#666';
+    const pagoEm=s.pago_em?new Date(s.pago_em).toLocaleDateString('pt-BR'):'—';
+    const linkPagar=`https://neuroplasticidar.gruposja.com/pagar-sessao.html?id=${s.id}`;
+    return `<tr>
+    <td style="font-weight:500">${s.cliente_nome||'—'}<div style="font-size:11px;color:var(--ink-lt)">${s.cliente_email||''}</div></td>
+    <td style="font-size:12px"><strong>${data}</strong></td>
+    <td style="font-size:11px">${local}<div style="font-size:10px;color:var(--ink-lt);margin-top:2px">👶 ${s.crianca_idade||'—'}</div></td>
+    <td style="font-family:'Playfair Display',serif;font-weight:700">R$ ${Number(s.valor_total).toFixed(2)}</td>
+    <td style="font-size:12px"><strong>R$ ${Number(s.valor_sinal).toFixed(2)}</strong><div style="font-size:10px;color:var(--ink-lt)">Restante: R$ ${Number(s.valor_restante).toFixed(2)}</div></td>
+    <td><span style="font-size:11px;font-weight:500;color:${statusColor}">${statusLabel}</span></td>
+    <td style="font-size:11px;color:var(--ink-lt)">${pagoEm}</td>
+    <td style="white-space:nowrap">
+      ${s.status==='aguardando_pagamento'?`<button onclick="copiarLinkConfirmada('${linkPagar}')" style="background:var(--blue);color:#fff;border:none;padding:5px 9px;border-radius:5px;font-size:11px;cursor:pointer;margin-right:4px" title="Copiar link de pagamento">🔗</button>`:''}
+      ${s.cliente_whatsapp?`<a href="https://wa.me/55${s.cliente_whatsapp.replace(/\D/g,'')}" target="_blank" style="background:#25D366;color:#fff;padding:5px 9px;border-radius:5px;font-size:11px;text-decoration:none;margin-right:4px">💬</a>`:''}
+      ${s.status==='sinal_pago'?`<button onclick="marcarRealizada('${s.id}')" style="background:var(--sage);color:#fff;border:none;padding:5px 9px;border-radius:5px;font-size:11px;cursor:pointer" title="Marcar como realizada">✅</button>`:''}
+    </td>
+  </tr>`;}).join('');
+}
+
+function subTabSessoes(tab,el){
+  document.querySelectorAll('#adm-sessoes .sub-tab-btn').forEach(b=>{
+    b.style.borderBottomColor='transparent';b.style.color='var(--ink-lt)';
+  });
+  el.style.borderBottomColor='var(--blue)';
+  el.style.color='var(--blue)';
+  document.getElementById('sub-aguardando').style.display=tab==='aguardando'?'block':'none';
+  document.getElementById('sub-confirmadas').style.display=tab==='confirmadas'?'block':'none';
+}
+
+function copiarLinkConfirmada(link){
+  navigator.clipboard.writeText(link);
+  alert('Link copiado! Cole no WhatsApp do cliente.');
+}
+
+async function marcarRealizada(id){
+  if(!confirm('Marcar essa sessão como realizada?'))return;
+  await sb.from('sessoes_agendadas').update({status:'realizada'}).eq('id',id);
+  await loadAdminSessoes();
 }
 function filterSessoes(s,el){
   document.querySelectorAll('#adm-sessoes .adm-filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');
@@ -3820,29 +4010,25 @@ async function updateSessaoStatus(id,status){await sb.from('leads').update({stat
 async function deleteSessao(id){if(!confirm('Remover?'))return;await sb.from('leads').delete().eq('id',id);await loadAdminSessoes();await loadDashboard();}
 
 /* COMPRAS */
+let allComprasData=[];
+let allSessoesPagasData=[];
+
 async function loadAdminCompras(){
   const all=await loadPurchasesFromDB();
-  const tbody=document.getElementById('adm-compras-tbody');
+  // Busca também sessões pagas pra unificar
+  const{data:sessPagas}=await sb.from('sessoes_agendadas')
+    .select('*')
+    .in('status',['sinal_pago','realizada'])
+    .order('pago_em',{ascending:false});
+  allSessoesPagasData=sessPagas||[];
 
-  // Atualiza estatísticas dos 3 cards
-  const total=all.reduce((s,p)=>s+parseFloat(p.amount||0),0);
-  const cnt=all.length;
-  const ticket=cnt?total/cnt:0;
-  const elT=document.getElementById('cp-total');if(elT)elT.textContent='R$ '+total.toFixed(2).replace('.',',');
-  const elC=document.getElementById('cp-count');if(elC)elC.textContent=cnt;
-  const elTk=document.getElementById('cp-ticket');if(elTk)elTk.textContent='R$ '+ticket.toFixed(2).replace('.',',');
-
-  if(!all.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhuma compra registrada ainda. As compras aparecerão aqui após o cliente pagar via Mercado Pago.</td></tr>';return;}
-
-  // Enriquece com nome do material
+  // Enriquece purchases
   const matIds=[...new Set(all.filter(p=>p.material_id).map(p=>p.material_id))];
   let matMap={};
   if(matIds.length){
     const{data:mats}=await sb.from('materials').select('id,title').in('id',matIds);
     matMap=Object.fromEntries((mats||[]).map(m=>[m.id,m.title]));
   }
-
-  // Enriquece com email do user
   const userIds=[...new Set(all.filter(p=>p.user_id).map(p=>p.user_id))];
   let userMap={};
   if(userIds.length){
@@ -3850,19 +4036,74 @@ async function loadAdminCompras(){
     userMap=Object.fromEntries((users||[]).map(u=>[u.id,u]));
   }
 
-  tbody.innerHTML=all.map(p=>{
+  // Unifica em uma lista só: materiais, kits, sessões
+  const lista=[];
+  all.forEach(p=>{
     const u=userMap[p.user_id]||{};
-    const matTitle=matMap[p.material_id]||'—';
-    const dt=new Date(p.created_at).toLocaleDateString('pt-BR');
+    const tipo=p.material_id?'material':'kit';
+    lista.push({
+      _tipo:tipo,
+      cliente_nome:u.name||u.email||'Visitante',
+      cliente_email:u.email||'',
+      item:tipo==='material'?(matMap[p.material_id]||'Material'):'Kit (físico)',
+      valor:parseFloat(p.amount||0),
+      cupom:p.coupon_code||null,
+      metodo:p.payment_method||'—',
+      data:p.created_at,
+    });
+  });
+  allSessoesPagasData.forEach(s=>{
+    lista.push({
+      _tipo:'sessao',
+      cliente_nome:s.cliente_nome,
+      cliente_email:s.cliente_email,
+      item:`Sessão presencial ${s.data_sessao||'(data a combinar)'}`,
+      valor:parseFloat(s.valor_sinal||0),
+      cupom:s.cupom_codigo||null,
+      metodo:'mp',
+      data:s.pago_em||s.created_at,
+    });
+  });
+  lista.sort((a,b)=>new Date(b.data)-new Date(a.data));
+  allComprasData=lista;
+
+  // Stats
+  const total=lista.reduce((s,p)=>s+p.valor,0);
+  const cnt=lista.length;
+  const ticket=cnt?total/cnt:0;
+  const cupons=lista.filter(p=>p.cupom).length;
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set('cp-total','R$ '+total.toFixed(2).replace('.',','));
+  set('cp-count',cnt);
+  set('cp-ticket','R$ '+ticket.toFixed(2).replace('.',','));
+  set('cp-cupons',cupons);
+
+  renderComprasTable(allComprasData);
+}
+
+function renderComprasTable(list){
+  const tbody=document.getElementById('adm-compras-tbody');
+  if(!list.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhuma compra registrada ainda. As compras aparecerão aqui após o cliente pagar via Mercado Pago.</td></tr>';return;}
+  tbody.innerHTML=list.map(p=>{
+    const tipoIcon={'material':'📄','kit':'🎒','sessao':'🏠'}[p._tipo]||'·';
+    const tipoLabel={'material':'Material','kit':'Kit','sessao':'Sessão'}[p._tipo]||p._tipo;
+    const dia=new Date(p.data);
+    const dataStr=dia.toLocaleDateString('pt-BR')+' '+dia.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
     return `<tr>
-      <td style="font-weight:500">${u.name||u.email||'Visitante'}<div style="font-size:11px;color:var(--ink-lt)">${u.email||''}</div></td>
-      <td>${matTitle}</td>
-      <td style="font-family:'Playfair Display',serif;font-weight:700">R$ ${parseFloat(p.amount||0).toFixed(2).replace('.',',')}</td>
-      <td>${p.payment_method||'—'}</td>
-      <td style="font-size:12px">${dt}</td>
-      <td><span class="badge-free">Aprovado</span></td>
-    </tr>`;
-  }).join('');
+    <td style="font-weight:500">${p.cliente_nome}<div style="font-size:11px;color:var(--ink-lt)">${p.cliente_email}</div></td>
+    <td><span style="font-size:11px;font-weight:500;color:var(--ink-md)">${tipoIcon} ${tipoLabel}</span></td>
+    <td style="font-size:12px">${p.item}</td>
+    <td style="font-family:'Playfair Display',serif;font-weight:700">R$ ${p.valor.toFixed(2).replace('.',',')}</td>
+    <td>${p.cupom?`<span style="background:var(--sage-lt);color:var(--sage);padding:3px 8px;border-radius:4px;font-size:10px;font-weight:600">${p.cupom}</span>`:'—'}</td>
+    <td style="font-size:12px">${p.metodo}</td>
+    <td style="font-size:11px;color:var(--ink-lt)">${dataStr}</td>
+  </tr>`;}).join('');
+}
+
+function filterCompras(tipo,el){
+  document.querySelectorAll('#adm-compras .adm-filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderComprasTable(tipo==='all'?allComprasData:allComprasData.filter(p=>p._tipo===tipo));
 }
 
 /* ══ REPASSE JAQUE ══ */
