@@ -3154,6 +3154,18 @@ async function submitQuiz(){
     });
   }catch(e){}
 
+  // Envia email do resultado do quiz (assíncrono, não bloqueia o fluxo)
+  try{
+    const kitFinal=pref==='acomp'?'Sessão Presencial em Manaus':pref==='digital'?'Materiais Digitais':kit.name;
+    sendEmailAction('send_quiz_result',{
+      email,
+      nome:name,
+      kit_recomendado:kitFinal,
+      is_logged_in:!!user,
+      respostas:quizAnswers
+    });
+  }catch(e){console.warn('[quiz] erro disparando email',e);}
+
   // Preencher resultado
   document.getElementById('qr-marker').textContent='🎒';
   document.getElementById('qr-kit-name').textContent=pref==='acomp'?'Sessão Presencial':pref==='digital'?'Materiais Digitais':kit.name;
