@@ -1155,7 +1155,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       <!-- Q4 -->
       <div class="quiz-step" id="qs4">
         <p class="quiz-q">Onde você quer receber o resultado?</p>
-        <p class="quiz-qsub">Nossa equipe entra em contato em até 24 horas com uma indicação personalizada.</p>
+        <p class="quiz-qsub">Nossa equipe entra em contato em até 48 horas com uma indicação personalizada.</p>
         <div class="quiz-field"><label>Seu nome</label><input type="text" id="q-name" placeholder="Como posso te chamar?"></div>
         <div class="quiz-field"><label>E-mail</label><input type="email" id="q-email" placeholder="Para receber o resultado completo"></div>
         <div class="quiz-field"><label>WhatsApp <span style="font-weight:300;color:var(--ink-lt)">(opcional — para contato mais rápido)</span></label><input type="tel" id="q-wpp" placeholder="(92) 99999-9999"></div>
@@ -1170,7 +1170,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
           <p class="qr-desc" id="qr-desc">Com base nas suas respostas, este kit foi pensado para apoiar o desenvolvimento do seu filho.</p>
           <!-- Botões dinâmicos — preenchidos pelo JS conforme a resposta Q3 -->
           <div id="qr-actions" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"></div>
-          <p class="qr-note">Nossa equipe entrará em contato pelo e-mail informado em até 24 horas.</p>
+          <p class="qr-note">Nossa equipe entrará em contato pelo e-mail informado em até 48 horas.</p>
           <button onclick="resetQuiz()" style="background:none;border:none;font-size:12px;color:var(--ink-lt);cursor:pointer;margin-top:12px;font-family:'DM Sans',sans-serif;font-weight:300">Refazer o quiz</button>
         </div>
       </div>
@@ -1228,7 +1228,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     <div class="contato-info">
       <p class="eyebrow">Contato</p>
       <h2>Vamos conversar?</h2>
-      <p>Dúvidas sobre materiais, kits ou acompanhamento? Preencha o formulário — nossa equipe entra em contato em até 24 horas.</p>
+      <p>Dúvidas sobre materiais, kits ou acompanhamento? Preencha o formulário — nossa equipe entra em contato em até 48 horas.</p>
       <div class="contact-channels">
         <div class="ch-item">
           <div><span class="ch-label">Instagram</span><a href="https://instagram.com/neuroplasticidar" target="_blank">@neuroplasticidar</a></div>
@@ -1296,7 +1296,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       </div>
       <div class="field"><label>Mensagem</label><textarea id="ct-msg" placeholder="Conte um pouco sobre o que você busca para o seu filho..."></textarea></div>
       <button class="btn-submit" id="ct-btn" onclick="submitContact()">Enviar mensagem</button>
-      <p style="font-size:11px;color:var(--ink-lt);margin-top:12px;text-align:center;font-weight:300">Nossa equipe retorna em até 24 horas úteis.</p>
+      <p style="font-size:11px;color:var(--ink-lt);margin-top:12px;text-align:center;font-weight:300">Nossa equipe retorna em até 48 horas úteis.</p>
     </div>
   </div>
 </section>
@@ -2200,7 +2200,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       💳 O pagamento é realizado após confirmação de data e horário com nossa equipe.
     </div>
     <button class="btn-pay" onclick="agendarSessao()">Solicitar agendamento</button>
-    <p style="font-size:11px;color:var(--ink-lt);text-align:center;margin-top:10px;font-weight:300">Nossa equipe retorna em até 24 horas.</p>
+    <p style="font-size:11px;color:var(--ink-lt);text-align:center;margin-top:10px;font-weight:300">Nossa equipe retorna em até 48 horas.</p>
   </div>
 </div>
 
@@ -3171,26 +3171,43 @@ async function submitQuiz(){
   document.getElementById('qr-kit-name').textContent=pref==='acomp'?'Sessão Presencial':pref==='digital'?'Materiais Digitais':kit.name;
   document.getElementById('qr-area').textContent=pref==='acomp'?'Acompanhamento em Casa':pref==='digital'?'Guias e recursos práticos':kit.area;
   document.getElementById('qr-desc').textContent=pref==='acomp'
-    ? 'Ótima escolha. Uma Assistente de Desenvolvimento Infantil irá até sua casa e trabalhará com seu filho através da brincadeira. Nossa equipe entrará em contato em até 24 horas.'
+    ? 'Ótima escolha. Uma Assistente de Desenvolvimento Infantil irá até sua casa e trabalhará com seu filho através da brincadeira. Nossa equipe entrará em contato em até 48 horas.'
     : pref==='digital'
     ? 'Temos guias práticos, fichas de atividades e roteiros prontos para você aplicar em casa. Alguns são gratuitos — acesse agora mesmo.'
-    : kit.desc+' Nossa equipe entrará em contato em até 24 horas com mais detalhes.';
+    : kit.desc+' Nossa equipe entrará em contato em até 48 horas com mais detalhes.';
 
-  // Botões dinâmicos por destino
+  // Monta a URL do WhatsApp com mensagem pré-preenchida (mesmo template do email)
+  const kitFinalNome=pref==='acomp'?'Sessão Presencial em Manaus':pref==='digital'?'Materiais Digitais':kit.name;
+  const sintomasText=(quizAnswers.symptoms||[]).length?quizAnswers.symptoms.join(', '):'preocupações gerais';
+  const ageText=quizAnswers.age||'não informada';
+  const whatsappMsg=`Olá, equipe Neuroplasticidar! 💜
+
+Acabei de fazer o quiz no site e vim conversar sobre o resultado.
+
+🙋 Sou: ${name}
+👶 Estou acompanhando uma criança de: ${ageText}
+🎯 Minhas principais preocupações: ${sintomasText}
+✨ Kit recomendado pelo quiz: ${kitFinalNome}
+
+Gostaria de saber mais detalhes!`;
+  const whatsappUrl=`https://wa.me/5592991479457?text=${encodeURIComponent(whatsappMsg)}`;
+
+  // Botões dinâmicos por destino — Kit e Sessão vão direto pro WhatsApp
   const actionsEl=document.getElementById('qr-actions');
   if(pref==='acomp'){
-    // Sessão → formulário com sessão pré-selecionada
+    // Sessão → WhatsApp da Jaque com template do quiz
     actionsEl.innerHTML=`
-      <a href="#contato" onclick="setTimeout(()=>{const el=document.querySelector('[data-intent=sessao]');if(el)selectIntent(el,'sessao');},300)" class="btn-gold" style="text-decoration:none">Agendar minha sessão</a>`;
+      <a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn-gold" style="text-decoration:none;background:#25D366;color:#fff">💬 Falar pelo WhatsApp</a>
+      <a href="#contato" onclick="setTimeout(()=>{const el=document.querySelector('[data-intent=sessao]');if(el)selectIntent(el,'sessao');},300)" style="display:inline-flex;align-items:center;padding:13px 24px;border-radius:50px;border:1.5px solid var(--border);font-size:14px;font-weight:500;color:var(--ink-md);text-decoration:none;transition:all .2s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'">Agendar pelo formulário</a>`;
   } else if(pref==='digital'){
-    // Material → seção de materiais
+    // Material → seção de materiais + WhatsApp opcional
     actionsEl.innerHTML=`
       <a href="#materiais" class="btn-gold" style="text-decoration:none">Ver materiais gratuitos</a>
-      <a href="#contato" onclick="setTimeout(()=>{const el=document.querySelector('[data-intent=material]');if(el)selectIntent(el,'material');},300)" style="display:inline-flex;align-items:center;padding:13px 24px;border-radius:50px;border:1.5px solid var(--border);font-size:14px;font-weight:500;color:var(--ink-md);text-decoration:none;transition:all .2s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'">Falar com a equipe</a>`;
+      <a href="${whatsappUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;padding:13px 24px;border-radius:50px;border:1.5px solid #25D366;background:#fff;font-size:14px;font-weight:500;color:#25D366;text-decoration:none;transition:all .2s">💬 Falar com a equipe</a>`;
   } else {
-    // Kit → formulário com kit pré-selecionado
+    // Kit → WhatsApp da Jaque com template do quiz
     actionsEl.innerHTML=`
-      <a href="javascript:void(0)" onclick="closeDialog('dlg-quiz');openKitDialog('${kit.name}')" class="btn-gold" style="text-decoration:none">Quero esse kit</a>
+      <a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn-gold" style="text-decoration:none;background:#25D366;color:#fff">💬 Quero esse kit (WhatsApp)</a>
       <a href="#materiais" style="display:inline-flex;align-items:center;padding:13px 24px;border-radius:50px;border:1.5px solid var(--border);font-size:14px;font-weight:500;color:var(--ink-md);text-decoration:none;transition:all .2s" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border)'">Ver materiais gratuitos</a>`;
   }
 
