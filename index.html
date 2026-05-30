@@ -3286,10 +3286,18 @@ async function submitContact(){
   const name=document.getElementById('ct-name').value.trim();
   const email=document.getElementById('ct-email').value.trim();
   const wpp=document.getElementById('ct-wpp')?.value.trim()||'';
+  const perfil=document.getElementById('ct-perfil')?.value||'';
   const msg=document.getElementById('ct-msg')?.value.trim()||'';
   if(!name||!email){alert('Preencha nome e e-mail.');return;}
   btn.textContent='Enviando…';btn.disabled=true;
+  // Salva lead no banco
   try{await sb.from('leads').insert({name,email,whatsapp:wpp,symptoms:[],contact_preference:'duvida_geral',recommended_kit:'contato',status:'new'});}catch(e){}
+  // Dispara email pra equipe (com reply_to = email do cliente)
+  try{
+    await sendEmailAction('send_contact_form',{
+      nome:name,email,whatsapp:wpp,perfil,mensagem:msg
+    });
+  }catch(e){console.warn('[contato] erro disparando email',e);}
   setTimeout(()=>{btn.textContent='✓ Mensagem enviada!';btn.style.background='var(--sage)';
     document.getElementById('ct-name').value='';document.getElementById('ct-email').value='';
     if(document.getElementById('ct-msg'))document.getElementById('ct-msg').value='';
