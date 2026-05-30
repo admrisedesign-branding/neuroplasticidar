@@ -3368,7 +3368,12 @@ let _purchasesCache=[];
 async function loadPurchasesFromDB(){
   try{
     const{data,error}=await sb.from('purchases').select('*').eq('payment_status','approved').order('created_at',{ascending:false});
-    if(error){console.error('[purchases] erro:',error.message||error.details||JSON.stringify(error));return [];}
+    if(error){
+      // Evita DataCloneError ao logar — pega só campos serializáveis
+      const errInfo={message:error.message,code:error.code,details:error.details,hint:error.hint};
+      console.error('[purchases] erro:',JSON.stringify(errInfo));
+      return [];
+    }
     _purchasesCache=data||[];
     return _purchasesCache;
   }catch(e){console.error('[purchases] exceção:',e);return [];}
@@ -3701,7 +3706,8 @@ let currentRepasseFilter='month';
 async function loadAdminRepasse(){
   const{data,error}=await sb.from('purchases').select('*').eq('payment_status','approved').order('created_at',{ascending:false});
   if(error){
-    console.error('[repasse] erro consultando purchases:',error.message||error.details||JSON.stringify(error));
+    const errInfo={message:error.message,code:error.code,details:error.details,hint:error.hint};
+    console.error('[repasse] erro consultando purchases:',JSON.stringify(errInfo));
     allRepasseData=[];
     renderRepasse();
     return;
