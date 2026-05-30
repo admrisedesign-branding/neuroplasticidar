@@ -1434,22 +1434,86 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
         </div>
       </div>
 
-      <!-- Stats do repasse -->
+      <!-- Cards de breakdown por tipo (líquido + repasse) -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">
+        <!-- CARD MATERIAIS -->
+        <div style="background:#fff;border-radius:12px;border:1px solid var(--border);padding:18px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+            <span style="font-size:20px">📄</span>
+            <p style="font-size:14px;font-weight:600;color:var(--ink);margin:0">Materiais Digitais</p>
+          </div>
+          <p style="font-size:10px;color:var(--ink-lt);margin:0 0 2px;text-transform:uppercase;letter-spacing:0.5px;font-weight:500">Líquido (sem taxa MP)</p>
+          <p style="font-size:20px;font-weight:700;color:var(--ink);margin:0 0 4px;font-family:'Playfair Display',serif" id="rp-mat-liquido">R$ 0,00</p>
+          <p style="font-size:11px;color:var(--ink-lt);margin:0 0 12px"><span id="rp-mat-vendas">0</span> vendas · <span id="rp-mat-taxa" style="color:#B45309">taxa MP: R$ 0,00</span></p>
+          <div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px dashed var(--border)">
+            <div>
+              <p style="font-size:10px;color:var(--ink-lt);margin:0;text-transform:uppercase;letter-spacing:0.5px;font-weight:500">Jaque (70%)</p>
+              <p style="font-size:17px;font-weight:700;color:var(--sage);margin:0;font-family:'Playfair Display',serif" id="rp-mat-jaque">R$ 0,00</p>
+            </div>
+            <div style="text-align:right">
+              <p style="font-size:10px;color:var(--ink-lt);margin:0;text-transform:uppercase;letter-spacing:0.5px;font-weight:500">Você (30%)</p>
+              <p style="font-size:17px;font-weight:700;color:var(--blue);margin:0;font-family:'Playfair Display',serif" id="rp-mat-joice">R$ 0,00</p>
+            </div>
+          </div>
+        </div>
+        <!-- CARD KITS -->
+        <div style="background:#fff;border-radius:12px;border:1px solid var(--border);padding:18px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+            <span style="font-size:20px">🎒</span>
+            <p style="font-size:14px;font-weight:600;color:var(--ink);margin:0">Kits Físicos</p>
+          </div>
+          <p style="font-size:10px;color:var(--ink-lt);margin:0 0 2px;text-transform:uppercase;letter-spacing:0.5px;font-weight:500">Líquido (sem taxa MP)</p>
+          <p style="font-size:20px;font-weight:700;color:var(--ink);margin:0 0 4px;font-family:'Playfair Display',serif" id="rp-kit-liquido">R$ 0,00</p>
+          <p style="font-size:11px;color:var(--ink-lt);margin:0 0 12px"><span id="rp-kit-vendas">0</span> vendas · <span id="rp-kit-taxa" style="color:#B45309">taxa MP: R$ 0,00</span></p>
+          <div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px dashed var(--border)">
+            <div>
+              <p style="font-size:10px;color:var(--ink-lt);margin:0;text-transform:uppercase;letter-spacing:0.5px;font-weight:500">Jaque (85%)</p>
+              <p style="font-size:17px;font-weight:700;color:var(--sage);margin:0;font-family:'Playfair Display',serif" id="rp-kit-jaque">R$ 0,00</p>
+            </div>
+            <div style="text-align:right">
+              <p style="font-size:10px;color:var(--ink-lt);margin:0;text-transform:uppercase;letter-spacing:0.5px;font-weight:500">Você (15%)</p>
+              <p style="font-size:17px;font-weight:700;color:var(--blue);margin:0;font-family:'Playfair Display',serif" id="rp-kit-joice">R$ 0,00</p>
+            </div>
+          </div>
+        </div>
+        <!-- CARD SESSÕES -->
+        <div style="background:#fff;border-radius:12px;border:1px solid var(--border);padding:18px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+            <span style="font-size:20px">🏠</span>
+            <p style="font-size:14px;font-weight:600;color:var(--ink);margin:0">Sessões Presenciais</p>
+          </div>
+          <p style="font-size:10px;color:var(--ink-lt);margin:0 0 2px;text-transform:uppercase;letter-spacing:0.5px;font-weight:500">Líquido (sem taxa MP)</p>
+          <p style="font-size:20px;font-weight:700;color:var(--ink);margin:0 0 4px;font-family:'Playfair Display',serif" id="rp-sess-liquido">R$ 0,00</p>
+          <p style="font-size:11px;color:var(--ink-lt);margin:0 0 12px"><span id="rp-sess-vendas">0</span> vendas · <span id="rp-sess-taxa" style="color:#B45309">taxa MP: R$ 0,00</span></p>
+          <div style="display:flex;justify-content:space-between;padding-top:10px;border-top:1px dashed var(--border)">
+            <div>
+              <p style="font-size:10px;color:var(--ink-lt);margin:0;text-transform:uppercase;letter-spacing:0.5px;font-weight:500">Jaque (85%)</p>
+              <p style="font-size:17px;font-weight:700;color:var(--sage);margin:0;font-family:'Playfair Display',serif" id="rp-sess-jaque">R$ 0,00</p>
+            </div>
+            <div style="text-align:right">
+              <p style="font-size:10px;color:var(--ink-lt);margin:0;text-transform:uppercase;letter-spacing:0.5px;font-weight:500">Você (15%)</p>
+              <p style="font-size:17px;font-weight:700;color:var(--blue);margin:0;font-family:'Playfair Display',serif" id="rp-sess-joice">R$ 0,00</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumo geral (compacto) -->
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px">
-        <div class="adm-stat-card" style="padding:18px">
-          <div class="adm-stat-val" id="rp-receita" style="font-size:22px">R$ —</div>
-          <div class="adm-stat-lbl">Receita bruta</div>
+        <div class="adm-stat-card" style="padding:14px">
+          <div class="adm-stat-val" id="rp-receita" style="font-size:18px">R$ —</div>
+          <div class="adm-stat-lbl">Receita bruta total</div>
         </div>
-        <div class="adm-stat-card" style="padding:18px">
-          <div class="adm-stat-val" id="rp-plataforma" style="font-size:22px;color:var(--blue)">R$ —</div>
-          <div class="adm-stat-lbl">Sua parte (Joice)</div>
+        <div class="adm-stat-card" style="padding:14px">
+          <div class="adm-stat-val" id="rp-plataforma" style="font-size:18px;color:var(--blue)">R$ —</div>
+          <div class="adm-stat-lbl">Sua parte total (Joice)</div>
         </div>
-        <div class="adm-stat-card" style="padding:18px">
-          <div class="adm-stat-val" id="rp-vendas" style="font-size:22px">—</div>
+        <div class="adm-stat-card" style="padding:14px">
+          <div class="adm-stat-val" id="rp-vendas" style="font-size:18px">—</div>
           <div class="adm-stat-lbl">Vendas no período</div>
         </div>
-        <div class="adm-stat-card" style="padding:18px">
-          <div class="adm-stat-val" id="rp-pago" style="font-size:22px;color:var(--sage)">R$ —</div>
+        <div class="adm-stat-card" style="padding:14px">
+          <div class="adm-stat-val" id="rp-pago" style="font-size:18px;color:var(--sage)">R$ —</div>
           <div class="adm-stat-lbl">Já repassado</div>
         </div>
       </div>
@@ -4453,6 +4517,32 @@ function renderRepasse(){
 
   const fmt=v=>v.toFixed(2).replace('.',',');
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+
+  // ═══ Cards por tipo: calcula receita líquida, taxa MP, parte Jaque, parte Joice ═══
+  const tipos=['material','kit','sessao'];
+  const taxasRepasse={'material':0.70,'kit':0.85,'sessao':0.85};
+  const prefixos={'material':'mat','kit':'kit','sessao':'sess'};
+
+  tipos.forEach(tipo=>{
+    const itens=list.filter(p=>p._tipo===tipo);
+    const bruto=itens.reduce((s,p)=>s+parseFloat(p.amount||0),0);
+    const liquido=itens.reduce((s,p)=>{
+      const net=p.net_amount!=null?parseFloat(p.net_amount):parseFloat(p.amount||0);
+      return s+net;
+    },0);
+    const taxaMP=bruto-liquido;
+    const rate=taxasRepasse[tipo];
+    const partJaque=liquido*rate;
+    const partJoice=liquido*(1-rate);
+    const prefix=prefixos[tipo];
+    set(`rp-${prefix}-liquido`,'R$ '+fmt(liquido));
+    set(`rp-${prefix}-vendas`,itens.length);
+    set(`rp-${prefix}-taxa`,'taxa MP: R$ '+fmt(taxaMP));
+    set(`rp-${prefix}-jaque`,'R$ '+fmt(partJaque));
+    set(`rp-${prefix}-joice`,'R$ '+fmt(partJoice));
+  });
+
+  // Resumo geral
   set('rp-total-jaque',fmt(aPagar));
   set('rp-receita','R$ '+fmt(totalReceita));
   set('rp-plataforma','R$ '+fmt(plataforma));
