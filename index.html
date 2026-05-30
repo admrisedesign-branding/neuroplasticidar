@@ -1228,7 +1228,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     <div class="contato-info">
       <p class="eyebrow">Contato</p>
       <h2>Vamos conversar?</h2>
-      <p>Dúvidas sobre materiais, kits ou acompanhamento? Preencha o formulário — nossa equipe entra em contato em até 48 horas.</p>
+      <p>Ainda tem dúvidas? Não sabe por onde começar? Preencha o formulário e nossa equipe entra em contato em até 48 horas.</p>
       <div class="contact-channels">
         <div class="ch-item">
           <div><span class="ch-label">Instagram</span><a href="https://instagram.com/neuroplasticidar" target="_blank">@neuroplasticidar</a></div>
@@ -1240,34 +1240,19 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
           <div><span class="ch-label">E-mail</span><a href="mailto:contato@neuroplasticidar.com">contato@neuroplasticidar.com</a></div>
         </div>
       </div>
-      <!-- Nota sobre sessão -->
+      <!-- Atalhos pras ações principais -->
       <div style="margin-top:32px;padding:20px 24px;background:var(--blue-lt);border-radius:var(--r);border-left:3px solid var(--blue)">
-        <p style="font-size:13px;font-weight:600;color:var(--blue-dk);margin-bottom:4px">Sobre o agendamento de sessão</p>
-        <p style="font-size:13px;color:var(--ink-md);line-height:1.6;font-weight:300">O pagamento da sessão presencial é feito via Mercado Pago após confirmação de data e horário pela nossa equipe.</p>
+        <p style="font-size:13px;font-weight:600;color:var(--blue-dk);margin-bottom:8px">Quer agir agora?</p>
+        <p style="font-size:13px;color:var(--ink-md);line-height:1.6;font-weight:300;margin-bottom:10px">Use os atalhos rápidos:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <a href="javascript:void(0)" onclick="openSessaoDialog()" style="font-size:12px;padding:6px 12px;background:var(--blue);color:#fff;border-radius:20px;text-decoration:none;font-weight:500">🏠 Agendar sessão</a>
+          <a href="#materiais" style="font-size:12px;padding:6px 12px;background:var(--blue);color:#fff;border-radius:20px;text-decoration:none;font-weight:500">📄 Ver materiais</a>
+          <a href="#quiz" style="font-size:12px;padding:6px 12px;background:var(--blue);color:#fff;border-radius:20px;text-decoration:none;font-weight:500">🎯 Fazer o quiz</a>
+        </div>
       </div>
     </div>
     <div class="contato-form-wrap">
       <h3>Envie uma mensagem</h3>
-
-      <!-- Seletor de intenção destacado -->
-      <div style="margin-bottom:24px">
-        <label style="display:block;font-size:11px;font-weight:500;color:var(--ink-lt);margin-bottom:10px;text-transform:uppercase;letter-spacing:.8px">O que você busca?</label>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="intent-selector">
-          <button type="button" class="intent-btn active" onclick="selectIntent(this,'kit')" data-intent="kit">
-            <span style="font-size:20px;display:block;margin-bottom:6px">🎒</span>
-            <span>Kit de brinquedos</span>
-          </button>
-          <button type="button" class="intent-btn" onclick="selectIntent(this,'sessao')" data-intent="sessao">
-            <span style="font-size:20px;display:block;margin-bottom:6px">🏠</span>
-            <span>Sessão presencial</span>
-          </button>
-          <button type="button" class="intent-btn" onclick="selectIntent(this,'material')" data-intent="material">
-            <span style="font-size:20px;display:block;margin-bottom:6px">📄</span>
-            <span>Material digital</span>
-          </button>
-        </div>
-        <input type="hidden" id="ct-intent" value="kit">
-      </div>
 
       <div class="field"><label>Nome</label><input type="text" id="ct-name" placeholder="Como posso te chamar?"></div>
       <div class="field"><label>E-mail</label><input type="email" id="ct-email" placeholder="seu@email.com"></div>
@@ -1280,21 +1265,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
           <option>Outro</option>
         </select>
       </div>
-      <!-- Campo de cupom — aparece só quando sessão está selecionada -->
-      <div class="field" id="ct-cupom-wrap" style="display:none">
-        <label>Cupom de desconto <span style="font-weight:300;color:var(--ink-lt)">(opcional)</span></label>
-        <div style="display:flex;gap:8px">
-          <input type="text" id="ct-cupom" placeholder="Digite o código" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
-          <button type="button" onclick="aplicarCupomContato()" style="padding:0 18px;border-radius:var(--r);border:1px solid var(--border);background:var(--parchment);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;white-space:nowrap;flex-shrink:0">Aplicar</button>
-        </div>
-        <span id="ct-cupom-msg" style="font-size:12px;margin-top:6px;display:block"></span>
-        <div id="ct-cupom-info" style="display:none;margin-top:8px;padding:10px 14px;background:var(--sage-lt);border-radius:var(--r);font-size:12px;color:var(--sage);font-weight:500"></div>
-        <!-- Nota pagamento -->
-        <div style="margin-top:10px;padding:12px 16px;background:var(--blue-lt);border-radius:var(--r);border-left:3px solid var(--blue);font-size:12px;color:var(--blue-dk);line-height:1.6">
-          💳 <strong>Pagamento após confirmação</strong> — Após receber sua mensagem, nossa equipe entrará em contato para confirmar data e horário. O pagamento é realizado via Mercado Pago.
-        </div>
-      </div>
-      <div class="field"><label>Mensagem</label><textarea id="ct-msg" placeholder="Conte um pouco sobre o que você busca para o seu filho..."></textarea></div>
+      <div class="field"><label>Mensagem</label><textarea id="ct-msg" placeholder="Conte um pouco sobre sua dúvida ou o que você busca..."></textarea></div>
       <button class="btn-submit" id="ct-btn" onclick="submitContact()">Enviar mensagem</button>
       <p style="font-size:11px;color:var(--ink-lt);margin-top:12px;text-align:center;font-weight:300">Nossa equipe retorna em até 48 horas úteis.</p>
     </div>
@@ -3253,46 +3224,22 @@ async function submitContact(){
   const btn=document.getElementById('ct-btn');
   const name=document.getElementById('ct-name').value.trim();
   const email=document.getElementById('ct-email').value.trim();
-  const intent=document.getElementById('ct-intent')?.value||'contato';
   const wpp=document.getElementById('ct-wpp')?.value.trim()||'';
+  const msg=document.getElementById('ct-msg')?.value.trim()||'';
   if(!name||!email){alert('Preencha nome e e-mail.');return;}
   btn.textContent='Enviando…';btn.disabled=true;
-  const pref=intent==='sessao'?'sessao_presencial':intent;
-  const rkit=intent==='sessao'?'sessao':'contato';
-  try{await sb.from('leads').insert({name,email,whatsapp:wpp,symptoms:[],contact_preference:pref,recommended_kit:rkit,status:'new'});}catch(e){}
+  try{await sb.from('leads').insert({name,email,whatsapp:wpp,symptoms:[],contact_preference:'duvida_geral',recommended_kit:'contato',status:'new'});}catch(e){}
   setTimeout(()=>{btn.textContent='✓ Mensagem enviada!';btn.style.background='var(--sage)';
     document.getElementById('ct-name').value='';document.getElementById('ct-email').value='';
     if(document.getElementById('ct-msg'))document.getElementById('ct-msg').value='';
-  },500);
-}
-function selectIntent(el,v){
-  document.querySelectorAll('.intent-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  if(document.getElementById('ct-intent'))document.getElementById('ct-intent').value=v;
-  // Mostra campo de cupom só para sessão
-  const cupomWrap=document.getElementById('ct-cupom-wrap');
-  if(cupomWrap) cupomWrap.style.display=v==='sessao'?'block':'none';
-}
-
-function goToSessao(){
-  document.querySelector('#contato').scrollIntoView({behavior:'smooth'});
-  setTimeout(()=>{
-    const el=document.querySelector('[data-intent=sessao]');
-    if(el) selectIntent(el,'sessao');
+    if(document.getElementById('ct-wpp'))document.getElementById('ct-wpp').value='';
   },500);
 }
 
-function aplicarCupomContato(){
-  const codigo=document.getElementById('ct-cupom').value.trim().toUpperCase();
-  const msg=document.getElementById('ct-cupom-msg');
-  const info=document.getElementById('ct-cupom-info');
-  if(!CUPONS[codigo]){msg.textContent='Cupom inválido.';msg.style.color='var(--terra)';info.style.display='none';return;}
-  const c=CUPONS[codigo];
-  const desconto=Math.round(SESSAO_PRICE*c.desconto);
-  msg.textContent='✓ '+c.desc+' aplicado!';msg.style.color='var(--sage)';
-  info.style.display='block';
-  info.innerHTML=`De <s>R$ ${SESSAO_PRICE}</s> por <strong>R$ ${SESSAO_PRICE-desconto}</strong> — você economiza R$ ${desconto}`;
-}
+// Funções legadas mantidas vazias para compatibilidade (caso ainda haja chamadas residuais)
+function selectIntent(){}
+function goToSessao(){openSessaoDialog();}
+function aplicarCupomContato(){}
 
 function directCheckout(id){
   currentProduct=materials.find(p=>p.id===id);
