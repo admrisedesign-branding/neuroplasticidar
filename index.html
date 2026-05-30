@@ -3176,20 +3176,31 @@ async function submitQuiz(){
     ? 'Temos guias práticos, fichas de atividades e roteiros prontos para você aplicar em casa. Alguns são gratuitos — acesse agora mesmo.'
     : kit.desc+' Nossa equipe entrará em contato em até 48 horas com mais detalhes.';
 
-  // Monta a URL do WhatsApp com mensagem pré-preenchida (mesmo template do email)
+  // Monta a URL do WhatsApp com mensagem estruturada (formato CRM-ready)
+  const slugify=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'');
+  const categoria=pref==='acomp'?'SESSAO':pref==='digital'?'MATERIAL':'KIT';
   const kitFinalNome=pref==='acomp'?'Sessão Presencial em Manaus':pref==='digital'?'Materiais Digitais':kit.name;
   const sintomasText=(quizAnswers.symptoms||[]).length?quizAnswers.symptoms.join(', '):'preocupações gerais';
   const ageText=quizAnswers.age||'não informada';
-  const whatsappMsg=`Olá, equipe Neuroplasticidar! 💜
+  const ageTag=slugify(ageText)||'Indefinida';
+  const kitTag=slugify(kitFinalNome);
+  const wppLine=wpp?`\n📱 WhatsApp: ${wpp}`:'';
+  const whatsappMsg=`👋 Olá, equipe Neuroplasticidar!
 
-Acabei de fazer o quiz no site e vim conversar sobre o resultado.
+Acabei de fazer o quiz no site e gostaria de saber mais sobre o resultado.
 
-🙋 Sou: ${name}
-👶 Estou acompanhando uma criança de: ${ageText}
-🎯 Minhas principais preocupações: ${sintomasText}
-✨ Kit recomendado pelo quiz: ${kitFinalNome}
+━━━ 📋 DADOS DO LEAD ━━━
+🏷️ Categoria: ${categoria}
+👤 Nome: ${name}
+📧 Email: ${email}${wppLine}
+👶 Idade da criança: ${ageText}
+🎯 Preocupações: ${sintomasText}
+✨ Recomendação: ${kitFinalNome}
+━━━━━━━━━━━━━━━━━━━━
 
-Gostaria de saber mais detalhes!`;
+Aguardo retorno! 💜
+
+#NeuroLead #Quiz #${kitTag} #Idade${ageTag}`;
   const whatsappUrl=`https://wa.me/5592991479457?text=${encodeURIComponent(whatsappMsg)}`;
 
   // Botões dinâmicos por destino — Kit e Sessão vão direto pro WhatsApp
