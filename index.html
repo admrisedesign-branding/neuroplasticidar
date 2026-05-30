@@ -1309,6 +1309,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     <button class="admin-tab-btn active" onclick="adminTab('dashboard',this)">Dashboard</button>
     <button class="admin-tab-btn" onclick="adminTab('materiais',this)">Materiais</button>
     <button class="admin-tab-btn" onclick="adminTab('kits',this)">Kits</button>
+    <button class="admin-tab-btn" id="tab-estoque" onclick="adminTab('estoque',this)">📦 Estoque</button>
     <button class="admin-tab-btn" id="tab-leads" onclick="adminTab('leads',this)">Leads Quiz</button>
     <button class="admin-tab-btn" id="tab-sessoes" onclick="adminTab('sessoes',this)">Sessões</button>
     <button class="admin-tab-btn" id="tab-pedidos" onclick="adminTab('pedidos',this)">Pedidos Kits</button>
@@ -1654,6 +1655,157 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
         <tbody id="adm-kit-tbody"></tbody>
       </table>
     </div>
+
+    <!-- ════════ ESTOQUE DE BRINQUEDOS ════════ -->
+    <div class="admin-section" id="adm-estoque">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+        <div>
+          <p style="font-size:24px;font-family:'Playfair Display',serif;font-weight:700;color:var(--ink)">📦 Estoque de Brinquedos</p>
+          <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Cadastro completo de brinquedos — usado pra montar kits sob demanda</p>
+        </div>
+        <button onclick="openBrinquedoForm()" style="background:var(--blue);color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">+ Novo brinquedo</button>
+      </div>
+
+      <!-- Stats do estoque -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+        <div class="adm-stat-card" style="padding:14px">
+          <div class="adm-stat-val" id="br-total" style="font-size:22px">—</div>
+          <div class="adm-stat-lbl">Total cadastrados</div>
+        </div>
+        <div class="adm-stat-card" style="padding:14px">
+          <div class="adm-stat-val" id="br-em-estoque" style="font-size:22px;color:var(--sage)">—</div>
+          <div class="adm-stat-lbl">Em estoque</div>
+        </div>
+        <div class="adm-stat-card" style="padding:14px">
+          <div class="adm-stat-val" id="br-alerta" style="font-size:22px;color:#B45309">—</div>
+          <div class="adm-stat-lbl">⚠️ Abaixo do mínimo</div>
+        </div>
+        <div class="adm-stat-card" style="padding:14px">
+          <div class="adm-stat-val" id="br-valor-total" style="font-size:22px;color:var(--blue)">R$ —</div>
+          <div class="adm-stat-lbl">Valor total estoque</div>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="adm-filter-btn active" onclick="filterBrinquedos('all',this)">Todos</button>
+        <button class="adm-filter-btn" onclick="filterBrinquedos('em-estoque',this)">Em estoque</button>
+        <button class="adm-filter-btn" onclick="filterBrinquedos('alerta',this)">⚠️ Abaixo do mínimo</button>
+        <button class="adm-filter-btn" onclick="filterBrinquedos('zerado',this)">Zerado</button>
+        <input type="text" id="br-search" placeholder="🔍 Buscar..." oninput="searchBrinquedos()" style="margin-left:auto;padding:8px 14px;border-radius:8px;border:1px solid var(--border);font-size:13px;font-family:'DM Sans',sans-serif;min-width:200px">
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Nome</th>
+            <th>Faixa etária</th>
+            <th>Custo</th>
+            <th>Preço venda</th>
+            <th>Estoque</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="adm-brinquedos-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Modal: Cadastrar / Editar Brinquedo -->
+    <div class="overlay" id="dlg-brinquedo">
+      <div class="dialog" style="max-width:560px;width:100%;padding:32px;max-height:85vh;overflow-y:auto">
+        <button class="dlg-close" onclick="closeDialog('dlg-brinquedo')">✕</button>
+        <h3 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px" id="br-form-title">🧸 Novo brinquedo</h3>
+        <p style="font-size:13px;color:var(--ink-lt);margin-bottom:20px;font-weight:300">Cadastre os dados completos do brinquedo</p>
+
+        <input type="hidden" id="br-id">
+
+        <!-- Foto -->
+        <div class="field" style="margin-bottom:16px">
+          <label>Foto do brinquedo</label>
+          <div id="br-photo-zone" style="border:2px dashed var(--border);border-radius:var(--r);padding:24px;text-align:center;cursor:pointer;transition:all .2s" onclick="document.getElementById('br-photo-input').click()" ondragover="event.preventDefault();this.style.borderColor='var(--blue)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="event.preventDefault();this.style.borderColor='var(--border)';handleBrinquedoPhotoDrop(event)">
+            <div id="br-photo-preview" style="display:none">
+              <img id="br-photo-img" style="max-width:160px;max-height:160px;border-radius:8px;margin-bottom:8px">
+              <p style="font-size:12px;color:var(--ink-lt)">Clique pra trocar</p>
+            </div>
+            <div id="br-photo-empty">
+              <div style="font-size:32px;margin-bottom:8px">📷</div>
+              <p style="font-size:13px;color:var(--ink-md);font-weight:500">Arraste ou clique pra enviar</p>
+              <p style="font-size:11px;color:var(--ink-lt);margin-top:4px">JPG ou PNG até 5MB</p>
+            </div>
+          </div>
+          <input type="file" id="br-photo-input" accept="image/*" style="display:none" onchange="handleBrinquedoPhotoSelect(this)">
+          <input type="hidden" id="br-foto-url">
+        </div>
+
+        <!-- Nome -->
+        <div class="field" style="margin-bottom:12px">
+          <label>Nome do brinquedo</label>
+          <input type="text" id="br-nome" placeholder="Ex: Bola Sensorial Tátil">
+        </div>
+
+        <!-- Descrição -->
+        <div class="field" style="margin-bottom:12px">
+          <label>Descrição</label>
+          <textarea id="br-descricao" style="min-height:60px" placeholder="O que esse brinquedo desenvolve?"></textarea>
+        </div>
+
+        <!-- Custo + Preço venda lado a lado -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="field" style="margin-bottom:12px">
+            <label>Custo (R$)</label>
+            <input type="number" id="br-custo" step="0.01" min="0" placeholder="0,00">
+          </div>
+          <div class="field" style="margin-bottom:12px">
+            <label>Preço de venda (R$)</label>
+            <input type="number" id="br-preco" step="0.01" min="0" placeholder="0,00">
+          </div>
+        </div>
+
+        <!-- Estoque atual + mínimo -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="field" style="margin-bottom:12px">
+            <label>Estoque atual</label>
+            <input type="number" id="br-estoque" min="0" placeholder="0">
+          </div>
+          <div class="field" style="margin-bottom:12px">
+            <label>Estoque mínimo (alerta)</label>
+            <input type="number" id="br-estoque-min" min="0" value="2">
+          </div>
+        </div>
+
+        <!-- Faixa etária + Fornecedor -->
+        <div class="field" style="margin-bottom:12px">
+          <label>Faixa etária</label>
+          <select id="br-faixa">
+            <option value="">Todas idades</option>
+            <option value="0-2 anos">0 a 2 anos</option>
+            <option value="3-5 anos">3 a 5 anos</option>
+            <option value="6-9 anos">6 a 9 anos</option>
+            <option value="10+ anos">10 anos ou mais</option>
+          </select>
+        </div>
+
+        <div class="field" style="margin-bottom:12px">
+          <label>Fornecedor (onde comprou) <span style="font-weight:300;color:var(--ink-lt)">(opcional)</span></label>
+          <input type="text" id="br-fornecedor" placeholder="Ex: Mercado Livre, AliExpress, Lojinha local...">
+        </div>
+
+        <!-- Tags -->
+        <div class="field" style="margin-bottom:16px">
+          <label>Tags (separadas por vírgula)</label>
+          <input type="text" id="br-tags" placeholder="motor fino, concentração, TEA, sensorial">
+          <p style="font-size:11px;color:var(--ink-lt);margin-top:4px">Use tags pra filtrar brinquedos depois ao montar kits</p>
+        </div>
+
+        <div style="display:flex;gap:8px">
+          <button class="btn-pay" onclick="saveBrinquedo()" style="flex:1">💾 Salvar brinquedo</button>
+          <button onclick="closeDialog('dlg-brinquedo')" style="padding:14px 20px;border-radius:var(--r);border:1px solid var(--border);background:#fff;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif">Cancelar</button>
+        </div>
+      </div>
+    </div>
+    <!-- ════════ FIM ESTOQUE ════════ -->
 
     <!-- LEADS QUIZ -->
     <div class="admin-section" id="adm-leads">
@@ -2739,6 +2891,7 @@ function adminTab(tab,el){
     'compras':loadAdminCompras,
     'pedidos':loadAdminPedidos,
     'repasse':()=>{loadAdminRepasse();renderGraficoRepasseMensal();},
+    'estoque':loadAdminBrinquedos,
     'pesquisas':loadAdminPesquisas,
     'equipe':loadEquipe,
     'materiais':loadAdminMateriais,
@@ -2826,6 +2979,200 @@ async function updateKitDeliveryStatus(id,status){
   await loadAdminPedidos();
 }
 async function updatePedidoStatus(id,status){await sb.from('leads').update({status}).eq('id',id);await loadDashboard();}
+
+/* ════════ BRINQUEDOS / ESTOQUE ════════ */
+let allBrinquedosData=[];
+let brinquedoEditandoId=null;
+
+async function loadAdminBrinquedos(){
+  const{data,error}=await sb.from('brinquedos').select('*').order('created_at',{ascending:false});
+  if(error){
+    const errInfo={message:error.message,code:error.code};
+    console.error('[brinquedos] erro:',JSON.stringify(errInfo));
+    allBrinquedosData=[];
+  } else {
+    allBrinquedosData=data||[];
+  }
+  // Stats
+  const total=allBrinquedosData.length;
+  const emEstoque=allBrinquedosData.filter(b=>(b.estoque_atual||0)>0).length;
+  const alerta=allBrinquedosData.filter(b=>(b.estoque_atual||0)<=(b.estoque_minimo||0)).length;
+  const valorTotal=allBrinquedosData.reduce((s,b)=>s+(parseFloat(b.custo||0)*parseInt(b.estoque_atual||0)),0);
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set('br-total',total);
+  set('br-em-estoque',emEstoque);
+  set('br-alerta',alerta);
+  set('br-valor-total','R$ '+valorTotal.toFixed(2).replace('.',','));
+  renderBrinquedosTable(allBrinquedosData);
+}
+
+function renderBrinquedosTable(list){
+  const tbody=document.getElementById('adm-brinquedos-tbody');
+  if(!tbody)return;
+  if(!list.length){
+    tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--ink-lt);padding:40px;font-weight:300">Nenhum brinquedo cadastrado ainda.<br><button onclick="openBrinquedoForm()" style="margin-top:12px;background:var(--blue);color:#fff;border:none;padding:8px 16px;border-radius:6px;font-size:12px;cursor:pointer">+ Cadastrar primeiro</button></td></tr>';
+    return;
+  }
+  tbody.innerHTML=list.map(b=>{
+    const estoque=parseInt(b.estoque_atual||0);
+    const min=parseInt(b.estoque_minimo||0);
+    const custo=parseFloat(b.custo||0);
+    const preco=parseFloat(b.preco_venda||0);
+    let statusBadge='';
+    if(estoque===0)statusBadge='<span style="font-size:10px;padding:3px 8px;background:#FEE2E2;color:#991B1B;border-radius:6px;font-weight:600">🚫 ZERADO</span>';
+    else if(estoque<=min)statusBadge='<span style="font-size:10px;padding:3px 8px;background:#FEF3C7;color:#92400E;border-radius:6px;font-weight:600">⚠️ ABAIXO MÍN</span>';
+    else statusBadge='<span style="font-size:10px;padding:3px 8px;background:#D1FAE5;color:#065F46;border-radius:6px;font-weight:600">✓ OK</span>';
+
+    const fotoHTML=b.foto_url?`<img src="${b.foto_url}" style="width:48px;height:48px;border-radius:8px;object-fit:cover">`:`<div style="width:48px;height:48px;border-radius:8px;background:var(--parchment);display:flex;align-items:center;justify-content:center;font-size:20px">🧸</div>`;
+    return `<tr>
+    <td>${fotoHTML}</td>
+    <td><div style="font-weight:500">${b.nome}</div>${b.tags?.length?`<div style="font-size:10px;color:var(--ink-lt);margin-top:2px">${b.tags.slice(0,3).join(' · ')}</div>`:''}</td>
+    <td style="font-size:12px">${b.faixa_etaria||'—'}</td>
+    <td style="font-family:'Playfair Display',serif;color:var(--ink-md);font-size:13px">R$ ${custo.toFixed(2).replace('.',',')}</td>
+    <td style="font-family:'Playfair Display',serif;font-weight:600">R$ ${preco.toFixed(2).replace('.',',')}</td>
+    <td style="font-weight:600;font-size:15px;text-align:center">${estoque}<div style="font-size:10px;color:var(--ink-lt);font-weight:300">mín: ${min}</div></td>
+    <td>${statusBadge}</td>
+    <td style="white-space:nowrap">
+      <button onclick="ajustarEstoque('${b.id}',1)" style="background:var(--sage);color:#fff;border:none;padding:5px 9px;border-radius:5px;font-size:11px;cursor:pointer;margin-right:2px" title="+1">+</button>
+      <button onclick="ajustarEstoque('${b.id}',-1)" style="background:#B45309;color:#fff;border:none;padding:5px 9px;border-radius:5px;font-size:11px;cursor:pointer;margin-right:2px" title="-1">−</button>
+      <button onclick="editarBrinquedo('${b.id}')" style="background:var(--blue);color:#fff;border:none;padding:5px 9px;border-radius:5px;font-size:11px;cursor:pointer;margin-right:2px">✏️</button>
+      <button class="btn-del" onclick="deleteBrinquedo('${b.id}')">×</button>
+    </td>
+  </tr>`;}).join('');
+}
+
+function filterBrinquedos(filter,el){
+  document.querySelectorAll('#adm-estoque .adm-filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  let filtered=allBrinquedosData;
+  if(filter==='em-estoque')filtered=allBrinquedosData.filter(b=>(b.estoque_atual||0)>0);
+  else if(filter==='alerta')filtered=allBrinquedosData.filter(b=>(b.estoque_atual||0)<=(b.estoque_minimo||0)&&(b.estoque_atual||0)>0);
+  else if(filter==='zerado')filtered=allBrinquedosData.filter(b=>(b.estoque_atual||0)===0);
+  renderBrinquedosTable(filtered);
+}
+
+function searchBrinquedos(){
+  const q=document.getElementById('br-search').value.toLowerCase().trim();
+  if(!q){renderBrinquedosTable(allBrinquedosData);return;}
+  const filtered=allBrinquedosData.filter(b=>
+    (b.nome||'').toLowerCase().includes(q)||
+    (b.descricao||'').toLowerCase().includes(q)||
+    (b.tags||[]).some(t=>t.toLowerCase().includes(q))
+  );
+  renderBrinquedosTable(filtered);
+}
+
+function openBrinquedoForm(){
+  brinquedoEditandoId=null;
+  document.getElementById('br-form-title').textContent='🧸 Novo brinquedo';
+  ['br-id','br-nome','br-descricao','br-custo','br-preco','br-estoque','br-fornecedor','br-tags','br-foto-url'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('br-estoque-min').value='2';
+  document.getElementById('br-faixa').value='';
+  document.getElementById('br-photo-preview').style.display='none';
+  document.getElementById('br-photo-empty').style.display='block';
+  openDialog('dlg-brinquedo');
+}
+
+function editarBrinquedo(id){
+  const b=allBrinquedosData.find(x=>x.id===id);
+  if(!b)return;
+  brinquedoEditandoId=id;
+  document.getElementById('br-form-title').textContent='✏️ Editar brinquedo';
+  document.getElementById('br-id').value=id;
+  document.getElementById('br-nome').value=b.nome||'';
+  document.getElementById('br-descricao').value=b.descricao||'';
+  document.getElementById('br-custo').value=b.custo||'';
+  document.getElementById('br-preco').value=b.preco_venda||'';
+  document.getElementById('br-estoque').value=b.estoque_atual||0;
+  document.getElementById('br-estoque-min').value=b.estoque_minimo||2;
+  document.getElementById('br-faixa').value=b.faixa_etaria||'';
+  document.getElementById('br-fornecedor').value=b.fornecedor||'';
+  document.getElementById('br-tags').value=(b.tags||[]).join(', ');
+  document.getElementById('br-foto-url').value=b.foto_url||'';
+  if(b.foto_url){
+    document.getElementById('br-photo-img').src=b.foto_url;
+    document.getElementById('br-photo-preview').style.display='block';
+    document.getElementById('br-photo-empty').style.display='none';
+  } else {
+    document.getElementById('br-photo-preview').style.display='none';
+    document.getElementById('br-photo-empty').style.display='block';
+  }
+  openDialog('dlg-brinquedo');
+}
+
+async function saveBrinquedo(){
+  const nome=document.getElementById('br-nome').value.trim();
+  if(!nome){alert('Nome obrigatório.');return;}
+  const data={
+    nome,
+    descricao:document.getElementById('br-descricao').value.trim(),
+    custo:parseFloat(document.getElementById('br-custo').value)||0,
+    preco_venda:parseFloat(document.getElementById('br-preco').value)||0,
+    estoque_atual:parseInt(document.getElementById('br-estoque').value)||0,
+    estoque_minimo:parseInt(document.getElementById('br-estoque-min').value)||2,
+    faixa_etaria:document.getElementById('br-faixa').value,
+    fornecedor:document.getElementById('br-fornecedor').value.trim(),
+    foto_url:document.getElementById('br-foto-url').value,
+    tags:document.getElementById('br-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    updated_at:new Date().toISOString(),
+  };
+  let result;
+  if(brinquedoEditandoId){
+    result=await sb.from('brinquedos').update(data).eq('id',brinquedoEditandoId);
+  } else {
+    result=await sb.from('brinquedos').insert(data);
+  }
+  if(result.error){
+    alert('Erro: '+result.error.message);return;
+  }
+  closeDialog('dlg-brinquedo');
+  await loadAdminBrinquedos();
+}
+
+async function deleteBrinquedo(id){
+  if(!confirm('Remover esse brinquedo do estoque? Esta ação não pode ser desfeita.'))return;
+  await sb.from('brinquedos').delete().eq('id',id);
+  await loadAdminBrinquedos();
+}
+
+async function ajustarEstoque(id,delta){
+  const b=allBrinquedosData.find(x=>x.id===id);
+  if(!b)return;
+  const novo=Math.max(0,(b.estoque_atual||0)+delta);
+  await sb.from('brinquedos').update({estoque_atual:novo,updated_at:new Date().toISOString()}).eq('id',id);
+  await loadAdminBrinquedos();
+}
+
+async function handleBrinquedoPhotoSelect(input){
+  const file=input.files[0];
+  if(!file)return;
+  await uploadBrinquedoPhoto(file);
+}
+
+async function handleBrinquedoPhotoDrop(e){
+  const file=e.dataTransfer.files[0];
+  if(!file)return;
+  await uploadBrinquedoPhoto(file);
+}
+
+async function uploadBrinquedoPhoto(file){
+  if(!file.type.startsWith('image/')){alert('Selecione uma imagem.');return;}
+  const zone=document.getElementById('br-photo-zone');
+  const empty=document.getElementById('br-photo-empty');
+  empty.innerHTML='<div style="font-size:20px">⏳</div><p style="font-size:12px;color:var(--blue);margin-top:4px">Enviando...</p>';
+  try{
+    const url=await uploadToStorage(file,'materials','brinquedos');
+    document.getElementById('br-foto-url').value=url;
+    document.getElementById('br-photo-img').src=url;
+    document.getElementById('br-photo-preview').style.display='block';
+    empty.style.display='none';
+  }catch(err){
+    empty.innerHTML='<div style="font-size:20px">❌</div><p style="font-size:12px;color:var(--terra);margin-top:4px">Erro. Tente outra.</p>';
+    console.error(err);
+  }
+}
 function renderBag(){
   showKit(0);
   const vid=document.getElementById('bag-video');
