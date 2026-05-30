@@ -151,22 +151,36 @@ let sessao=null;
 let mp=null;
 
 async function api(action,payload){
+  console.log('[api] chamando',action,payload);
   const r=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
     method:'POST',
     headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON},
     body:JSON.stringify({action,payload})
   });
-  return r.json();
+  console.log('[api] status HTTP:',r.status);
+  const data=await r.json();
+  console.log('[api] resposta:',data);
+  return data;
 }
 
 async function init(){
+  console.log('[pagar-sessao] iniciando, id=',sessaoId);
   if(!sessaoId){
     document.getElementById('loading').innerHTML='<p style="color:#B45309">⚠️ Link inválido — id da sessão não encontrado.</p>';
     return;
   }
-  const res=await api('get_sessao',{id:sessaoId});
-  if(!res.ok){
-    document.getElementById('loading').innerHTML=`<p style="color:#B45309">⚠️ ${res.error||'Sessão não encontrada'}</p>`;
+  let res;
+  try{
+    res=await api('get_sessao',{id:sessaoId});
+    console.log('[pagar-sessao] resposta:',res);
+  }catch(e){
+    console.error('[pagar-sessao] erro fetch:',e);
+    document.getElementById('loading').innerHTML=`<p style="color:#B45309">⚠️ Erro de conexão: ${e.message}</p>`;
+    return;
+  }
+  if(!res||!res.ok){
+    console.warn('[pagar-sessao] sessão não veio:',res);
+    document.getElementById('loading').innerHTML=`<p style="color:#B45309">⚠️ ${res?.error||'Sessão não encontrada'}</p><p style="font-size:11px;color:#999;margin-top:10px">Debug: ${JSON.stringify(res).substring(0,200)}</p>`;
     return;
   }
   sessao=res.sessao;
