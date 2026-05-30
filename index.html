@@ -1929,6 +1929,24 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       <h3 style="font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--ink);margin-bottom:5px">Confirmar compra</h3>
       <p style="font-size:12px;color:var(--ink-lt);margin-bottom:18px;font-weight:300">Verifique antes de prosseguir.</p>
       <div class="ck-summary" id="ck-summary"></div>
+
+      <!-- Cupom de desconto -->
+      <div class="field" style="margin-bottom:14px">
+        <label style="display:block;font-size:11px;font-weight:500;color:var(--ink-lt);margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px">Cupom de desconto <span style="font-weight:300;text-transform:none;letter-spacing:0">(opcional)</span></label>
+        <div style="display:flex;gap:8px">
+          <input type="text" id="ck-cupom" placeholder="Digite o código" style="text-transform:uppercase;flex:1;padding:10px 12px;border-radius:var(--r);border:1px solid var(--border);font-size:13px;font-family:'DM Sans',sans-serif" oninput="this.value=this.value.toUpperCase()">
+          <button type="button" onclick="aplicarCupomCheckout()" id="ck-cupom-btn" style="padding:0 16px;border-radius:var(--r);border:1px solid var(--border);background:var(--parchment);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;white-space:nowrap;flex-shrink:0">Aplicar</button>
+        </div>
+        <span id="ck-cupom-msg" style="font-size:12px;margin-top:6px;display:block"></span>
+      </div>
+
+      <!-- Resumo de valor com desconto -->
+      <div id="ck-resumo-valor" style="display:none;background:var(--sage-lt);border-radius:var(--r);padding:14px 16px;margin-bottom:14px;font-size:13px">
+        <div style="display:flex;justify-content:space-between;color:var(--ink-md);margin-bottom:4px"><span>Subtotal</span><span id="ck-rv-base"></span></div>
+        <div style="display:flex;justify-content:space-between;color:var(--sage);font-weight:600;margin-bottom:6px"><span>Desconto cupom</span><span id="ck-rv-desconto"></span></div>
+        <div style="display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid rgba(0,0,0,0.06);font-weight:700;color:var(--ink);font-size:15px"><span>Total</span><span id="ck-rv-total"></span></div>
+      </div>
+
       <div style="background:var(--parchment);border-radius:var(--r);border:1px solid var(--border);padding:12px 16px;margin-bottom:18px;font-size:12px;color:var(--ink-md);font-weight:300;line-height:1.6">Após o pagamento você recebe o link de download na tela e no e-mail cadastrado.</div>
       <button class="btn-pay" onclick="ckStep(2)">Escolher forma de pagamento</button>
     </div>
@@ -2724,6 +2742,7 @@ function openCheckout(){
     <div class="inf"><h4>${p.title}</h4><p>${p.category} · ${p.age_range}</p></div>
     <div class="pr">R$ ${p.price}</div>`;
   document.getElementById('dl-email').textContent=user?.email||'';
+  resetCupomCheckout();
   openDialog('dlg-checkout');
 }
 function handleCTA(){
@@ -2903,7 +2922,9 @@ async function gerarPix(){
         action:'create_pix',
         payload:{
           product:{id:currentProduct.id,title:currentProduct.title,price:currentProduct.price},
-          user_email:user.email,user_name:user.name
+          user_email:user.email,user_name:user.name,
+          kind:currentProduct._kind||'material',
+          coupon_code:ckCupomAplicado?.codigo||''
         }
       })
     });
@@ -3014,7 +3035,9 @@ async function pagarCartao(){
           installments:parseInt(parcelas),
           payment_method_id:paymentMethodId,
           product:{id:currentProduct.id,title:currentProduct.title,price:currentProduct.price},
-          user_email:user.email,user_name:user.name,cpf
+          user_email:user.email,user_name:user.name,cpf,
+          kind:currentProduct._kind||'material',
+          coupon_code:ckCupomAplicado?.codigo||''
         }
       })
     });
@@ -3050,7 +3073,9 @@ async function gerarBoleto(){
         action:'create_boleto',
         payload:{
           product:{id:currentProduct.id,title:currentProduct.title,price:currentProduct.price},
-          user_email:user.email,user_name:nome,cpf
+          user_email:user.email,user_name:nome,cpf,
+          kind:currentProduct._kind||'material',
+          coupon_code:ckCupomAplicado?.codigo||''
         }
       })
     });
@@ -3343,7 +3368,7 @@ let _purchasesCache=[];
 async function loadPurchasesFromDB(){
   try{
     const{data,error}=await sb.from('purchases').select('*').eq('payment_status','approved').order('created_at',{ascending:false});
-    if(error){console.error('[purchases] erro:',error);return [];}
+    if(error){console.error('[purchases] erro:',error.message||error.details||JSON.stringify(error));return [];}
     _purchasesCache=data||[];
     return _purchasesCache;
   }catch(e){console.error('[purchases] exceção:',e);return [];}
@@ -3676,7 +3701,7 @@ let currentRepasseFilter='month';
 async function loadAdminRepasse(){
   const{data,error}=await sb.from('purchases').select('*').eq('payment_status','approved').order('created_at',{ascending:false});
   if(error){
-    console.error('[repasse] erro consultando purchases:',error);
+    console.error('[repasse] erro consultando purchases:',error.message||error.details||JSON.stringify(error));
     allRepasseData=[];
     renderRepasse();
     return;
@@ -4389,6 +4414,66 @@ async function processKitPayment(){
 /* ══ CUPOM DE DESCONTO ══ */
 const CUPONS={'NEURO15':{desconto:0.15,desc:'15% de desconto'},'PRIMEIRA':{desconto:0.10,desc:'10% na 1ª sessão'}};
 let cupomAplicado=null;
+
+// Cupom no checkout de materiais/kits
+let ckCupomAplicado=null;
+
+async function aplicarCupomCheckout(){
+  const codigo=document.getElementById('ck-cupom').value.trim().toUpperCase();
+  const msg=document.getElementById('ck-cupom-msg');
+  const btn=document.getElementById('ck-cupom-btn');
+  if(!codigo){msg.textContent='Digite um código.';msg.style.color='var(--terra)';return;}
+  if(!currentProduct){msg.textContent='Erro: produto não selecionado.';msg.style.color='var(--terra)';return;}
+  if(!user?.email){msg.textContent='Você precisa estar logada pra usar cupom.';msg.style.color='var(--terra)';return;}
+
+  btn.textContent='Validando…';btn.disabled=true;
+  try{
+    const r=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON},
+      body:JSON.stringify({action:'validate_coupon',payload:{codigo,email:user.email}})
+    });
+    const data=await r.json();
+    if(!data.ok){
+      msg.textContent='✗ '+(data.error||'Cupom inválido');msg.style.color='var(--terra)';
+      ckCupomAplicado=null;atualizarResumoCheckout();
+      btn.textContent='Aplicar';btn.disabled=false;return;
+    }
+    ckCupomAplicado={codigo:data.codigo,desconto_pct:data.desconto_pct};
+    msg.textContent='✓ Cupom válido — '+data.desconto_pct+'% de desconto';msg.style.color='var(--sage)';
+    atualizarResumoCheckout();
+    btn.textContent='✓ Aplicado';btn.disabled=true;
+    document.getElementById('ck-cupom').disabled=true;
+  }catch(e){
+    console.error('[cupom] erro:',e);
+    msg.textContent='Erro ao validar cupom. Tente novamente.';msg.style.color='var(--terra)';
+    btn.textContent='Aplicar';btn.disabled=false;
+  }
+}
+
+function atualizarResumoCheckout(){
+  const box=document.getElementById('ck-resumo-valor');
+  if(!ckCupomAplicado||!currentProduct){box.style.display='none';return;}
+  const base=Number(currentProduct.price);
+  const desconto=Math.round(base*ckCupomAplicado.desconto_pct)/100;
+  const total=Math.max(0.01,Number((base-desconto).toFixed(2)));
+  document.getElementById('ck-rv-base').textContent='R$ '+base.toFixed(2).replace('.',',');
+  document.getElementById('ck-rv-desconto').textContent='− R$ '+desconto.toFixed(2).replace('.',',');
+  document.getElementById('ck-rv-total').textContent='R$ '+total.toFixed(2).replace('.',',');
+  box.style.display='block';
+}
+
+function resetCupomCheckout(){
+  ckCupomAplicado=null;
+  const inp=document.getElementById('ck-cupom');
+  const btn=document.getElementById('ck-cupom-btn');
+  const msg=document.getElementById('ck-cupom-msg');
+  if(inp){inp.value='';inp.disabled=false;}
+  if(btn){btn.textContent='Aplicar';btn.disabled=false;}
+  if(msg){msg.textContent='';}
+  const box=document.getElementById('ck-resumo-valor');
+  if(box)box.style.display='none';
+}
 
 function aplicarCupom(){
   const codigo=document.getElementById('sess-cupom').value.trim().toUpperCase();
