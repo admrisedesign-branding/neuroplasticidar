@@ -1758,6 +1758,20 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
           </div>
         </div>
 
+        <!-- ONDE PESQUISA + SITES/LOJAS -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-bottom:24px">
+          <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:20px">
+            <h3 style="font-size:14px;font-weight:600;color:var(--ink);margin:0 0 4px">🔎 Onde pesquisam materiais</h3>
+            <p style="font-size:11px;color:var(--ink-lt);margin:0 0 14px">Canais usados pra descobrir conteúdo</p>
+            <div id="chart-onde-pesquisa"></div>
+          </div>
+          <div style="background:white;border:1px solid var(--border);border-radius:12px;padding:20px">
+            <h3 style="font-size:14px;font-weight:600;color:var(--ink);margin:0 0 4px">🛒 Sites e lojas mencionados</h3>
+            <p style="font-size:11px;color:var(--ink-lt);margin:0 0 14px">Concorrentes diretos e indiretos</p>
+            <div id="pat-sites-compra" style="display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto"></div>
+          </div>
+        </div>
+
         <!-- SUGESTÕES -->
         <div style="background:#FEF3C7;border:1px solid #F59E0B33;border-radius:12px;padding:20px;margin-bottom:24px">
           <h3 style="font-size:14px;font-weight:600;color:#92400E;margin:0 0 12px">💭 Sugestões e comentários</h3>
@@ -3798,8 +3812,9 @@ function renderPesquisaATDetail(){
     document.getElementById('pat-paga').textContent='—';
     document.getElementById('pat-marketplace').textContent='—';
     document.getElementById('pat-tbody').innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhuma resposta ainda. Quando alguém responder a pesquisa, aparecerá aqui.</td></tr>';
-    ['chart-nps','chart-area','chart-exp','chart-preco','chart-pagou','chart-pdf','chart-temas','chart-formatos'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<p style="font-size:12px;color:var(--ink-lt);text-align:center;padding:20px 0">Sem dados</p>';});
+    ['chart-nps','chart-area','chart-exp','chart-preco','chart-pagou','chart-pdf','chart-temas','chart-formatos','chart-onde-pesquisa'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<p style="font-size:12px;color:var(--ink-lt);text-align:center;padding:20px 0">Sem dados</p>';});
     document.getElementById('pat-sugestoes').innerHTML='<p style="font-size:12px;color:#92400E;font-style:italic">Nenhuma sugestão recebida ainda.</p>';
+    document.getElementById('pat-sites-compra').innerHTML='<p style="font-size:12px;color:var(--ink-lt);font-style:italic">Nenhum site mencionado ainda.</p>';
     return;
   }
 
@@ -3843,6 +3858,18 @@ function renderPesquisaATDetail(){
   document.getElementById('chart-temas').innerHTML=barChart(countByArray(d,'temas_interesse'),'#DB2777',total);
   document.getElementById('chart-formatos').innerHTML=barChart(countByArray(d,'formatos_preferidos'),'#059669',total);
 
+  // ONDE PESQUISA (array)
+  document.getElementById('chart-onde-pesquisa').innerHTML=barChart(countByArray(d,'onde_pesquisa'),'#1A3FBF',total);
+
+  // SITES/LOJAS (texto livre)
+  const sites=d.filter(r=>r.sites_compra&&r.sites_compra.trim()).slice(0,30);
+  document.getElementById('pat-sites-compra').innerHTML=sites.length?sites.map(r=>`
+    <div style="background:#F8FAFC;border-radius:8px;padding:10px 12px;border-left:3px solid #1A3FBF">
+      <p style="font-size:12px;color:var(--ink);margin:0 0 4px;line-height:1.5">${escapeHtml(r.sites_compra)}</p>
+      <p style="font-size:10px;color:var(--ink-lt);margin:0">— ${escapeHtml(r.nome||'Anônima')}</p>
+    </div>
+  `).join(''):'<p style="font-size:12px;color:var(--ink-lt);font-style:italic">Nenhum site mencionado ainda.</p>';
+
   // SUGESTÕES
   const sugs=d.filter(r=>r.sugestao&&r.sugestao.trim()).slice(0,20);
   document.getElementById('pat-sugestoes').innerHTML=sugs.length?sugs.map(r=>`
@@ -3884,7 +3911,7 @@ function filterPatTable(q){
 
 function exportPesquisaAT(){
   if(!allPesquisaATData.length){alert('Sem dados para exportar.');return;}
-  const cols=['nome','email','whatsapp','area','experiencia','usa_pdf','ja_pagou','faixa_preco','temas_interesse','formatos_preferidos','nps','sugestao','cria_materiais','interesse_marketplace','origem','created_at'];
+  const cols=['nome','email','whatsapp','area','experiencia','usa_pdf','ja_pagou','faixa_preco','temas_interesse','formatos_preferidos','onde_pesquisa','sites_compra','nps','sugestao','cria_materiais','interesse_marketplace','origem','created_at'];
   const header=cols.join(',');
   const rows=allPesquisaATData.map(r=>cols.map(c=>{
     let v=r[c];
