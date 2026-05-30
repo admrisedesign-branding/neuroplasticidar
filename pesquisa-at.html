@@ -517,7 +517,7 @@ async function submitForm(e){
     // Salva no Supabase
     const cria=document.querySelector('[name="cria_materiais"]:checked')?.value||null;
     const marketplace=document.querySelector('[name="interesse_marketplace"]:checked')?.value||null;
-    await sb.from('pesquisa_at').insert({
+    const {error:insertError} = await sb.from('pesquisa_at').insert({
       nome,email,whatsapp:wpp||null,
       area,experiencia:exp,
       usa_pdf:pdf,ja_pagou:pagou,faixa_preco:preco,
@@ -527,6 +527,11 @@ async function submitForm(e){
       cria_materiais:cria,interesse_marketplace:marketplace,
       origem:'grupo_at',
     });
+
+    if(insertError){
+      console.error('[pesquisa_at INSERT erro]',insertError);
+      throw new Error('Erro ao salvar: '+(insertError.message||'desconhecido'));
+    }
 
     // Envia e-mail com presente
     await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
@@ -548,7 +553,7 @@ async function submitForm(e){
 
   }catch(err){
     btn.disabled=false;btn.textContent='Enviar pesquisa e receber o presente 🎁';
-    alert('Erro ao enviar. Tente novamente.');
+    alert('Erro ao enviar: '+(err.message||'Tente novamente.'));
     console.error(err);
   }
 }
