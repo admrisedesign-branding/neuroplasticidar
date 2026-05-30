@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pagamento da sessão — Neuroplasticidar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<style>
+*,::before,::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0F0E0C;--ink-md:#44403C;--ink-lt:#A8A29E;
+  --blue:#1A3FBF;--blue-dk:#122E9A;--blue-lt:#E8EDFF;
+  --sage:#2E6B3E;--sage-lt:#C6F2D8;
+  --gold:#D4900A;--gold-lt:#FEF3C7;
+  --terra:#B45309;--cream:#FAF9F6;--parchment:#F5F2EA;
+  --border:#E7E5E0;--shadow:0 4px 24px rgba(0,0,0,0.08);
+  --r:12px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;padding:40px 20px;line-height:1.6}
+.container{max-width:560px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.header{background:#F0F9FF;padding:32px 28px;text-align:center;border-bottom:3px solid var(--blue)}
+.header img{width:64px;height:64px;border-radius:50%;margin-bottom:12px}
+.header h1{font-family:'Playfair Display',serif;font-size:24px;color:var(--blue);font-weight:700}
+.header p{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#666;margin-top:6px}
+.content{padding:32px 28px}
+.session-info{background:var(--blue-lt);border-radius:var(--r);padding:18px 20px;margin-bottom:24px}
+.session-info h3{font-size:13px;color:var(--blue);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.session-info p{font-size:14px;color:var(--ink-md);margin-bottom:4px}
+.session-info strong{color:var(--ink)}
+.valor-box{background:var(--gold-lt);border-radius:var(--r);padding:20px;margin-bottom:24px;text-align:center}
+.valor-box .label{font-size:11px;color:var(--terra);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.valor-box .price{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--terra)}
+.valor-box .sub{font-size:12px;color:#78350F;margin-top:4px}
+.pay-methods{display:flex;gap:8px;margin-bottom:20px}
+.pay-method-btn{flex:1;padding:14px 8px;border-radius:var(--r);border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .2s}
+.pay-method-btn:hover{border-color:var(--blue-dk)}
+.pay-method-btn.active{border-color:var(--blue);background:var(--blue-lt);color:var(--blue-dk)}
+.pay-method-btn .icon{font-size:20px}
+.pay-section{display:none}
+.pay-section.active{display:block}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;font-weight:500;color:var(--ink-lt);margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px}
+.field input{width:100%;padding:12px 14px;border-radius:var(--r);border:1px solid var(--border);font-size:14px;font-family:'DM Sans',sans-serif}
+.btn-pay{width:100%;padding:16px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.btn-pay:hover{background:var(--blue-dk)}
+.btn-pay:disabled{opacity:0.6;cursor:wait}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;margin-right:6px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pix-result{display:none;text-align:center;background:var(--parchment);border-radius:var(--r);padding:20px;margin-top:14px}
+.pix-result img{max-width:200px;margin:0 auto 14px;display:block}
+.pix-code{font-size:11px;background:#fff;padding:10px;border-radius:8px;word-break:break-all;margin-bottom:10px}
+.success-screen{display:none;text-align:center;padding:40px 20px}
+.success-screen .icon{font-size:64px;margin-bottom:16px}
+.success-screen h2{font-family:'Playfair Display',serif;font-size:26px;color:var(--sage);margin-bottom:10px}
+.error-msg{background:#FEE2E2;color:#991B1B;padding:14px 18px;border-radius:8px;font-size:13px;margin-bottom:14px}
+.loading{text-align:center;padding:60px 20px;color:var(--ink-lt)}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <img src="https://neuroplasticidar.gruposja.com/dino-logo.png" alt="Neuroplasticidar">
+    <h1>Neuroplasticidar</h1>
+    <p>Pagamento da Sessão Presencial</p>
+  </div>
+
+  <div id="loading" class="loading">
+    <div class="spin" style="border-color:var(--blue);border-top-color:transparent;width:32px;height:32px"></div>
+    <p style="margin-top:14px">Carregando dados da sua sessão...</p>
+  </div>
+
+  <div id="main" style="display:none">
+    <div class="content">
+      <div class="session-info" id="session-info"></div>
+
+      <div class="valor-box">
+        <p class="label">Sinal a pagar agora</p>
+        <p class="price" id="valor-sinal"></p>
+        <p class="sub" id="valor-info"></p>
+      </div>
+
+      <div class="pay-methods">
+        <button class="pay-method-btn active" onclick="selectMethod('pix',this)"><span class="icon">⚡</span><span>PIX</span></button>
+        <button class="pay-method-btn" onclick="selectMethod('cartao',this)"><span class="icon">💳</span><span>Cartão</span></button>
+        <button class="pay-method-btn" onclick="selectMethod('boleto',this)"><span class="icon">📄</span><span>Boleto</span></button>
+      </div>
+
+      <!-- PIX -->
+      <div id="pay-pix" class="pay-section active">
+        <div class="field">
+          <label>CPF (opcional)</label>
+          <input type="text" id="pix-cpf" placeholder="000.000.000-00">
+        </div>
+        <button class="btn-pay" id="btn-pix" onclick="payPix()">Gerar QR Code PIX</button>
+        <div class="pix-result" id="pix-result">
+          <p style="font-size:13px;color:var(--ink);margin-bottom:12px;font-weight:600">Escaneie ou copie o código:</p>
+          <img id="pix-qr">
+          <div class="pix-code" id="pix-code"></div>
+          <button onclick="copyPix()" style="padding:8px 16px;border-radius:8px;border:none;background:var(--blue);color:#fff;cursor:pointer;font-size:12px">Copiar código</button>
+          <p style="font-size:12px;color:var(--sage);margin-top:14px">⏱ Aguardando pagamento... Esta tela atualiza sozinha.</p>
+        </div>
+      </div>
+
+      <!-- CARTÃO -->
+      <div id="pay-cartao" class="pay-section">
+        <div class="field"><label>Número do cartão</label><input type="text" id="card-num" placeholder="0000 0000 0000 0000"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div class="field"><label>Validade</label><input type="text" id="card-exp" placeholder="MM/AA"></div>
+          <div class="field"><label>CVV</label><input type="text" id="card-cvv" placeholder="123"></div>
+          <div class="field"><label>Parcelas</label><select id="card-parc" style="width:100%;padding:12px 8px;border-radius:var(--r);border:1px solid var(--border);font-size:13px;font-family:'DM Sans',sans-serif"><option value="1">1x</option><option value="2">2x</option><option value="3">3x</option></select></div>
+        </div>
+        <div class="field"><label>Nome no cartão</label><input type="text" id="card-nome"></div>
+        <div class="field"><label>CPF</label><input type="text" id="card-cpf" placeholder="000.000.000-00"></div>
+        <button class="btn-pay" id="btn-card" onclick="payCard()">Pagar com cartão</button>
+      </div>
+
+      <!-- BOLETO -->
+      <div id="pay-boleto" class="pay-section">
+        <div class="field"><label>Nome completo</label><input type="text" id="bol-nome"></div>
+        <div class="field"><label>CPF</label><input type="text" id="bol-cpf" placeholder="000.000.000-00"></div>
+        <button class="btn-pay" id="btn-bol" onclick="payBoleto()">Gerar Boleto</button>
+        <div id="bol-result" style="display:none;background:var(--parchment);border-radius:var(--r);padding:20px;margin-top:14px;text-align:center">
+          <p style="font-size:13px;margin-bottom:14px">Use o código abaixo no seu banco:</p>
+          <input type="text" id="bol-code" readonly style="width:100%;font-size:11px;padding:10px;border-radius:8px;border:1px solid var(--border);background:#fff;margin-bottom:10px">
+          <a id="bol-link" target="_blank" style="display:inline-block;padding:10px 20px;background:var(--blue);color:#fff;text-decoration:none;border-radius:8px;font-size:13px">Abrir boleto em PDF</a>
+        </div>
+      </div>
+
+      <p style="font-size:11px;color:var(--ink-lt);text-align:center;margin-top:20px">🔒 Pagamento processado pelo Mercado Pago</p>
+    </div>
+  </div>
+
+  <div id="success" class="success-screen">
+    <div class="icon">✅</div>
+    <h2>Pagamento confirmado!</h2>
+    <p style="color:var(--ink-md);margin-bottom:20px">Sua sessão presencial está garantida. Você receberá um e-mail de confirmação em instantes.</p>
+    <a href="https://neuroplasticidar.gruposja.com" style="display:inline-block;padding:14px 28px;background:var(--blue);color:#fff;text-decoration:none;border-radius:8px;font-weight:500">Voltar pro site</a>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL='https://cifndytwoehbnmjllrml.supabase.co';
+const SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpZm5keXR3b2VoYm5tamxscm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NjM1OTIsImV4cCI6MjA5NDUzOTU5Mn0.Rkd_5t52cuQEJVPPN3sXPUukL6aEcGrwLtR2qx78Rto'; // SUBSTITUIR
+const MP_PUBLIC_KEY='APP_USR-1a28a1ff-9733-45c9-9ecb-b2bf912ea38a';
+
+const sessaoId=new URLSearchParams(window.location.search).get('id');
+let sessao=null;
+let mp=null;
+
+async function api(action,payload){
+  const r=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON},
+    body:JSON.stringify({action,payload})
+  });
+  return r.json();
+}
+
+async function init(){
+  if(!sessaoId){
+    document.getElementById('loading').innerHTML='<p style="color:#B45309">⚠️ Link inválido — id da sessão não encontrado.</p>';
+    return;
+  }
+  const res=await api('get_sessao',{id:sessaoId});
+  if(!res.ok){
+    document.getElementById('loading').innerHTML=`<p style="color:#B45309">⚠️ ${res.error||'Sessão não encontrada'}</p>`;
+    return;
+  }
+  sessao=res.sessao;
+
+  // Já pago?
+  if(sessao.status==='sinal_pago'||sessao.status==='realizada'){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('success').style.display='block';
+    return;
+  }
+
+  // Render
+  let info=`<h3>📋 Sua sessão</h3>`;
+  info+=`<p><strong>Nome:</strong> ${sessao.cliente_nome}</p>`;
+  if(sessao.data_sessao) info+=`<p><strong>📅 Data:</strong> ${sessao.data_sessao} ${sessao.hora_sessao?'às '+sessao.hora_sessao:''}</p>`;
+  if(sessao.endereco_bairro) info+=`<p><strong>📍 Local:</strong> ${sessao.endereco_cidade}/${sessao.endereco_uf}, ${sessao.endereco_bairro}</p>`;
+  if(sessao.crianca_idade) info+=`<p><strong>👶 Criança:</strong> ${sessao.crianca_idade}</p>`;
+  document.getElementById('session-info').innerHTML=info;
+
+  document.getElementById('valor-sinal').textContent='R$ '+Number(sessao.valor_sinal).toFixed(2).replace('.',',');
+  let sub=`Valor total da sessão: R$ ${Number(sessao.valor_total).toFixed(2).replace('.',',')}`;
+  sub+=` · R$ ${Number(sessao.valor_restante).toFixed(2).replace('.',',')} pago no dia`;
+  if(sessao.cupom_codigo) sub+=` · Cupom ${sessao.cupom_codigo} aplicado`;
+  document.getElementById('valor-info').textContent=sub;
+
+  document.getElementById('loading').style.display='none';
+  document.getElementById('main').style.display='block';
+
+  // Inicializa MP SDK
+  mp=new MercadoPago(MP_PUBLIC_KEY,{locale:'pt-BR'});
+}
+
+function selectMethod(m,el){
+  document.querySelectorAll('.pay-method-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.pay-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('pay-'+m).classList.add('active');
+}
+
+async function payPix(){
+  const btn=document.getElementById('btn-pix');
+  const cpf=document.getElementById('pix-cpf').value.replace(/\D/g,'');
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span> Gerando...';
+  const res=await api('pay_sessao_pix',{sessao_id:sessaoId,cpf});
+  if(!res.ok){alert('Erro: '+(res.error||'tente novamente'));btn.disabled=false;btn.textContent='Gerar QR Code PIX';return;}
+  document.getElementById('pix-qr').src='data:image/png;base64,'+res.qr_code_base64;
+  document.getElementById('pix-code').textContent=res.qr_code;
+  document.getElementById('pix-result').style.display='block';
+  btn.style.display='none';
+  pollPayment(res.payment_id);
+}
+
+async function payCard(){
+  const btn=document.getElementById('btn-card');
+  const num=document.getElementById('card-num').value.replace(/\s/g,'');
+  const exp=document.getElementById('card-exp').value.split('/');
+  const cvv=document.getElementById('card-cvv').value;
+  const parc=document.getElementById('card-parc').value;
+  const nome=document.getElementById('card-nome').value;
+  const cpf=document.getElementById('card-cpf').value.replace(/\D/g,'');
+  if(!num||!cvv||!nome||!cpf||exp.length!==2){alert('Preencha todos os campos.');return;}
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span> Processando...';
+  try{
+    const token=await mp.createCardToken({
+      cardNumber:num,
+      cardholderName:nome,
+      cardExpirationMonth:exp[0],
+      cardExpirationYear:'20'+exp[1],
+      securityCode:cvv,
+      identificationType:'CPF',
+      identificationNumber:cpf
+    });
+    const pmId=await mp.getPaymentMethods({bin:num.slice(0,6)});
+    const res=await api('pay_sessao_card',{
+      sessao_id:sessaoId,cpf,card_token:token.id,installments:parseInt(parc),
+      payment_method_id:pmId.results[0].id
+    });
+    if(res.status==='approved'){
+      document.getElementById('main').style.display='none';
+      document.getElementById('success').style.display='block';
+    } else {
+      alert('Pagamento '+res.status+'. Tente PIX se preferir.');
+      btn.disabled=false;btn.textContent='Pagar com cartão';
+    }
+  }catch(e){alert('Erro: '+(e.message||'tente novamente'));btn.disabled=false;btn.textContent='Pagar com cartão';}
+}
+
+async function payBoleto(){
+  const btn=document.getElementById('btn-bol');
+  const nome=document.getElementById('bol-nome').value;
+  const cpf=document.getElementById('bol-cpf').value.replace(/\D/g,'');
+  if(!nome||!cpf){alert('Preencha nome e CPF.');return;}
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span> Gerando...';
+  const res=await api('pay_sessao_boleto',{sessao_id:sessaoId,cpf});
+  if(!res.ok){alert('Erro');btn.disabled=false;btn.textContent='Gerar Boleto';return;}
+  document.getElementById('bol-code').value=res.barcode;
+  document.getElementById('bol-link').href=res.boleto_url;
+  document.getElementById('bol-result').style.display='block';
+  btn.style.display='none';
+}
+
+function copyPix(){
+  const txt=document.getElementById('pix-code').textContent;
+  navigator.clipboard.writeText(txt);
+  alert('Código PIX copiado!');
+}
+
+let pollInterval=null;
+async function pollPayment(paymentId){
+  if(pollInterval) clearInterval(pollInterval);
+  pollInterval=setInterval(async()=>{
+    const r=await api('get_sessao',{id:sessaoId});
+    if(r.ok&&(r.sessao.status==='sinal_pago'||r.sessao.status==='realizada')){
+      clearInterval(pollInterval);
+      document.getElementById('main').style.display='none';
+      document.getElementById('success').style.display='block';
+    }
+  },4000);
+}
+
+init();
+</script>
+
+</body>
+</html>
