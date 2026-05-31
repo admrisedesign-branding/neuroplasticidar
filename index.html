@@ -2761,7 +2761,60 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
   </div>
 </div>
 
-<!-- DIALOG: SOLICITAR KIT PERSONALIZADO -->
+<!-- ════════ DIALOG: BOAS-VINDAS (1ª vez) ════════ -->
+<div class="overlay" id="dlg-welcome">
+  <div class="dialog" style="max-width:520px;width:100%;padding:0;overflow:hidden;border-radius:20px">
+
+    <!-- Topo com gradiente e dino -->
+    <div style="background:linear-gradient(135deg,#E0EAFF 0%,#F0F9FF 100%);padding:36px 32px 24px;text-align:center;position:relative">
+      <button class="dlg-close" onclick="closeWelcomeModal()" style="position:absolute;top:16px;right:16px">✕</button>
+      <img src="https://neuroplasticidar.gruposja.com/dino-logo.png" alt="Neuroplasticidar" style="width:84px;height:84px;border-radius:50%;margin-bottom:14px;background:#fff;padding:8px;box-shadow:0 8px 28px rgba(26,63,191,0.15)">
+      <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#1A3FBF;margin:0 0 6px;line-height:1.2">Que bom te ver por aqui, <span id="welcome-name" style="font-style:italic">amiga</span>! 💜</h2>
+      <p style="font-size:14px;color:#1e3a5f;font-weight:300;margin:0;line-height:1.5">Sua jornada de desenvolvimento infantil começa agora.</p>
+    </div>
+
+    <!-- Corpo -->
+    <div style="padding:28px 32px 32px">
+      <p style="font-size:15px;color:var(--ink-md);line-height:1.7;margin:0 0 20px">Aqui você vai encontrar tudo o que precisa pra estimular seu pequeno de forma intencional, lúdica e baseada em ciência:</p>
+
+      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:24px">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:18px">📚</div>
+          <div>
+            <p style="font-size:14px;font-weight:600;color:var(--ink);margin:0 0 2px">Materiais digitais</p>
+            <p style="font-size:13px;color:var(--ink-lt);margin:0;line-height:1.5;font-weight:300">E-books, guias e atividades pra baixar e usar em casa</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:#FEF3C7;display:flex;align-items:center;justify-content:center;font-size:18px">🎒</div>
+          <div>
+            <p style="font-size:14px;font-weight:600;color:var(--ink);margin:0 0 2px">Kits personalizados</p>
+            <p style="font-size:13px;color:var(--ink-lt);margin:0;line-height:1.5;font-weight:300">Brinquedos curados pela Jaque conforme o perfil do seu filho</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:#D1FAE5;display:flex;align-items:center;justify-content:center;font-size:18px">🏠</div>
+          <div>
+            <p style="font-size:14px;font-weight:600;color:var(--ink);margin:0 0 2px">Sessões presenciais</p>
+            <p style="font-size:13px;color:var(--ink-lt);margin:0;line-height:1.5;font-weight:300">Acompanhamento da Jaque na sua casa (Manaus)</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="flex-shrink:0;width:36px;height:36px;border-radius:10px;background:#FCE7F3;display:flex;align-items:center;justify-content:center;font-size:18px">🧠</div>
+          <div>
+            <p style="font-size:14px;font-weight:600;color:var(--ink);margin:0 0 2px">Quiz personalizado</p>
+            <p style="font-size:13px;color:var(--ink-lt);margin:0;line-height:1.5;font-weight:300">Descubra qual kit é ideal pro momento do seu filho</p>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="closeWelcomeModal()" style="width:100%;background:var(--blue);color:#fff;border:none;padding:16px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s" onmouseover="this.style.background='var(--blue-dk)'" onmouseout="this.style.background='var(--blue)'">🌟 Conhecer o site</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════ DIALOG: SOLICITAR KIT PERSONALIZADO ════════ -->
 <div class="overlay" id="dlg-curadoria">
   <div class="dialog" style="max-width:520px;width:100%;padding:32px;max-height:90vh;overflow-y:auto">
     <button class="dlg-close" onclick="closeDialog('dlg-curadoria')">✕</button>
@@ -3745,6 +3798,7 @@ function doCad(){
   // Email de boas-vindas
   sendEmailAction('send_welcome',{nome:name,email});
   afterAuth();
+  showWelcomeIfFirstTime();
 }
 async function doLogin(){
   clearAuthError();
@@ -3780,7 +3834,26 @@ async function doLogin(){
   user={name:acc[email].name,email,role:'user'};
   purchases=JSON.parse(localStorage.getItem('np_p_'+email)||'[]');
   saveSession();closeDialog('dlg-auth');updateNavUI();afterAuth();
+  showWelcomeIfFirstTime();
 }
+
+/* ════════ MODAL DE BOAS-VINDAS (1ª vez do cliente) ════════ */
+function showWelcomeIfFirstTime(){
+  if(!user||user.role==='admin'||user.role==='editor')return;
+  const key='np_welcome_shown_'+(user.email||'');
+  if(localStorage.getItem(key))return; // já viu
+  setTimeout(()=>{
+    const firstName=(user.name||'amiga').split(' ')[0];
+    document.getElementById('welcome-name').textContent=firstName;
+    openDialog('dlg-welcome');
+    localStorage.setItem(key,'1');
+  },400); // pequeno delay pra UX suave
+}
+
+function closeWelcomeModal(){
+  closeDialog('dlg-welcome');
+}
+
 function afterAuth(){
   if(!currentProduct)return;
   if(pendingAction==='free'){
