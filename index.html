@@ -1060,7 +1060,11 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       <div>
         <div class="kits-list" id="kits-list"></div>
         <p style="margin-top:32px;font-size:14px;color:var(--ink-lt);font-weight:300;line-height:1.6">Faça o quiz abaixo para descobrir qual kit é ideal para o seu filho — e receba uma indicação personalizada da nossa equipe.</p>
-        <a href="#quiz" style="display:inline-flex;margin-top:16px;font-size:13px;font-weight:600;color:var(--blue);text-decoration:none;border-bottom:1.5px solid var(--blue-lt);padding-bottom:2px;transition:all .2s" onmouseover="this.style.borderBottomColor='var(--blue)'" onmouseout="this.style.borderBottomColor='var(--blue-lt)'">Descobrir o que meu filho precisa →</a>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;align-items:center">
+          <a href="#quiz" style="display:inline-flex;font-size:13px;font-weight:600;color:var(--blue);text-decoration:none;border-bottom:1.5px solid var(--blue-lt);padding-bottom:2px;transition:all .2s" onmouseover="this.style.borderBottomColor='var(--blue)'" onmouseout="this.style.borderBottomColor='var(--blue-lt)'">Descobrir o que meu filho precisa →</a>
+          <span style="color:var(--ink-lt);font-size:12px;font-weight:300">ou</span>
+          <button onclick="openKitCuradoria()" style="display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;border:none;padding:11px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s" onmouseover="this.style.background='var(--blue-dk)'" onmouseout="this.style.background='var(--blue)'">💜 Quero curadoria personalizada</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1947,25 +1951,38 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
         <div>
           <p style="font-size:22px;font-family:'Playfair Display',serif;font-weight:700;color:var(--ink)">Pedidos de Kits</p>
-          <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Kits comprados via Mercado Pago — confira endereço de entrega e atualize status</p>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="adm-filter-btn active" onclick="filterPedidos('all',this)">Todos</button>
-          <button class="adm-filter-btn" onclick="filterPedidos('preparando',this)">Em preparo</button>
-          <button class="adm-filter-btn" onclick="filterPedidos('enviado',this)">Enviado</button>
-          <button class="adm-filter-btn" onclick="filterPedidos('entregue',this)">Entregue</button>
+          <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Solicitações de curadoria → monte o kit → gere link → cliente paga</p>
         </div>
       </div>
+
       <!-- Stats -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
-        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="pk-total" style="font-size:22px">—</div><div class="adm-stat-lbl">Pedidos pagos</div></div>
+        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="pk-total" style="font-size:22px">—</div><div class="adm-stat-lbl">Kits pagos</div></div>
         <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="pk-preparando" style="font-size:22px">—</div><div class="adm-stat-lbl">Em preparo</div></div>
-        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="pk-receita" style="font-size:22px">R$ —</div><div class="adm-stat-lbl">Receita de kits</div></div>
+        <div class="adm-stat-card" style="padding:14px"><div class="adm-stat-val" id="pk-receita" style="font-size:22px;color:var(--sage)">R$ —</div><div class="adm-stat-lbl">Receita de kits</div></div>
       </div>
-      <table class="admin-table">
-        <thead><tr><th>Cliente</th><th>Kit</th><th>Valor pago</th><th>Endereço</th><th>WhatsApp</th><th>Pago em</th><th>Status entrega</th><th>Ações</th></tr></thead>
-        <tbody id="adm-pedidos-tbody"></tbody>
-      </table>
+
+      <!-- Sub-abas -->
+      <div style="display:flex;gap:6px;border-bottom:1px solid var(--border);margin-bottom:16px">
+        <button class="sub-tab-btn active" onclick="subTabPedidos('solicitacoes',this)" style="padding:10px 16px;background:none;border:none;border-bottom:2px solid var(--blue);font-size:13px;font-weight:500;color:var(--blue);cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:-1px">📥 Solicitações</button>
+        <button class="sub-tab-btn" onclick="subTabPedidos('pedidos',this)" style="padding:10px 16px;background:none;border:none;border-bottom:2px solid transparent;font-size:13px;font-weight:500;color:var(--ink-lt);cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:-1px">💳 Pedidos</button>
+      </div>
+
+      <!-- Sub-aba: Solicitações (leads de kit) -->
+      <div id="sub-solic-kit">
+        <table class="admin-table">
+          <thead><tr><th>Nome</th><th>Kit preferido</th><th>Idade</th><th>Foco</th><th>Local</th><th>Data</th><th>Ações</th></tr></thead>
+          <tbody id="adm-solic-kit-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Sub-aba: Pedidos com link gerado -->
+      <div id="sub-pedidos-kit" style="display:none">
+        <table class="admin-table">
+          <thead><tr><th>Cliente</th><th>Valor</th><th>Endereço</th><th>WhatsApp</th><th>Data</th><th>Status pagto</th><th>Status entrega</th><th>Ações</th></tr></thead>
+          <tbody id="adm-pedidos-tbody"></tbody>
+        </table>
+      </div>
     </div>
 
     <!-- PESQUISAS -->
@@ -2576,6 +2593,105 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
   </div>
 </div>
 
+<!-- ADMIN: Montar Kit por Pedido (curadoria) -->
+<div class="overlay" id="dlg-montar-kit">
+  <div class="dialog" style="max-width:720px;width:100%;padding:32px;max-height:92vh;overflow-y:auto">
+    <button class="dlg-close" onclick="closeDialog('dlg-montar-kit')">✕</button>
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px">🧸 Montar Kit por Pedido</h3>
+    <p style="font-size:13px;color:var(--ink-lt);margin-bottom:20px;font-weight:300">Selecione os brinquedos, defina preço e frete — gera link de pagamento automaticamente.</p>
+
+    <!-- DADOS DO CLIENTE -->
+    <div style="background:var(--parchment);border-radius:var(--r);padding:16px;margin-bottom:20px">
+      <p style="font-size:11px;color:var(--ink-lt);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:10px">Cliente</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="field" style="margin-bottom:8px"><label>Nome</label><input type="text" id="mk-nome"></div>
+        <div class="field" style="margin-bottom:8px"><label>E-mail</label><input type="email" id="mk-email"></div>
+        <div class="field" style="margin-bottom:8px"><label>WhatsApp</label><input type="text" id="mk-wpp"></div>
+        <div class="field" style="margin-bottom:8px"><label>Idade da criança</label><input type="text" id="mk-idade"></div>
+      </div>
+    </div>
+
+    <!-- ENDEREÇO DE ENTREGA -->
+    <div style="background:var(--parchment);border-radius:var(--r);padding:16px;margin-bottom:20px">
+      <p style="font-size:11px;color:var(--ink-lt);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:10px">📍 Endereço de entrega</p>
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px">
+        <div class="field" style="margin-bottom:8px"><label>CEP</label><input type="text" id="mk-cep" placeholder="00000-000" onblur="buscarCepKit()"></div>
+        <div class="field" style="margin-bottom:8px"><label>Rua</label><input type="text" id="mk-rua"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="field" style="margin-bottom:8px"><label>Número</label><input type="text" id="mk-numero"></div>
+        <div class="field" style="margin-bottom:8px"><label>Complemento</label><input type="text" id="mk-complemento" placeholder="Apto, casa, ref..."></div>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px">
+        <div class="field" style="margin-bottom:8px"><label>Bairro</label><input type="text" id="mk-bairro" onchange="calcularFreteAuto()"></div>
+        <div class="field" style="margin-bottom:8px"><label>Cidade</label><input type="text" id="mk-cidade" value="Manaus" onchange="calcularFreteAuto()"></div>
+        <div class="field" style="margin-bottom:8px"><label>UF</label><input type="text" id="mk-uf" value="AM" maxlength="2" onchange="calcularFreteAuto()"></div>
+      </div>
+    </div>
+
+    <!-- BRINQUEDOS DO KIT -->
+    <div style="background:var(--parchment);border-radius:var(--r);padding:16px;margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <p style="font-size:11px;color:var(--ink-lt);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin:0">🧸 Brinquedos do kit</p>
+        <span style="font-size:11px;color:var(--ink-lt);font-weight:300">Custo total: <strong id="mk-custo-total" style="color:var(--ink);font-family:'Playfair Display',serif">R$ 0,00</strong></span>
+      </div>
+      <div id="mk-toys-selected" style="background:#fff;border-radius:var(--r);padding:10px;min-height:50px;display:flex;flex-direction:column;gap:6px">
+        <p style="font-size:12px;color:var(--ink-lt);text-align:center;font-weight:300;margin:8px 0">Nenhum brinquedo adicionado</p>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <input type="text" id="mk-toy-search" placeholder="🔍 Buscar brinquedo no estoque..." oninput="filterMkToyOptions()" onfocus="showMkToyOptions()" style="flex:1;padding:10px 12px;border-radius:var(--r);border:1px solid var(--border);font-size:13px;font-family:'DM Sans',sans-serif">
+      </div>
+      <div id="mk-toy-options" style="display:none;background:#fff;border:1px solid var(--border);border-radius:var(--r);max-height:240px;overflow-y:auto;margin-top:4px;box-shadow:var(--shadow)"></div>
+    </div>
+
+    <!-- VALORES -->
+    <div style="background:var(--blue-lt);border-radius:var(--r);padding:16px;margin-bottom:20px">
+      <p style="font-size:11px;color:var(--blue-dk);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;margin-bottom:10px">💰 Valores</p>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px">
+        <span style="color:var(--ink-md)">Preço sugerido dos brinquedos:</span>
+        <strong id="mk-preco-sugerido" style="font-family:'Playfair Display',serif">R$ 0,00</strong>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+        <div class="field" style="margin-bottom:0">
+          <label>Valor do kit (R$)</label>
+          <input type="number" id="mk-valor-kit" step="0.01" min="0" oninput="atualizarTotalKit()">
+          <span style="font-size:10px;color:var(--ink-lt);margin-top:2px;display:block">Edite se quiser</span>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label>Frete (R$)</label>
+          <input type="number" id="mk-valor-frete" step="0.01" min="0" oninput="atualizarTotalKit()">
+          <span style="font-size:10px;color:var(--ink-lt);margin-top:2px;display:block" id="mk-frete-info">Calculado automaticamente</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:10px;margin-bottom:0">
+        <label>Cupom (opcional)</label>
+        <input type="text" id="mk-cupom" placeholder="BEMVINDA..." style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+      </div>
+
+      <hr style="border:none;border-top:1px dashed rgba(0,0,0,0.1);margin:14px 0">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:16px">
+        <strong style="color:var(--ink)">Total:</strong>
+        <strong style="font-family:'Playfair Display',serif;font-size:24px;color:var(--blue-dk)" id="mk-total">R$ 0,00</strong>
+      </div>
+    </div>
+
+    <button class="btn-pay" id="mk-btn" onclick="gerarLinkKit()">📧 Criar link e enviar por e-mail</button>
+
+    <!-- Resultado -->
+    <div id="mk-result" style="display:none;margin-top:18px;background:var(--sage-lt);border-radius:var(--r);padding:16px">
+      <p style="font-size:13px;color:var(--sage);font-weight:600;margin-bottom:8px">✅ Link gerado!</p>
+      <input type="text" id="mk-link" readonly style="width:100%;font-size:11px;padding:8px;border-radius:6px;border:1px solid var(--border);background:#fff;margin-bottom:8px">
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button onclick="copyMkLink()" style="padding:8px 14px;border-radius:6px;border:none;background:var(--blue);color:#fff;font-size:12px;cursor:pointer">📋 Copiar</button>
+        <button onclick="enviarKitWhatsApp()" style="padding:8px 14px;border-radius:6px;border:none;background:#25D366;color:#fff;font-size:12px;cursor:pointer">💬 WhatsApp</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ADMIN: Gerar Link de Sessão -->
 <div class="overlay" id="dlg-gerar-link">
   <div class="dialog" style="max-width:520px;width:100%;padding:32px">
@@ -2642,6 +2758,79 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       <button onclick="copyLink()" style="padding:8px 14px;border-radius:6px;border:none;background:var(--blue);color:#fff;font-size:12px;cursor:pointer">📋 Copiar link</button>
       <button id="gl-wpp-btn" onclick="enviarLinkWhatsApp()" style="padding:8px 14px;border-radius:6px;border:none;background:#25D366;color:#fff;font-size:12px;cursor:pointer;margin-left:6px">💬 Enviar WhatsApp</button>
     </div>
+  </div>
+</div>
+
+<!-- DIALOG: SOLICITAR KIT PERSONALIZADO -->
+<div class="overlay" id="dlg-curadoria">
+  <div class="dialog" style="max-width:520px;width:100%;padding:32px;max-height:90vh;overflow-y:auto">
+    <button class="dlg-close" onclick="closeDialog('dlg-curadoria')">✕</button>
+    <h3 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px">💜 Curadoria personalizada</h3>
+    <p style="font-size:13px;color:var(--ink-lt);margin-bottom:20px;font-weight:300">Conta um pouquinho sobre seu filho — a Jaque vai montar o kit ideal e te enviar pelo WhatsApp 💌</p>
+
+    <div class="field" style="margin-bottom:12px">
+      <label>Seu nome</label>
+      <input type="text" id="cur-nome" placeholder="Como devemos te chamar?">
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>E-mail</label>
+      <input type="email" id="cur-email" placeholder="seu@email.com">
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>WhatsApp</label>
+      <input type="text" id="cur-wpp" placeholder="(92) 9XXXX-XXXX">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="field" style="margin-bottom:12px">
+        <label>Estado</label>
+        <select id="cur-uf">
+          <option value="AM">AM</option>
+          <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+          <option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option>
+          <option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option>
+          <option value="MG">MG</option><option value="MS">MS</option><option value="MT">MT</option>
+          <option value="PA">PA</option><option value="PB">PB</option><option value="PE">PE</option>
+          <option value="PI">PI</option><option value="PR">PR</option><option value="RJ">RJ</option>
+          <option value="RN">RN</option><option value="RO">RO</option><option value="RR">RR</option>
+          <option value="RS">RS</option><option value="SC">SC</option><option value="SE">SE</option>
+          <option value="SP">SP</option><option value="TO">TO</option>
+        </select>
+      </div>
+      <div class="field" style="margin-bottom:12px">
+        <label>Cidade</label>
+        <input type="text" id="cur-cidade" placeholder="Manaus" value="Manaus">
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>Bairro</label>
+      <input type="text" id="cur-bairro" placeholder="Ex: Adrianópolis">
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>Idade da criança</label>
+      <select id="cur-idade">
+        <option value="">Selecione</option>
+        <option value="0 a 2 anos">0 a 2 anos</option>
+        <option value="3 a 5 anos">3 a 5 anos</option>
+        <option value="6 a 9 anos">6 a 9 anos</option>
+        <option value="10 anos ou mais">10 anos ou mais</option>
+      </select>
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>Tem algum kit preferido?</label>
+      <select id="cur-kit-pref">
+        <option value="">Quero que a Jaque sugira</option>
+      </select>
+    </div>
+    <div class="field" style="margin-bottom:16px">
+      <label>O que você quer estimular ou desenvolver?</label>
+      <textarea id="cur-foco" style="min-height:80px" placeholder="Ex: Concentração, regulação emocional, motricidade fina, comunicação..."></textarea>
+    </div>
+
+    <div style="background:var(--blue-lt);border-radius:var(--r);padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--blue-dk);line-height:1.5">
+      💡 <strong>Como funciona:</strong> Jaque vai analisar seu pedido, montar o kit ideal e te enviar o link de pagamento pelo WhatsApp — com valor já calculado (kit + frete).
+    </div>
+
+    <button class="btn-pay" onclick="solicitarKit()" style="background:#25D366;color:#fff;border:none">💬 Solicitar pelo WhatsApp</button>
   </div>
 </div>
 
@@ -2940,37 +3129,126 @@ async function loadAdminData(){
 let allPedidosData=[];
 
 async function loadAdminPedidos(){
-  // Junta: compras pagas de kits (purchases) + intenções (leads kit) que ainda não pagaram
-  const{data:compras}=await sb.from('purchases')
-    .select('*,users(name,email,whatsapp)')
-    .eq('payment_status','approved')
+  // 1) Solicitações de curadoria (leads de kit não-pagos)
+  const{data:leads}=await sb.from('leads')
+    .select('*')
+    .or('contact_preference.eq.kit,recommended_kit.eq.curadoria')
     .order('created_at',{ascending:false});
+  allLeadsKitData=(leads||[]).filter(l=>l.contact_preference!=='sessao_presencial'&&l.recommended_kit!=='sessao');
 
-  // Filtra só os que têm dados típicos de kit (material_id null = era kit, ou amount alto)
-  const kitsPagos=(compras||[]).filter(c=>!c.material_id);
-
-  allPedidosData=kitsPagos.map(c=>({
-    ...c,
-    _tipo:'pago',
-    nome:c.users?.name||c.payer_name||'Cliente',
-    email:c.users?.email||c.payer_email||'—',
-    whatsapp:c.users?.whatsapp||'',
-    valor:c.amount,
-    pago_em:c.created_at,
-    delivery_status:c.delivery_status||'preparando',
-  }));
+  // 2) Pedidos com link gerado (pedidos_kit)
+  const{data:pedidos}=await sb.from('pedidos_kit')
+    .select('*')
+    .order('created_at',{ascending:false});
+  allPedidosKitData=pedidos||[];
 
   // Stats
-  const total=allPedidosData.length;
-  const preparando=allPedidosData.filter(p=>p.delivery_status==='preparando'||!p.delivery_status).length;
-  const receita=allPedidosData.reduce((s,p)=>s+Number(p.valor||0),0);
+  const aguardando=allLeadsKitData.filter(l=>!l.status||l.status==='new').length;
+  const aguardandoPag=allPedidosKitData.filter(p=>p.status==='aguardando_pagamento').length;
+  const pagos=allPedidosKitData.filter(p=>['pago','preparando','enviado','entregue'].includes(p.status)).length;
+  const receita=allPedidosKitData.filter(p=>['pago','preparando','enviado','entregue'].includes(p.status)).reduce((s,p)=>s+Number(p.valor_total||0),0);
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  set('pk-total',total);
-  set('pk-preparando',preparando);
+  set('pk-total',pagos);
+  set('pk-preparando',allPedidosKitData.filter(p=>p.status==='preparando'||(p.status==='pago')).length);
   set('pk-receita','R$ '+receita.toFixed(2).replace('.',','));
 
-  renderPedidosTable(allPedidosData);
+  // Sub-aba labels
+  const t1=document.querySelector('#adm-pedidos .sub-tab-btn:nth-child(1)');
+  const t2=document.querySelector('#adm-pedidos .sub-tab-btn:nth-child(2)');
+  if(t1)t1.innerHTML=`📥 Solicitações (${allLeadsKitData.length})`;
+  if(t2)t2.innerHTML=`💳 Pedidos (${allPedidosKitData.length})`;
+
+  renderSolicitacoesKitTable(allLeadsKitData);
+  renderPedidosKitTable(allPedidosKitData);
 }
+
+function renderSolicitacoesKitTable(list){
+  const tbody=document.getElementById('adm-solic-kit-tbody');
+  if(!tbody)return;
+  if(!list.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhuma solicitação de kit ainda.</td></tr>';return;}
+  tbody.innerHTML=list.map(l=>{
+    let det={};try{det=typeof l.child_age==='string'&&l.child_age.startsWith('{')?JSON.parse(l.child_age):{};}catch(e){}
+    const local=det.cidade?`${det.cidade}/${det.uf||'AM'}${det.bairro?', '+det.bairro:''}`:'—';
+    const idade=det.idade||l.child_age||'—';
+    const foco=det.foco||(l.symptoms||[]).join(', ')||'—';
+    const kitPref=det.kit_preferido||(l.recommended_kit&&l.recommended_kit!=='curadoria'?l.recommended_kit:'A definir');
+    const dia=new Date(l.created_at);
+    const dataStr=dia.toLocaleDateString('pt-BR');
+    return `<tr>
+    <td style="font-weight:500">${l.name||'—'}<div style="font-size:11px;color:var(--ink-lt)">${l.email||''}</div></td>
+    <td style="font-size:12px">${kitPref}</td>
+    <td style="font-size:12px">${idade}</td>
+    <td style="font-size:11px;color:var(--ink-md);max-width:180px">${foco}</td>
+    <td style="font-size:11px">${local}</td>
+    <td style="font-size:11px;color:var(--ink-lt)">${dataStr}</td>
+    <td style="white-space:nowrap">
+      <button onclick='openMontarKit(${JSON.stringify(l).replace(/'/g,"&apos;")})' style="background:var(--blue);color:#fff;border:none;padding:6px 10px;border-radius:6px;font-size:11px;cursor:pointer;margin-right:4px;font-weight:500" title="Montar kit + gerar link">🧸 Montar</button>
+      ${l.whatsapp?`<a href="https://wa.me/55${l.whatsapp.replace(/\D/g,'')}" target="_blank" style="background:#25D366;color:#fff;padding:6px 10px;border-radius:6px;font-size:11px;text-decoration:none">💬</a>`:''}
+    </td>
+  </tr>`;}).join('');
+}
+
+function renderPedidosKitTable(list){
+  const tbody=document.getElementById('adm-pedidos-tbody');
+  if(!list.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--ink-lt);padding:32px;font-weight:300">Nenhum pedido de kit gerado ainda.</td></tr>';return;}
+  const statusLabels={
+    'aguardando_curadoria':{label:'⏳ Aguardando curadoria',color:'#92400E'},
+    'aguardando_pagamento':{label:'💳 Aguardando pagamento',color:'#92400E'},
+    'pago':{label:'✅ Pago',color:'#16A34A'},
+    'preparando':{label:'📦 Preparando',color:'#1A3FBF'},
+    'enviado':{label:'🚚 Enviado',color:'#7C3AED'},
+    'entregue':{label:'✅ Entregue',color:'#16A34A'},
+    'cancelado':{label:'❌ Cancelado',color:'#991B1B'}
+  };
+  tbody.innerHTML=list.map(p=>{
+    const status=statusLabels[p.status]||{label:p.status,color:'#666'};
+    const dia=new Date(p.created_at).toLocaleDateString('pt-BR');
+    const endereco=`${p.endereco_rua||'—'}${p.endereco_numero?', '+p.endereco_numero:''}<br><span style="font-size:11px">${p.endereco_bairro||''} · ${p.endereco_cidade}/${p.endereco_uf}</span>`;
+    const linkPagar=`https://neuroplasticidar.gruposja.com/pagar-kit.html?id=${p.id}`;
+    return `<tr>
+    <td style="font-weight:500">${p.cliente_nome}<div style="font-size:11px;color:var(--ink-lt)">${p.cliente_email}</div></td>
+    <td style="font-family:'Playfair Display',serif;font-weight:700">R$ ${Number(p.valor_total).toFixed(2)}<div style="font-size:10px;color:var(--ink-lt);font-weight:300">kit ${Number(p.valor_kit||0).toFixed(2)} + frete ${Number(p.valor_frete||0).toFixed(2)}</div></td>
+    <td style="font-size:11px;color:var(--ink-md);max-width:200px">${endereco}</td>
+    <td>${p.cliente_whatsapp?`<a class="btn-wpp-sm" href="https://wa.me/55${p.cliente_whatsapp.replace(/\D/g,'')}" target="_blank" style="font-size:11px">💬 ${p.cliente_whatsapp}</a>`:'—'}</td>
+    <td style="font-size:11px;color:var(--ink-lt)">${dia}</td>
+    <td><span style="font-size:11px;font-weight:500;color:${status.color}">${status.label}</span></td>
+    <td><select class="status-sel" onchange="updatePedidoKitStatus('${p.id}',this.value)">
+      <option value="aguardando_pagamento" ${p.status==='aguardando_pagamento'?'selected':''}>Aguardando pagamento</option>
+      <option value="pago" ${p.status==='pago'?'selected':''}>Pago</option>
+      <option value="preparando" ${p.status==='preparando'?'selected':''}>Preparando</option>
+      <option value="enviado" ${p.status==='enviado'?'selected':''}>Enviado</option>
+      <option value="entregue" ${p.status==='entregue'?'selected':''}>Entregue</option>
+      <option value="cancelado" ${p.status==='cancelado'?'selected':''}>Cancelado</option>
+    </select></td>
+    <td style="white-space:nowrap">
+      ${p.status==='aguardando_pagamento'?`<button onclick="copiarLinkPedidoKit('${linkPagar}')" style="background:var(--blue);color:#fff;border:none;padding:5px 9px;border-radius:5px;font-size:11px;cursor:pointer;margin-right:4px" title="Copiar link de pagamento">🔗</button>`:''}
+      ${p.cliente_whatsapp?`<a href="https://wa.me/55${p.cliente_whatsapp.replace(/\D/g,'')}" target="_blank" style="background:#25D366;color:#fff;padding:5px 9px;border-radius:5px;font-size:11px;text-decoration:none">💬</a>`:''}
+    </td>
+  </tr>`;}).join('');
+}
+
+function subTabPedidos(tab,el){
+  document.querySelectorAll('#adm-pedidos .sub-tab-btn').forEach(b=>{
+    b.style.borderBottomColor='transparent';b.style.color='var(--ink-lt)';
+  });
+  el.style.borderBottomColor='var(--blue)';
+  el.style.color='var(--blue)';
+  document.getElementById('sub-solic-kit').style.display=tab==='solicitacoes'?'block':'none';
+  document.getElementById('sub-pedidos-kit').style.display=tab==='pedidos'?'block':'none';
+}
+
+function copiarLinkPedidoKit(link){
+  navigator.clipboard.writeText(link);
+  alert('Link copiado! Cole no WhatsApp do cliente.');
+}
+
+async function updatePedidoKitStatus(id,status){
+  await sb.from('pedidos_kit').update({status,updated_at:new Date().toISOString()}).eq('id',id);
+  await loadAdminPedidos();
+}
+
+let allLeadsKitData=[];
+let allPedidosKitData=[];
 
 function renderPedidosTable(list){
   const tbody=document.getElementById('adm-pedidos-tbody');
@@ -4763,6 +5041,284 @@ function filterSessoes(s,el){
 let glLinkAtual=null;
 let glClienteAtual=null;
 
+/* ════════ MONTAR KIT POR PEDIDO (admin) ════════ */
+let mkBrinquedos=[]; // brinquedos selecionados pro kit
+let mkLeadAtual=null;
+let mkLinkAtual=null;
+
+// Tabela de frete por bairro (Manaus, saindo do Novo Aleixo)
+const FRETE_MANAUS={
+  proximo:{label:'Próximo (até 5km)',valor:20,bairros:['cidade nova','aleixo','distrito industrial','coroado','novo aleixo','colonia santo antonio','jorge teixeira']},
+  medio:{label:'Médio (5-12km)',valor:30,bairros:['centro','sao geraldo','adrianopolis','parque 10','flores','dom pedro','planalto','sao jorge']},
+  longe:{label:'Longe (12-20km)',valor:40,bairros:['compensa','santo antonio','taruma','ponta negra','cachoeirinha','educandos','sao raimundo','presidente vargas']},
+  muito_longe:{label:'Muito longe (>20km)',valor:50,bairros:[]}
+};
+
+function calcularFreteAuto(){
+  const uf=document.getElementById('mk-uf').value.trim().toUpperCase();
+  const cidade=document.getElementById('mk-cidade').value.trim().toLowerCase();
+  const bairro=document.getElementById('mk-bairro').value.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const info=document.getElementById('mk-frete-info');
+  const fInput=document.getElementById('mk-valor-frete');
+
+  if(uf==='AM'&&cidade.includes('manaus')&&bairro){
+    let zona='muito_longe';
+    if(FRETE_MANAUS.proximo.bairros.some(b=>bairro.includes(b)))zona='proximo';
+    else if(FRETE_MANAUS.medio.bairros.some(b=>bairro.includes(b)))zona='medio';
+    else if(FRETE_MANAUS.longe.bairros.some(b=>bairro.includes(b)))zona='longe';
+    const f=FRETE_MANAUS[zona];
+    fInput.value=f.valor.toFixed(2);
+    info.innerHTML=`<span style="color:var(--sage)">✓ ${f.label}</span>`;
+    atualizarTotalKit();
+  } else if(uf!=='AM'){
+    info.innerHTML=`<a href="https://www2.correios.com.br/sistemas/precosPrazos/" target="_blank" style="color:var(--blue);font-size:11px">📦 Calcular Correios →</a> e digitar manualmente`;
+    fInput.value='';
+    atualizarTotalKit();
+  } else {
+    info.innerHTML='Digite o bairro pra calcular';
+  }
+}
+
+async function buscarCepKit(){
+  const cep=document.getElementById('mk-cep').value.replace(/\D/g,'');
+  if(cep.length!==8)return;
+  try{
+    const r=await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const d=await r.json();
+    if(d.erro)return;
+    document.getElementById('mk-rua').value=d.logradouro||'';
+    document.getElementById('mk-bairro').value=d.bairro||'';
+    document.getElementById('mk-cidade').value=d.localidade||'';
+    document.getElementById('mk-uf').value=d.uf||'';
+    calcularFreteAuto();
+  }catch(e){console.warn('[cep] erro:',e);}
+}
+
+function openMontarKit(lead){
+  mkLeadAtual=lead;
+  mkBrinquedos=[];
+  mkLinkAtual=null;
+  document.getElementById('mk-result').style.display='none';
+  document.getElementById('mk-btn').disabled=false;
+  document.getElementById('mk-btn').textContent='📧 Criar link e enviar por e-mail';
+
+  // Pré-preenche com dados do lead
+  let det={};try{det=typeof lead.child_age==='string'&&lead.child_age.startsWith('{')?JSON.parse(lead.child_age):{};}catch(e){}
+  document.getElementById('mk-nome').value=lead.name||'';
+  document.getElementById('mk-email').value=lead.email||'';
+  document.getElementById('mk-wpp').value=lead.whatsapp||'';
+  document.getElementById('mk-idade').value=det.idade||lead.child_age||'';
+  document.getElementById('mk-cep').value='';
+  document.getElementById('mk-rua').value='';
+  document.getElementById('mk-numero').value='';
+  document.getElementById('mk-complemento').value='';
+  document.getElementById('mk-bairro').value=det.bairro||'';
+  document.getElementById('mk-cidade').value=det.cidade||'Manaus';
+  document.getElementById('mk-uf').value=det.uf||'AM';
+  document.getElementById('mk-cupom').value='';
+  document.getElementById('mk-valor-kit').value='';
+  document.getElementById('mk-valor-frete').value='';
+
+  renderMkToysSelected();
+  if(det.bairro)calcularFreteAuto();
+
+  openDialog('dlg-montar-kit');
+}
+
+async function ensureBrinquedosLoadedMk(){
+  if(!allBrinquedosData||!allBrinquedosData.length){
+    const{data}=await sb.from('brinquedos').select('*').eq('ativo',true).order('nome');
+    allBrinquedosData=data||[];
+  }
+}
+
+async function showMkToyOptions(){
+  await ensureBrinquedosLoadedMk();
+  filterMkToyOptions();
+  document.getElementById('mk-toy-options').style.display='block';
+}
+
+function filterMkToyOptions(){
+  const box=document.getElementById('mk-toy-options');
+  if(!box)return;
+  const q=document.getElementById('mk-toy-search').value.toLowerCase().trim();
+  const jaIds=new Set(mkBrinquedos.map(t=>t.id));
+  const disp=(allBrinquedosData||[]).filter(b=>!jaIds.has(b.id)).filter(b=>!q||(b.nome||'').toLowerCase().includes(q)||(b.tags||[]).some(t=>t.toLowerCase().includes(q))||(b.faixa_etaria||'').toLowerCase().includes(q));
+  if(!disp.length){
+    box.innerHTML='<p style="text-align:center;padding:14px;font-size:12px;color:var(--ink-lt)">Nenhum brinquedo encontrado</p>';
+    return;
+  }
+  box.innerHTML=disp.map(b=>{
+    const estoque=parseInt(b.estoque_atual||0);
+    const min=parseInt(b.estoque_minimo||0);
+    const foto=b.foto_url?`<img src="${b.foto_url}" style="width:36px;height:36px;border-radius:6px;object-fit:cover;flex-shrink:0">`:'<div style="width:36px;height:36px;border-radius:6px;background:var(--parchment);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🧸</div>';
+    let badge='';
+    if(estoque===0)badge='<span style="font-size:10px;padding:2px 6px;background:#FEE2E2;color:#991B1B;border-radius:4px;font-weight:600">🚫</span>';
+    else if(estoque<=min)badge='<span style="font-size:10px;padding:2px 6px;background:#FEF3C7;color:#92400E;border-radius:4px;font-weight:600">⚠️ '+estoque+'</span>';
+    else badge='<span style="font-size:10px;padding:2px 6px;background:#D1FAE5;color:#065F46;border-radius:4px;font-weight:600">✓ '+estoque+'</span>';
+    return `<div onclick='addToyToMk("${b.id}")' style="display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--border)" onmouseover="this.style.background='var(--parchment)'" onmouseout="this.style.background='transparent'">
+      ${foto}
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:500;font-size:13px">${b.nome}</div>
+        <div style="font-size:11px;color:var(--ink-lt)">${b.faixa_etaria||'—'} · custo R$ ${parseFloat(b.custo||0).toFixed(2).replace('.',',')} · venda R$ ${parseFloat(b.preco_venda||0).toFixed(2).replace('.',',')}</div>
+      </div>
+      ${badge}
+    </div>`;
+  }).join('');
+}
+
+function addToyToMk(id){
+  const b=(allBrinquedosData||[]).find(x=>x.id===id);
+  if(!b)return;
+  if(mkBrinquedos.find(t=>t.id===id))return;
+  mkBrinquedos.push({
+    id:b.id,nome:b.nome,foto_url:b.foto_url,
+    custo:parseFloat(b.custo||0),
+    preco_venda:parseFloat(b.preco_venda||0),
+    estoque_atual:parseInt(b.estoque_atual||0),
+    quantidade:1
+  });
+  document.getElementById('mk-toy-search').value='';
+  document.getElementById('mk-toy-options').style.display='none';
+  renderMkToysSelected();
+}
+
+function removeMkToy(id){
+  mkBrinquedos=mkBrinquedos.filter(t=>t.id!==id);
+  renderMkToysSelected();
+}
+
+function changeMkToyQty(id,delta){
+  const t=mkBrinquedos.find(x=>x.id===id);
+  if(!t)return;
+  t.quantidade=Math.max(1,(t.quantidade||1)+delta);
+  renderMkToysSelected();
+}
+
+function renderMkToysSelected(){
+  const box=document.getElementById('mk-toys-selected');
+  if(!mkBrinquedos.length){
+    box.innerHTML='<p style="font-size:12px;color:var(--ink-lt);text-align:center;font-weight:300;margin:8px 0">Nenhum brinquedo adicionado</p>';
+    document.getElementById('mk-custo-total').textContent='R$ 0,00';
+    document.getElementById('mk-preco-sugerido').textContent='R$ 0,00';
+    if(!document.getElementById('mk-valor-kit').value)atualizarTotalKit();
+    return;
+  }
+  let custoTotal=0,sugerido=0;
+  box.innerHTML=mkBrinquedos.map(t=>{
+    const subCusto=(t.custo||0)*(t.quantidade||1);
+    const subPreco=(t.preco_venda||0)*(t.quantidade||1);
+    custoTotal+=subCusto;sugerido+=subPreco;
+    const estoqueOk=t.estoque_atual>=t.quantidade;
+    const foto=t.foto_url?`<img src="${t.foto_url}" style="width:32px;height:32px;border-radius:6px;object-fit:cover;flex-shrink:0">`:'<div style="width:32px;height:32px;border-radius:6px;background:var(--parchment);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🧸</div>';
+    const alertaEst=!estoqueOk?'<span style="font-size:9px;padding:1px 5px;background:#FEE2E2;color:#991B1B;border-radius:3px;font-weight:600;margin-left:4px">⚠️ falta</span>':'';
+    return `<div style="display:flex;align-items:center;gap:8px;padding:6px;background:#fff;border-radius:6px;border:1px solid var(--border)">
+      ${foto}
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:500;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.nome}${alertaEst}</div>
+        <div style="font-size:10px;color:var(--ink-lt)">custo R$ ${(t.custo||0).toFixed(2).replace('.',',')} · venda R$ ${(t.preco_venda||0).toFixed(2).replace('.',',')}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:3px">
+        <button type="button" onclick="changeMkToyQty('${t.id}',-1)" style="width:22px;height:22px;border-radius:4px;border:1px solid var(--border);background:#fff;font-size:12px;cursor:pointer">−</button>
+        <span style="min-width:22px;text-align:center;font-weight:600;font-size:12px">${t.quantidade}</span>
+        <button type="button" onclick="changeMkToyQty('${t.id}',1)" style="width:22px;height:22px;border-radius:4px;border:1px solid var(--border);background:#fff;font-size:12px;cursor:pointer">+</button>
+      </div>
+      <button type="button" onclick="removeMkToy('${t.id}')" style="background:none;border:none;color:#991B1B;font-size:16px;cursor:pointer;padding:0 4px">×</button>
+    </div>`;
+  }).join('');
+  document.getElementById('mk-custo-total').textContent='R$ '+custoTotal.toFixed(2).replace('.',',');
+  document.getElementById('mk-preco-sugerido').textContent='R$ '+sugerido.toFixed(2).replace('.',',');
+  // Auto-popula valor do kit se vazio
+  if(!document.getElementById('mk-valor-kit').value){
+    document.getElementById('mk-valor-kit').value=sugerido.toFixed(2);
+  }
+  atualizarTotalKit();
+}
+
+function atualizarTotalKit(){
+  const kit=parseFloat(document.getElementById('mk-valor-kit').value)||0;
+  const frete=parseFloat(document.getElementById('mk-valor-frete').value)||0;
+  document.getElementById('mk-total').textContent='R$ '+(kit+frete).toFixed(2).replace('.',',');
+}
+
+async function gerarLinkKit(){
+  const nome=document.getElementById('mk-nome').value.trim();
+  const email=document.getElementById('mk-email').value.trim();
+  if(!nome||!email){alert('Preencha nome e e-mail do cliente.');return;}
+  if(!mkBrinquedos.length){alert('Adicione ao menos 1 brinquedo ao kit.');return;}
+  const valorKit=parseFloat(document.getElementById('mk-valor-kit').value)||0;
+  const valorFrete=parseFloat(document.getElementById('mk-valor-frete').value)||0;
+  if(valorKit<=0){alert('Defina o valor do kit.');return;}
+
+  const btn=document.getElementById('mk-btn');
+  btn.disabled=true;
+  btn.innerHTML='<span style="display:inline-block;width:12px;height:12px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .8s linear infinite;margin-right:6px;vertical-align:middle"></span> Gerando...';
+
+  const payload={
+    cliente_nome:nome,
+    cliente_email:email,
+    cliente_whatsapp:document.getElementById('mk-wpp').value.trim(),
+    cep:document.getElementById('mk-cep').value.trim(),
+    endereco_rua:document.getElementById('mk-rua').value.trim(),
+    endereco_numero:document.getElementById('mk-numero').value.trim(),
+    endereco_complemento:document.getElementById('mk-complemento').value.trim(),
+    endereco_bairro:document.getElementById('mk-bairro').value.trim(),
+    endereco_cidade:document.getElementById('mk-cidade').value.trim()||'Manaus',
+    endereco_uf:document.getElementById('mk-uf').value.trim()||'AM',
+    crianca_idade:document.getElementById('mk-idade').value.trim(),
+    kit_nome:'Kit personalizado',
+    brinquedos:mkBrinquedos.map(t=>({id:t.id,nome:t.nome,quantidade:t.quantidade,custo:t.custo,preco_venda:t.preco_venda})),
+    valor_kit:valorKit,
+    valor_frete:valorFrete,
+    cupom_codigo:document.getElementById('mk-cupom').value.trim().toUpperCase(),
+    modo:'curadoria',
+  };
+
+  try{
+    const r=await fetch(`${SUPABASE_URL}/functions/v1/smooth-task`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON,'Authorization':'Bearer '+SUPABASE_ANON},
+      body:JSON.stringify({action:'create_kit_link',payload})
+    });
+    const data=await r.json();
+    if(!data.ok){alert('Erro: '+(data.error||'tente novamente'));btn.disabled=false;btn.textContent='📧 Criar link e enviar por e-mail';return;}
+    mkLinkAtual=data.link;
+    document.getElementById('mk-link').value=data.link;
+    document.getElementById('mk-result').style.display='block';
+    btn.textContent='✅ Link enviado!';
+    // Atualiza status do lead se vier da aba de pedidos
+    if(mkLeadAtual?.id){
+      await sb.from('leads').update({status:'contacted'}).eq('id',mkLeadAtual.id);
+    }
+  }catch(e){alert('Erro: '+e.message);btn.disabled=false;btn.textContent='📧 Criar link e enviar por e-mail';}
+}
+
+function copyMkLink(){
+  navigator.clipboard.writeText(mkLinkAtual||document.getElementById('mk-link').value);
+  alert('Link copiado!');
+}
+
+function enviarKitWhatsApp(){
+  const wpp=document.getElementById('mk-wpp').value.replace(/\D/g,'');
+  if(!wpp){alert('WhatsApp não informado.');return;}
+  const nome=document.getElementById('mk-nome').value.trim().split(' ')[0];
+  const valorKit=document.getElementById('mk-valor-kit').value;
+  const valorFrete=document.getElementById('mk-valor-frete').value;
+  const total=(parseFloat(valorKit)+parseFloat(valorFrete||0)).toFixed(2);
+  const msg=`Oi ${nome}! 💜
+
+Montamos o kit personalizado pro seu filho. Aqui está o link pra pagamento:
+
+${mkLinkAtual}
+
+🧸 Kit: R$ ${parseFloat(valorKit).toFixed(2)}
+🚚 Frete: R$ ${parseFloat(valorFrete||0).toFixed(2)}
+💰 Total: R$ ${total}
+
+Qualquer dúvida é só chamar!`;
+  window.open(`https://wa.me/55${wpp}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
 function openGerarLinkSessao(lead){
   glLinkAtual=null;
   glClienteAtual=lead;
@@ -5881,6 +6437,97 @@ function openSessaoDialog(){
   }
   document.getElementById('sess-wpp').value='';
   openDialog('dlg-sessao');
+}
+
+/* ════════ CURADORIA DE KIT (site público) ════════ */
+async function openKitCuradoria(){
+  // Limpa form
+  ['cur-nome','cur-email','cur-wpp','cur-bairro','cur-foco'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('cur-uf').value='AM';
+  document.getElementById('cur-cidade').value='Manaus';
+  document.getElementById('cur-idade').value='';
+
+  // Popula dropdown de kits do banco
+  const sel=document.getElementById('cur-kit-pref');
+  try{
+    const{data:kits}=await sb.from('kits').select('id,name,emoji,age_range').eq('active',true).order('name');
+    sel.innerHTML='<option value="">Quero que a Jaque sugira</option>'+(kits||[]).map(k=>`<option value="${k.id}">${k.emoji||'🎒'} ${k.name}${k.age_range?' ('+k.age_range+')':''}</option>`).join('');
+  }catch(e){console.warn('[curadoria] erro carregando kits:',e.message);}
+
+  openDialog('dlg-curadoria');
+}
+
+async function solicitarKit(){
+  const nome=document.getElementById('cur-nome').value.trim();
+  const email=document.getElementById('cur-email').value.trim();
+  const wpp=document.getElementById('cur-wpp').value.trim();
+  const uf=document.getElementById('cur-uf').value;
+  const cidade=document.getElementById('cur-cidade').value.trim();
+  const bairro=document.getElementById('cur-bairro').value.trim();
+  const idade=document.getElementById('cur-idade').value;
+  const kitPref=document.getElementById('cur-kit-pref');
+  const kitPrefNome=kitPref.options[kitPref.selectedIndex].text;
+  const kitPrefId=kitPref.value;
+  const foco=document.getElementById('cur-foco').value.trim();
+
+  if(!nome||!email){alert('Preencha pelo menos nome e e-mail.');return;}
+  if(!idade){alert('Selecione a idade da criança.');return;}
+  if(!bairro){alert('Informe o bairro pra calcularmos o frete.');return;}
+
+  // Salva lead
+  console.log('[curadoria] salvando lead...');
+  let leadSalvo=false;
+  try{
+    const{data,error}=await sb.from('leads').insert({
+      name:nome,email,whatsapp:wpp,
+      symptoms:foco?[foco]:[],
+      contact_preference:'kit',
+      recommended_kit:kitPrefId||'curadoria',
+      status:'new',
+      child_age:JSON.stringify({
+        idade,bairro,cidade,uf,
+        kit_preferido:kitPrefNome,
+        kit_preferido_id:kitPrefId,
+        foco
+      })
+    }).select();
+    if(error){
+      const errInfo={message:error.message,code:error.code};
+      console.error('[curadoria] erro salvando:',JSON.stringify(errInfo));
+      alert('⚠️ Não conseguimos salvar agora, mas vou abrir o WhatsApp pra você falar direto com a equipe.');
+    } else {
+      leadSalvo=true;
+      console.log('[curadoria] ✅ lead salvo');
+    }
+  }catch(e){console.error('[curadoria] exceção:',e);}
+
+  // Hashtags pra CRM
+  const slugify=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'');
+  const firstName=nome.split(' ')[0];
+  const localStr=`${cidade}/${uf}, bairro ${bairro}`;
+  const kitLine=kitPrefId?`\n🎒 Kit de interesse: ${kitPrefNome}`:'\n🎒 Aberta pra sugestões da Jaque';
+  const focoLine=foco?`\n🎯 Foco: ${foco}`:'';
+
+  const msg=`Oi, equipe Neuroplasticidar! 💜
+
+Tenho interesse em um kit de brinquedos pra meu filho.
+
+Sou ${firstName}, moro em ${localStr} e a criança tem ${idade}.${kitLine}${focoLine}
+
+Gostaria de receber a sugestão personalizada da Jaque, com valor do kit e frete pra cá.
+
+📧 ${email}${wpp?`\n📱 ${wpp}`:''}
+
+Aguardo o link de pagamento!
+
+—
+#Kit #Curadoria #${slugify(cidade)} #${slugify(bairro)} #Idade${slugify(idade)}`;
+  const url=`https://wa.me/5592991479457?text=${encodeURIComponent(msg)}`;
+
+  closeDialog('dlg-curadoria');
+  window.open(url,'_blank');
 }
 
 async function agendarSessao(){
