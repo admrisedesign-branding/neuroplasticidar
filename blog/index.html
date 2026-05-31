@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Neuroplasticidar | Desenvolvimento infantil baseado em ciência</title>
+<meta name="description" content="Artigos sobre desenvolvimento infantil, regulação emocional, autismo, motricidade fina, atraso de fala e mais. Conteúdo gratuito baseado em ciência.">
+<meta name="author" content="Neuroplasticidar">
+<meta name="keywords" content="blog desenvolvimento infantil, regulação emocional, autismo, motricidade fina, fala criança, neuroplasticidade">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Blog Neuroplasticidar — Desenvolvimento infantil baseado em ciência">
+<meta property="og:description" content="Artigos gratuitos sobre regulação emocional, autismo, motricidade fina, fala infantil e mais.">
+<meta property="og:url" content="https://neuroplasticidar.gruposja.com/blog/">
+<meta property="og:image" content="https://neuroplasticidar.gruposja.com/dino-logo.png">
+<meta property="og:site_name" content="Neuroplasticidar">
+<meta property="og:locale" content="pt_BR">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Blog Neuroplasticidar">
+<meta name="twitter:description" content="Artigos gratuitos sobre desenvolvimento infantil baseado em ciência.">
+
+<link rel="canonical" href="https://neuroplasticidar.gruposja.com/blog/">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,::before,::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0F0E0C;--ink-md:#44403C;--ink-lt:#A8A29E;
+  --blue:#1A3FBF;--blue-dk:#122E9A;--blue-lt:#EEF2FF;
+  --cream:#FAF9F6;--parchment:#F5F2EA;
+  --border:#E7E5E0;--shadow:0 4px 24px rgba(0,0,0,0.06);
+  --r:12px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;line-height:1.7}
+
+.blog-nav{background:#fff;border-bottom:1px solid var(--border);padding:18px 24px;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);background:rgba(255,255,255,0.95)}
+.blog-nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.blog-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.blog-logo img{width:36px;height:36px;border-radius:50%}
+.blog-logo span{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--blue)}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;padding:8px 16px;border-radius:50px;text-decoration:none;font-size:13px;font-weight:500;transition:all .2s}
+.btn-back:hover{background:var(--blue-dk)}
+
+/* Hero */
+.blog-hero{padding:70px 24px 50px;text-align:center;background:linear-gradient(180deg,#fff 0%,var(--cream) 100%)}
+.blog-hero-inner{max-width:780px;margin:0 auto}
+.hero-badge{display:inline-block;padding:6px 14px;background:var(--blue-lt);color:var(--blue);border-radius:50px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px}
+.blog-hero h1{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,52px);font-weight:700;line-height:1.1;letter-spacing:-0.015em;margin-bottom:18px}
+.blog-hero p{font-size:clamp(16px,2vw,19px);color:var(--ink-md);font-weight:300;line-height:1.6;max-width:640px;margin:0 auto}
+
+/* Lista */
+.blog-list{max-width:1100px;margin:0 auto;padding:30px 24px 80px}
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
+.blog-card{background:#fff;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);transition:all .25s;text-decoration:none;color:inherit;display:flex;flex-direction:column}
+.blog-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--blue-lt)}
+.blog-card-cat-bar{height:6px;width:100%}
+.blog-card-content{padding:24px;flex:1;display:flex;flex-direction:column}
+.blog-card-cat{font-size:10px;color:var(--blue);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.blog-card h2{font-family:'Playfair Display',serif;font-size:21px;font-weight:600;color:var(--ink);line-height:1.3;margin-bottom:10px;letter-spacing:-0.005em}
+.blog-card p{font-size:14px;color:var(--ink-md);line-height:1.6;font-weight:300;flex:1;margin-bottom:16px}
+.blog-card-meta{display:flex;gap:12px;font-size:12px;color:var(--ink-lt);padding-top:12px;border-top:1px solid var(--border)}
+
+.cor-amber{background:linear-gradient(90deg,#F59E0B,#FBBF24)}
+.cor-blue{background:linear-gradient(90deg,#1A3FBF,#3B82F6)}
+.cor-green{background:linear-gradient(90deg,#10B981,#34D399)}
+.cor-purple{background:linear-gradient(90deg,#8B5CF6,#A78BFA)}
+.cor-pink{background:linear-gradient(90deg,#EC4899,#F472B6)}
+
+/* CTA final */
+.blog-cta{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dk) 100%);color:#fff;padding:50px 28px;border-radius:16px;text-align:center;margin:30px 24px;max-width:880px;margin-left:auto;margin-right:auto}
+.blog-cta h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:12px}
+.blog-cta p{font-size:16px;color:rgba(255,255,255,0.85);font-weight:300;margin-bottom:24px;max-width:540px;margin-left:auto;margin-right:auto}
+.blog-cta .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.blog-cta a{display:inline-block;padding:13px 28px;border-radius:50px;text-decoration:none;font-weight:600;font-size:14px;transition:all .2s}
+.cta-primary{background:#fff;color:var(--blue)}
+.cta-primary:hover{transform:translateY(-2px)}
+.cta-secondary{background:rgba(255,255,255,0.12);color:#fff;border:1.5px solid rgba(255,255,255,0.3)}
+.cta-secondary:hover{background:rgba(255,255,255,0.2)}
+
+.blog-footer{background:#fff;border-top:1px solid var(--border);padding:40px 24px;text-align:center;color:var(--ink-lt);font-size:13px;margin-top:30px}
+.blog-footer a{color:var(--blue);text-decoration:none}
+
+@media(max-width:640px){
+  .blog-hero{padding:50px 20px 36px}
+  .blog-list{padding:20px 20px 60px}
+}
+</style>
+</head>
+<body>
+
+<nav class="blog-nav">
+  <div class="blog-nav-inner">
+    <a href="https://neuroplasticidar.gruposja.com" class="blog-logo">
+      <img src="https://neuroplasticidar.gruposja.com/dino-logo.png" alt="Neuroplasticidar">
+      <span>Neuroplasticidar</span>
+    </a>
+    <a href="https://neuroplasticidar.gruposja.com" class="btn-back">← Voltar ao site</a>
+  </div>
+</nav>
+
+<section class="blog-hero">
+  <div class="blog-hero-inner">
+    <div class="hero-badge">Blog Neuroplasticidar</div>
+    <h1>Conteúdo gratuito baseado em <em>ciência</em></h1>
+    <p>Artigos sobre desenvolvimento infantil, regulação emocional, autismo, motricidade, fala, telas e tudo que afeta o cérebro em construção do seu filho.</p>
+  </div>
+</section>
+
+<section class="blog-list">
+  <div class="blog-grid">
+
+    <a href="regulacao-emocional-criancas.html" class="blog-card">
+      <div class="blog-card-cat-bar cor-amber"></div>
+      <div class="blog-card-content">
+        <div class="blog-card-cat">Regulação Emocional</div>
+        <h2>Como ajudar seu filho a regular as emoções (sem precisar castigar)</h2>
+        <p>Birras, explosões e crises não são desobediência — são sinais de um cérebro ainda em construção. Veja como acompanhar seu filho nesse processo.</p>
+        <div class="blog-card-meta">
+          <span>📅 15 mai 2026</span>
+          <span>⏱️ 7 min</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="sinais-tea-infantil.html" class="blog-card">
+      <div class="blog-card-cat-bar cor-blue"></div>
+      <div class="blog-card-content">
+        <div class="blog-card-cat">Desenvolvimento Atípico</div>
+        <h2>10 sinais de autismo na primeira infância que merecem atenção</h2>
+        <p>Identificar cedo faz toda a diferença. Veja o que observar, sem alarmismo e sem negação, do nascimento até os 3 anos.</p>
+        <div class="blog-card-meta">
+          <span>📅 20 mai 2026</span>
+          <span>⏱️ 8 min</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="motricidade-fina-atividades.html" class="blog-card">
+      <div class="blog-card-cat-bar cor-green"></div>
+      <div class="blog-card-content">
+        <div class="blog-card-cat">Motor e Coordenação</div>
+        <h2>7 atividades de motricidade fina pra fazer em casa</h2>
+        <p>A força da mãozinha do seu filho vai influenciar a escrita, a fala e até a autonomia futura. Atividades simples com itens que você já tem.</p>
+        <div class="blog-card-meta">
+          <span>📅 22 mai 2026</span>
+          <span>⏱️ 5 min</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="atraso-fala-criancas.html" class="blog-card">
+      <div class="blog-card-cat-bar cor-purple"></div>
+      <div class="blog-card-content">
+        <div class="blog-card-cat">Linguagem e Fala</div>
+        <h2>Atraso de fala: quando se preocupar e o que fazer</h2>
+        <p>Cada criança tem seu ritmo, mas alguns marcos não são opcionais. Veja o que é esperado, quando buscar ajuda e como estimular em casa.</p>
+        <div class="blog-card-meta">
+          <span>📅 24 mai 2026</span>
+          <span>⏱️ 6 min</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="telas-desenvolvimento-infantil.html" class="blog-card">
+      <div class="blog-card-cat-bar cor-pink"></div>
+      <div class="blog-card-content">
+        <div class="blog-card-cat">Saúde e Desenvolvimento</div>
+        <h2>Telas e desenvolvimento infantil: o que a ciência diz de verdade</h2>
+        <p>Sem alarmismo, sem culpa — só fatos. O impacto real das telas no cérebro em formação e como usar de forma consciente.</p>
+        <div class="blog-card-meta">
+          <span>📅 28 mai 2026</span>
+          <span>⏱️ 7 min</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section class="blog-cta">
+  <h2>Quer apoio personalizado pra seu filho?</h2>
+  <p>Faça nosso quiz gratuito e receba a indicação de kit ideal — ou agende uma sessão presencial com nossa especialista.</p>
+  <div class="btns">
+    <a href="https://neuroplasticidar.gruposja.com#quiz" class="cta-primary">🧠 Fazer o quiz gratuito</a>
+    <a href="https://neuroplasticidar.gruposja.com#especialista" class="cta-secondary">🏠 Conhecer as sessões</a>
+  </div>
+</section>
+
+<footer class="blog-footer">
+  <p>© 2026 Neuroplasticidar · <a href="https://neuroplasticidar.gruposja.com">Voltar ao site</a></p>
+</footer>
+
+</body>
+</html>
