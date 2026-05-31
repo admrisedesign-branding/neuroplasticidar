@@ -1059,57 +1059,19 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
       </div>
       <div>
         <div class="kits-list" id="kits-list"></div>
-        <p style="margin-top:32px;font-size:14px;color:var(--ink-lt);font-weight:300;line-height:1.6">Faça o quiz abaixo para descobrir qual kit é ideal para o seu filho — e receba uma indicação personalizada da nossa equipe.</p>
-        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;align-items:center">
-          <a href="#quiz" style="display:inline-flex;font-size:13px;font-weight:600;color:var(--blue);text-decoration:none;border-bottom:1.5px solid var(--blue-lt);padding-bottom:2px;transition:all .2s" onmouseover="this.style.borderBottomColor='var(--blue)'" onmouseout="this.style.borderBottomColor='var(--blue-lt)'">Descobrir o que meu filho precisa →</a>
-          <span style="color:var(--ink-lt);font-size:12px;font-weight:300">ou</span>
-          <button onclick="openKitCuradoria()" style="display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;border:none;padding:11px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s" onmouseover="this.style.background='var(--blue-dk)'" onmouseout="this.style.background='var(--blue)'">💜 Quero curadoria personalizada</button>
-        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ESPECIALISTA -->
-<section id="especialista">
-  <div class="esp-inner">
-    <div class="esp-info">
-      <p class="eyebrow">Acompanhamento presencial</p>
-      <h2>Você não precisa fazer isso <em>sozinho.</em></h2>
-      <p class="lead">Uma Assistente de Desenvolvimento Infantil vai até sua casa e trabalha com seu filho através da brincadeira intencional — porque amar não é o mesmo que saber como estimular.</p>
-      <ul class="esp-features">
-        <li>Sessão planejada conforme o perfil e as necessidades do seu filho</li>
-        <li>Profissional trabalha diretamente com a criança, usando os brinquedos certos</li>
-        <li>Os pais participam e aprendem durante a sessão</li>
-        <li>Relatório de evolução ao final de cada encontro</li>
-        <li>Indicação de materiais complementares para continuar em casa</li>
-      </ul>
-    </div>
-    <div class="esp-card">
-      <div class="esp-price-block">
-        <div class="esp-price"><sup>R$</sup>200<sub>/hora</sub></div>
-        <p class="esp-price-label">Sessão presencial em casa</p>
-      </div>
-      <ul class="esp-includes">
-        <li>Avaliação inicial do perfil da criança</li>
-        <li>Sessão de desenvolvimento pela brincadeira</li>
-        <li>Participação e orientação dos pais</li>
-        <li>Relatório de evolução por sessão</li>
-        <li>Indicação de materiais complementares</li>
-        <li>Atendimento em Manaus — AM</li>
-      </ul>
-      <a href="javascript:void(0)" onclick="openSessaoDialog()" class="btn-wpp-white">Agendar uma sessão</a>
-    </div>
-  </div>
-</section>
-
 <!-- QUIZ -->
 <section id="quiz">
   <div class="quiz-bg-text">Quiz</div>
   <div class="quiz-inner">
     <p class="eyebrow">Quiz de desenvolvimento</p>
     <h2>Qual é a necessidade do seu filho?</h2>
-    <p class="lead">Responda 4 perguntas e receba uma indicação personalizada — gratuita, sem compromisso.</p>
+    <p class="lead">Responda algumas perguntas e receba uma indicação personalizada — gratuita, sem compromisso.</p>
     <div class="quiz-card">
       <div class="quiz-progress" id="quiz-progress">
         <div class="qp-bar active"></div>
@@ -1156,13 +1118,39 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
         </div>
         <button class="btn-quiz" onclick="quizNext(3)">Continuar</button>
       </div>
-      <!-- Q4 -->
+      <!-- Q4: Coleta completa (igual modal de curadoria) -->
       <div class="quiz-step" id="qs4">
-        <p class="quiz-q">Onde você quer receber o resultado?</p>
-        <p class="quiz-qsub">Nossa equipe entra em contato em até 48 horas com uma indicação personalizada.</p>
+        <p class="quiz-q">Pra te enviar a indicação certa</p>
+        <p class="quiz-qsub">Preencha seus dados — nossa especialista vai analisar e entrar em contato em até 48h pelo WhatsApp.</p>
         <div class="quiz-field"><label>Seu nome</label><input type="text" id="q-name" placeholder="Como posso te chamar?"></div>
-        <div class="quiz-field"><label>E-mail</label><input type="email" id="q-email" placeholder="Para receber o resultado completo"></div>
-        <div class="quiz-field"><label>WhatsApp <span style="font-weight:300;color:var(--ink-lt)">(opcional — para contato mais rápido)</span></label><input type="tel" id="q-wpp" placeholder="(92) 99999-9999"></div>
+        <div class="quiz-field"><label>E-mail</label><input type="email" id="q-email" placeholder="seu@email.com"></div>
+        <div class="quiz-field"><label>WhatsApp</label><input type="tel" id="q-wpp" placeholder="(92) 9XXXX-XXXX"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="quiz-field"><label>Estado</label>
+            <select id="q-uf" style="width:100%;padding:12px 14px;border-radius:var(--r);border:1px solid var(--border);font-size:14px;font-family:'DM Sans',sans-serif;background:#fff">
+              <option value="AM">AM</option>
+              <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+              <option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option>
+              <option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option>
+              <option value="MG">MG</option><option value="MS">MS</option><option value="MT">MT</option>
+              <option value="PA">PA</option><option value="PB">PB</option><option value="PE">PE</option>
+              <option value="PI">PI</option><option value="PR">PR</option><option value="RJ">RJ</option>
+              <option value="RN">RN</option><option value="RO">RO</option><option value="RR">RR</option>
+              <option value="RS">RS</option><option value="SC">SC</option><option value="SE">SE</option>
+              <option value="SP">SP</option><option value="TO">TO</option>
+            </select>
+          </div>
+          <div class="quiz-field"><label>Cidade</label><input type="text" id="q-cidade" value="Manaus"></div>
+        </div>
+        <div class="quiz-field"><label>Bairro</label><input type="text" id="q-bairro" placeholder="Ex: Adrianópolis"></div>
+        <div class="quiz-field"><label>Tem algum kit preferido? <span style="font-weight:300;color:var(--ink-lt)">(opcional)</span></label>
+          <select id="q-kit-pref" style="width:100%;padding:12px 14px;border-radius:var(--r);border:1px solid var(--border);font-size:14px;font-family:'DM Sans',sans-serif;background:#fff">
+            <option value="">Quero a sugestão da especialista</option>
+          </select>
+        </div>
+        <div class="quiz-field"><label>O que você quer estimular ou desenvolver?</label>
+          <textarea id="q-foco" style="min-height:70px;width:100%;padding:12px 14px;border-radius:var(--r);border:1px solid var(--border);font-size:14px;font-family:'DM Sans',sans-serif;resize:vertical" placeholder="Ex: Concentração, regulação emocional, motricidade fina, comunicação..."></textarea>
+        </div>
         <button class="btn-quiz" onclick="submitQuiz()">Ver meu resultado</button>
       </div>
       <!-- Resultado -->
@@ -1178,6 +1166,39 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
           <button onclick="resetQuiz()" style="background:none;border:none;font-size:12px;color:var(--ink-lt);cursor:pointer;margin-top:12px;font-family:'DM Sans',sans-serif;font-weight:300">Refazer o quiz</button>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESPECIALISTA -->
+<section id="especialista">
+  <div class="esp-inner">
+    <div class="esp-info">
+      <p class="eyebrow">Acompanhamento presencial</p>
+      <h2>Você não precisa fazer isso <em>sozinho.</em></h2>
+      <p class="lead">Uma Assistente de Desenvolvimento Infantil vai até sua casa e trabalha com seu filho através da brincadeira intencional — porque amar não é o mesmo que saber como estimular.</p>
+      <ul class="esp-features">
+        <li>Sessão planejada conforme o perfil e as necessidades do seu filho</li>
+        <li>Profissional trabalha diretamente com a criança, usando os brinquedos certos</li>
+        <li>Os pais participam e aprendem durante a sessão</li>
+        <li>Relatório de evolução ao final de cada encontro</li>
+        <li>Indicação de materiais complementares para continuar em casa</li>
+      </ul>
+    </div>
+    <div class="esp-card">
+      <div class="esp-price-block">
+        <div class="esp-price"><sup>R$</sup>200<sub>/hora</sub></div>
+        <p class="esp-price-label">Sessão presencial em casa</p>
+      </div>
+      <ul class="esp-includes">
+        <li>Avaliação inicial do perfil da criança</li>
+        <li>Sessão de desenvolvimento pela brincadeira</li>
+        <li>Participação e orientação dos pais</li>
+        <li>Relatório de evolução por sessão</li>
+        <li>Indicação de materiais complementares</li>
+        <li>Atendimento em Manaus — AM</li>
+      </ul>
+      <a href="javascript:void(0)" onclick="openSessaoDialog()" class="btn-wpp-white">Agendar uma sessão</a>
     </div>
   </div>
 </section>
@@ -4164,11 +4185,26 @@ function selectOpt(el,v){
 function quizNext(step){
   if(step===1){if(!q1Selected.length){alert('Selecione ao menos uma opção.');return;}quizAnswers.symptoms=q1Selected;}
   if(step===2){const s=document.querySelector('#qs2 .quiz-opt.selected');if(!s){alert('Selecione a faixa etária.');return;}quizAnswers.age=s.textContent.replace('✓','').trim();}
-  if(step===3){const s=document.querySelector('#qs3 .quiz-opt.selected');if(!s){alert('Selecione como prefere começar.');return;}quizAnswers.start=s.textContent.replace('✓','').trim();}
+  if(step===3){
+    const s=document.querySelector('#qs3 .quiz-opt.selected');
+    if(!s){alert('Selecione como prefere começar.');return;}
+    quizAnswers.start=s.textContent.replace('✓','').trim();
+    // Popula dropdown de kits do banco ao chegar no Q4
+    populateQuizKitDropdown();
+  }
   document.getElementById('qs'+step).classList.remove('active');
   const next=step<4?'qs'+(step+1):'qs-result';
   document.getElementById(next).classList.add('active');
   updateQP(step+1);
+}
+
+async function populateQuizKitDropdown(){
+  const sel=document.getElementById('q-kit-pref');
+  if(!sel)return;
+  try{
+    const{data:kits}=await sb.from('kits').select('id,name,emoji,age_range').eq('active',true).order('name');
+    sel.innerHTML='<option value="">Quero a sugestão da especialista</option>'+(kits||[]).map(k=>`<option value="${k.id}">${k.emoji||'🎒'} ${k.name}${k.age_range?' ('+k.age_range+')':''}</option>`).join('');
+  }catch(e){console.warn('[quiz] erro carregando kits:',e);}
 }
 function updateQP(step){
   document.querySelectorAll('.qp-bar').forEach((b,i)=>{b.classList.remove('active','done');if(i<step-1)b.classList.add('done');if(i===step-1)b.classList.add('active');});
@@ -4177,24 +4213,41 @@ async function submitQuiz(){
   const name=document.getElementById('q-name').value.trim();
   const email=document.getElementById('q-email').value.trim();
   const wpp=document.getElementById('q-wpp').value.trim();
+  const uf=document.getElementById('q-uf').value;
+  const cidade=document.getElementById('q-cidade').value.trim();
+  const bairro=document.getElementById('q-bairro').value.trim();
+  const kitPrefEl=document.getElementById('q-kit-pref');
+  const kitPrefNome=kitPrefEl.options[kitPrefEl.selectedIndex].text;
+  const kitPrefId=kitPrefEl.value;
+  const foco=document.getElementById('q-foco').value.trim();
+
   if(!name||!email){alert('Preencha nome e e-mail para ver o resultado.');return;}
+  if(!bairro){alert('Informe o bairro pra podermos calcular o frete se for kit.');return;}
+
   const kit=recommendKit(quizAnswers.symptoms||[]);
-  quizAnswers={...quizAnswers,name,email,wpp,kit:kit.name};
+  quizAnswers={...quizAnswers,name,email,wpp,uf,cidade,bairro,kit_preferido:kitPrefNome,kit_preferido_id:kitPrefId,foco,kit:kit.name};
   const pref=quizAnswers.start||'kit';
 
-  // Salvar lead
+  // Salvar lead (com detalhes completos)
   try{
     await sb.from('leads').insert({
       name,email,whatsapp:wpp,
-      child_age:quizAnswers.age,
-      symptoms:quizAnswers.symptoms,
-      recommended_kit:pref==='acomp'?'sessao':kit.name,
+      symptoms:foco?[foco,...(quizAnswers.symptoms||[])]:(quizAnswers.symptoms||[]),
+      recommended_kit:pref==='acomp'?'sessao':(kitPrefId||kit.name),
       contact_preference:pref==='acomp'?'sessao_presencial':pref==='digital'?'material':'kit',
-      status:'new'
+      status:'new',
+      child_age:JSON.stringify({
+        idade:quizAnswers.age,
+        bairro,cidade,uf,
+        kit_preferido:kitPrefNome,
+        kit_preferido_id:kitPrefId,
+        foco,
+        sintomas:quizAnswers.symptoms||[]
+      })
     });
-  }catch(e){}
+  }catch(e){console.warn('[quiz] erro salvando lead:',e);}
 
-  // Envia email do resultado do quiz (assíncrono, não bloqueia o fluxo)
+  // Envia email do resultado do quiz
   try{
     const kitFinal=pref==='acomp'?'Sessão Presencial em Manaus':pref==='digital'?'Materiais Digitais':kit.name;
     sendEmailAction('send_quiz_result',{
@@ -4228,6 +4281,9 @@ async function submitQuiz(){
   const firstName=name.split(' ')[0];
   const sintomasHashtags=sintomasLista.map(s=>'#'+slugify(s)).join(' ');
   const wppLine=wpp?`\n📱 ${wpp}`:'';
+  const localStr=`${cidade}/${uf}, bairro ${bairro}`;
+  const focoLine=foco?`\n🎯 Foco principal: ${foco}`:'';
+  const kitPrefLine=kitPrefId?`\n🎒 Kit de interesse: ${kitPrefNome}`:'';
 
   // Mensagem por tipo de interesse — em 1ª pessoa
   let introMsg;
@@ -4236,7 +4292,7 @@ async function submitQuiz(){
 
 Fiz o quiz no site e o resultado me indicou a sessão presencial. Tenho interesse em saber mais.
 
-Sou ${firstName} e estou acompanhando uma criança de ${ageText}. Minhas principais preocupações são: ${sintomasFrase}.
+Sou ${firstName}, moro em ${localStr} e estou acompanhando uma criança de ${ageText}. Minhas principais preocupações são: ${sintomasFrase}.${focoLine}
 
 Gostaria de saber sobre como funciona a sessão, disponibilidade e detalhes do atendimento.`;
   } else if(pref==='digital'){
@@ -4244,15 +4300,15 @@ Gostaria de saber sobre como funciona a sessão, disponibilidade e detalhes do a
 
 Fiz o quiz no site e gostaria de conversar sobre os materiais digitais que vocês oferecem.
 
-Sou ${firstName} e estou acompanhando uma criança de ${ageText}. Minhas principais preocupações são: ${sintomasFrase}.
+Sou ${firstName}, moro em ${localStr} e estou acompanhando uma criança de ${ageText}. Minhas principais preocupações são: ${sintomasFrase}.${focoLine}
 
 Quero saber quais materiais combinam mais com o que estou buscando.`;
   } else {
     introMsg=`Oi, equipe Neuroplasticidar! 💜
 
-Fiz o quiz no site e o resultado me indicou o ${kitFinalNome}. Gostaria de saber mais detalhes sobre ele.
+Fiz o quiz no site e o resultado me indicou o ${kitFinalNome}. Gostaria de saber mais detalhes.
 
-Sou ${firstName} e estou acompanhando uma criança de ${ageText}. Minhas principais preocupações são: ${sintomasFrase}.
+Sou ${firstName}, moro em ${localStr} e estou acompanhando uma criança de ${ageText}. Minhas principais preocupações são: ${sintomasFrase}.${focoLine}${kitPrefLine}
 
 Quero saber como funciona, como recebo e o investimento.`;
   }
@@ -4264,7 +4320,7 @@ Quero saber como funciona, como recebo e o investimento.`;
 Aguardo retorno!
 
 —
-#${categoria} #${kitTag} #Idade${ageTag}${sintomasHashtags?' '+sintomasHashtags:''}`;
+#${categoria} #${kitTag} #Idade${ageTag} #${slugify(cidade)} #${slugify(bairro)}${sintomasHashtags?' '+sintomasHashtags:''}`;
   const whatsappUrl=`https://wa.me/5592991479457?text=${encodeURIComponent(whatsappMsg)}`;
 
   // Botões dinâmicos por destino — Kit e Sessão vão direto pro WhatsApp
