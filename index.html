@@ -3839,15 +3839,23 @@ async function doLogin(){
 
 /* ════════ MODAL DE BOAS-VINDAS (1ª vez do cliente) ════════ */
 function showWelcomeIfFirstTime(){
-  if(!user||user.role==='admin'||user.role==='editor')return;
+  console.log('[welcome] tentando exibir... user=',user);
+  if(!user){console.log('[welcome] ❌ sem user');return;}
+  if(user.role==='admin'||user.role==='editor'){console.log('[welcome] ❌ é admin/editor, não mostra');return;}
   const key='np_welcome_shown_'+(user.email||'');
-  if(localStorage.getItem(key))return; // já viu
+  if(localStorage.getItem(key)){console.log('[welcome] ❌ já viu antes (localStorage marcado)');return;}
+  console.log('[welcome] ✅ vai exibir em 600ms...');
   setTimeout(()=>{
     const firstName=(user.name||'amiga').split(' ')[0];
-    document.getElementById('welcome-name').textContent=firstName;
+    const nameEl=document.getElementById('welcome-name');
+    const dlgEl=document.getElementById('dlg-welcome');
+    console.log('[welcome] elementos:',{nameEl:!!nameEl,dlgEl:!!dlgEl});
+    if(!dlgEl){console.error('[welcome] ❌ dialog dlg-welcome NÃO existe no DOM!');return;}
+    if(nameEl)nameEl.textContent=firstName;
     openDialog('dlg-welcome');
     localStorage.setItem(key,'1');
-  },400); // pequeno delay pra UX suave
+    console.log('[welcome] ✅ exibido para',firstName);
+  },600);
 }
 
 function closeWelcomeModal(){
