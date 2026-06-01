@@ -4,7 +4,7 @@
 
 const SUPABASE_URL  = 'https://cifndytwoehbnmjllrml.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpZm5keXR3b2VoYm5tamxscm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NjM1OTIsImV4cCI6MjA5NDUzOTU5Mn0.Rkd_5t52cuQEJVPPN3sXPUukL6aEcGrwLtR2qx78Rto';
-const SITE_URL      = 'https://neuroplasticidar.vercel.app';
+const SITE_URL      = 'https://neuroplasticidar.gruposja.com';
 
 export default async function handler(req, res) {
   const { slug } = req.query;
