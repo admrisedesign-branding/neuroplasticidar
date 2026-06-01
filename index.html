@@ -3758,13 +3758,20 @@ function handleCTA(){
 }
 
 /* ── LOGIN SOCIAL ── */
+function savePendingIntent(){
+  if(pendingAction&&currentProduct){
+    try{sessionStorage.setItem('np_pending',JSON.stringify({action:pendingAction,id:currentProduct.id}));}catch(e){}
+  }
+}
 async function loginGoogle(){
   try{
+    savePendingIntent();
     await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin}});
   }catch(e){showAuthError('Erro ao conectar com Google.');}
 }
 async function loginApple(){
   try{
+    savePendingIntent();
     await sb.auth.signInWithOAuth({provider:'apple',options:{redirectTo:window.location.origin}});
   }catch(e){showAuthError('Erro ao conectar com Apple.');}
 }
@@ -3894,14 +3901,37 @@ function closeWelcomeModal(){
   closeDialog('dlg-welcome');
 }
 
-function afterAuth(){
-  if(!currentProduct)return;
-  if(pendingAction==='free'){
-    releaseDownload();
-  } else if(pendingAction==='pay'){
-    openCheckout();
-  }
+function _runPending(){
+  if(!currentProduct||!pendingAction)return;
+  if(pendingAction==='free'){releaseDownload();}
+  else if(pendingAction==='pay'){openCheckout();}
   pendingAction=null;
+}
+function afterAuth(){
+  // Recupera a intenção salva antes do login social (sobrevive ao reload do OAuth)
+  if(!currentProduct||!pendingAction){
+    let intent=null;
+    try{const raw=sessionStorage.getItem('np_pending');if(raw)intent=JSON.parse(raw);}catch(e){}
+    if(intent){
+      sessionStorage.removeItem('np_pending');
+      pendingAction=intent.action;
+      if(materials.length>0){
+        currentProduct=materials.find(m=>m.id===intent.id)||currentProduct;
+        _runPending();
+      } else {
+        const _w=setInterval(()=>{
+          if(materials.length>0){
+            clearInterval(_w);
+            currentProduct=materials.find(m=>m.id===intent.id)||currentProduct;
+            _runPending();
+          }
+        },200);
+        setTimeout(()=>clearInterval(_w),6000);
+      }
+      return;
+    }
+  }
+  _runPending();
 }
 
 /* CHECKOUT */
