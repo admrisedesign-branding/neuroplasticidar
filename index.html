@@ -3877,44 +3877,53 @@ async function doLogin(){
 }
 
 /* ════════ MODAL DE BOAS-VINDAS (1ª vez do cliente) ════════ */
-function showWelcomeIfFirstTime(){
-  console.log('[welcome] tentando exibir... user=',user);
-  if(!user){console.log('[welcome] ❌ sem user');return;}
-  if(user.role==='admin'||user.role==='editor'){console.log('[welcome] ❌ é admin/editor, não mostra');return;}
-  const key='np_welcome_shown_'+(user.email||'');
-  if(localStorage.getItem(key)){console.log('[welcome] ❌ já viu antes (localStorage marcado)');return;}
-  console.log('[welcome] ✅ vai exibir em 600ms...');
-  setTimeout(()=>{
-    const firstName=(user.name||'amiga').split(' ')[0];
-    const nameEl=document.getElementById('welcome-name');
-    const dlgEl=document.getElementById('dlg-welcome');
-    console.log('[welcome] elementos:',{nameEl:!!nameEl,dlgEl:!!dlgEl});
-    if(!dlgEl){console.error('[welcome] ❌ dialog dlg-welcome NÃO existe no DOM!');return;}
-    if(nameEl)nameEl.textContent=firstName;
-    openDialog('dlg-welcome');
-    localStorage.setItem(key,'1');
-    console.log('[welcome] ✅ exibido para',firstName);
-  },600);
+let afterWelcomeRun=null;
+function willShowWelcome(){
+  if(!user)return false;
+  if(user.role==='admin'||user.role==='editor')return false;
+  return !localStorage.getItem('np_welcome_shown_'+(user.email||''));
 }
+function showWelcome(){
+  const key='np_welcome_shown_'+(user.email||'');
+  const firstName=(user.name||'amiga').split(' ')[0];
+  const nameEl=document.getElementById('welcome-name');
+  const dlgEl=document.getElementById('dlg-welcome');
+  if(!dlgEl)return;
+  if(nameEl)nameEl.textContent=firstName;
+  openDialog('dlg-welcome');
+  localStorage.setItem(key,'1');
+}
+// usado pelos logins por e-mail sem pendência de download
+function showWelcomeIfFirstTime(){ if(willShowWelcome()) showWelcome(); }
 
 function closeWelcomeModal(){
   closeDialog('dlg-welcome');
+  // depois do "bem-vindo", leva pro material que a pessoa queria
+  if(typeof afterWelcomeRun==='function'){const fn=afterWelcomeRun;afterWelcomeRun=null;setTimeout(fn,250);}
 }
 
-function _runPending(){
-  if(!currentProduct||!pendingAction)return;
-  const act=pendingAction;
-  pendingAction=null;
-  // volta pro card que a pessoa clicou (rola + destaca)
-  const card=document.getElementById('card-'+currentProduct.id);
+function _goToCardAndRun(act){
+  // rola até o card que a pessoa clicou e destaca
+  const card=currentProduct?document.getElementById('card-'+currentProduct.id):null;
   if(card){
     card.scrollIntoView({behavior:'smooth',block:'center'});
     card.classList.add('card-highlight');
     setTimeout(()=>card.classList.remove('card-highlight'),2600);
   }
-  // continua o fluxo
-  if(act==='free'){releaseDownload();}
-  else if(act==='pay'){openCheckout();}
+  // espera o scroll terminar antes de abrir o download/checkout (senão o modal trava a rolagem no topo)
+  setTimeout(()=>{ if(act==='free'){releaseDownload();} else if(act==='pay'){openCheckout();} },700);
+}
+function _runPending(){
+  if(!currentProduct||!pendingAction)return;
+  const act=pendingAction;
+  pendingAction=null;
+  if(willShowWelcome()){
+    // 1ª vez: mostra o "bem-vindo" e só leva pro material quando ela fechar
+    afterWelcomeRun=()=>_goToCardAndRun(act);
+    showWelcome();
+  } else {
+    _goToCardAndRun(act);
+  }
 }
 function afterAuth(){
   // Recupera a intenção salva antes do login social (sobrevive ao reload do OAuth)
