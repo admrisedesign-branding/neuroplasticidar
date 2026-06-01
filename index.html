@@ -3652,7 +3652,7 @@ function showToast(){
 function copyMaterialLink(id){
   const p=materials.find(m=>m.id===id);if(!p)return;
   // Usa o ID do produto na URL — mais confiável que o slug do título
-  const url=`https://neuroplasticidar.vercel.app/m/${id}`;
+const url=`https://neuroplasticidar.gruposja.com/m/${id}`;
   if(navigator.clipboard){
     navigator.clipboard.writeText(url).then(showToast).catch(()=>fallbackCopy(url));
   } else { fallbackCopy(url); }
