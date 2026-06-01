@@ -3777,10 +3777,14 @@ async function loginApple(){
 }
 // Escuta retorno OAuth
 sb.auth.onAuthStateChange&&sb.auth.onAuthStateChange(async(event,session)=>{
-  if(event==='SIGNED_IN'&&session?.user&&!user){
+if(event==='SIGNED_IN'&&session?.user&&!user){
     const u=session.user;
-    const isNew=event==='SIGNED_IN'&&!localStorage.getItem('np_welcomed_'+u.email);
-    user={name:u.user_metadata?.full_name||u.user_metadata?.name||u.email.split('@')[0],email:u.email,role:'user'};
+    // 1º login DE VERDADE: conta recém-criada no Supabase (vale em qualquer device, não depende de localStorage)
+    const created=u.created_at?new Date(u.created_at).getTime():0;
+    const lastIn=u.last_sign_in_at?new Date(u.last_sign_in_at).getTime():created;
+    const isFirstEver=created>0&&(lastIn-created<10000);
+    const isNew=isFirstEver&&!localStorage.getItem('np_welcomed_'+u.email);
+    user={name:u.user_metadata?.full_name||u.user_metadata?.name||u.email.split('@')[0],email:u.email,role:'user',firstEver:isFirstEver};
     purchases=[];saveSession();closeDialog('dlg-auth');updateNavUI();
     if(isNew){
       localStorage.setItem('np_welcomed_'+u.email,'1');
@@ -3881,6 +3885,7 @@ let afterWelcomeRun=null;
 function willShowWelcome(){
   if(!user)return false;
   if(user.role==='admin'||user.role==='editor')return false;
+  if(user.firstEver===false)return false; // login social recorrente: já conhece a plataforma, não mostra
   return !localStorage.getItem('np_welcome_shown_'+(user.email||''));
 }
 function showWelcome(){
