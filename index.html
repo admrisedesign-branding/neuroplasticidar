@@ -1028,6 +1028,8 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     <button class="chip" onclick="setChip('ludico',this)">Aprendizagem lúdica</button>
     <button class="chip" onclick="setChip('sono',this)">Sono & rotina</button>
     <button class="chip" onclick="setChip('emocoes',this)">Emoções</button>
+    <button class="chip" onclick="setChip('motricidade',this)">Motricidade</button>
+    <button class="chip" onclick="setChip('linguagem',this)">Linguagem & Fala</button>
   </div>
   <div class="products-grid" id="products-grid"></div>
   <div class="no-results" id="no-results">Nenhum material encontrado com esses filtros.</div>
@@ -3593,7 +3595,7 @@ function renderKitsList(){
 }
 
 /* PRODUTOS */
-const TEMA={telas:['telas','Redução de telas','tela'],funcoes:['funcoes','Funções executivas','funcao'],ludico:['ludico','lúdica','ludica'],sono:['sono','Sono','rotina'],emocoes:['emocoes','emoci','Regulação emocional']};
+const TEMA={telas:['telas','Redução de telas','tela'],funcoes:['funcoes','Funções executivas','funcao'],ludico:['ludico','lúdica','ludica'],sono:['sono','Sono','rotina'],emocoes:['emocoes','emoci','Regulação emocional'],motricidade:['motricidade','motora','coordena'],linguagem:['linguagem','fala']};
 function renderProducts(){
   const q=document.getElementById('search-input').value.toLowerCase().trim();
   const list=materials.filter(p=>{
