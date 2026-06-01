@@ -1018,7 +1018,9 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
   <div class="mat-controls">
     <button class="tab active" onclick="setTab('todos',this)">Todos</button>
     <button class="tab" onclick="setTab('gratuito',this)">Gratuitos</button>
-    <button class="tab" onclick="setTab('pago',this)">Completos</button>
+<button class="tab" onclick="setTab('pago',this)">Completos</button>
+    <button class="tab" onclick="setTab('diy',this)">Atividades DIY</button>
+    <div class="divider"></div>
     <div class="divider"></div>
     <button class="chip active" onclick="setChip('todos',this)">Todos os temas</button>
     <button class="chip" onclick="setChip('telas',this)">Telas</button>
@@ -3595,7 +3597,8 @@ const TEMA={telas:['telas','Redução de telas','tela'],funcoes:['funcoes','Fun�
 function renderProducts(){
   const q=document.getElementById('search-input').value.toLowerCase().trim();
   const list=materials.filter(p=>{
-    const mT=activeTab==='todos'||(activeTab==='gratuito'&&p.is_free)||(activeTab==='pago'&&!p.is_free);
+const isDIY=(p.category||'').toLowerCase().includes('diy')||(p.tags||[]).some(t=>(t||'').toLowerCase().includes('diy'));
+    const mT=activeTab==='todos'||(activeTab==='gratuito'&&p.is_free)||(activeTab==='pago'&&!p.is_free&&!isDIY)||(activeTab==='diy'&&isDIY);
     const mC=activeChip==='todos'||(TEMA[activeChip]||[activeChip]).some(v=>p.category.toLowerCase().includes(v.toLowerCase()));
     const mQ=!q||p.title.toLowerCase().includes(q)||p.category.toLowerCase().includes(q);
     return mT&&mC&&mQ;
@@ -3605,7 +3608,7 @@ function renderProducts(){
     <div class="prod-card" onclick="openProduct('${p.id}')">
       <div class="prod-thumb" style="background:${p.cover_color||'#EEF2FF'};position:relative;overflow:hidden">
         <img src="${getCover(p)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">
-        <span class="prod-type-badge ${p.is_free?'type-free':'type-paid'}">${p.is_free?'Gratuito':'Completo'}</span>
+        <span class="prod-type-badge ${p.is_free?'type-free':'type-paid'}">${((p.category||'').toLowerCase().includes('diy')||(p.tags||[]).some(t=>(t||'').toLowerCase().includes('diy')))?'DIY':(p.is_free?'Gratuito':'Completo')}</span>
       </div>
       <div class="prod-body">
         <p class="prod-cat">${p.category}</p>
