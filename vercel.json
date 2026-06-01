@@ -1,4 +1,14 @@
 {
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        { "type": "host", "value": "neuroplasticidar.vercel.app" }
+      ],
+      "destination": "https://neuroplasticidar.gruposja.com/:path*",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     { "source": "/m/:slug", "destination": "/api/material?slug=:slug" }
   ],
