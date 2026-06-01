@@ -3903,9 +3903,18 @@ function closeWelcomeModal(){
 
 function _runPending(){
   if(!currentProduct||!pendingAction)return;
-  if(pendingAction==='free'){releaseDownload();}
-  else if(pendingAction==='pay'){openCheckout();}
+  const act=pendingAction;
   pendingAction=null;
+  // volta pro card que a pessoa clicou (rola + destaca)
+  const card=document.getElementById('card-'+currentProduct.id);
+  if(card){
+    card.scrollIntoView({behavior:'smooth',block:'center'});
+    card.classList.add('card-highlight');
+    setTimeout(()=>card.classList.remove('card-highlight'),2600);
+  }
+  // continua o fluxo
+  if(act==='free'){releaseDownload();}
+  else if(act==='pay'){openCheckout();}
 }
 function afterAuth(){
   // Recupera a intenção salva antes do login social (sobrevive ao reload do OAuth)
