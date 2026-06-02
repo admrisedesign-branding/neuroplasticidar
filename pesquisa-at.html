@@ -238,8 +238,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--parchment);color:var(--in
             <div class="opt-item"><input type="radio" name="area" id="a3" value="Psicóloga infantil"><label for="a3"><div class="opt-radio"></div>Psicóloga infantil</label></div>
             <div class="opt-item"><input type="radio" name="area" id="a4" value="Psicopedagoga"><label for="a4"><div class="opt-radio"></div>Psicopedagoga</label></div>
             <div class="opt-item"><input type="radio" name="area" id="a5" value="Educadora / Professora"><label for="a5"><div class="opt-radio"></div>Educadora / Professora</label></div>
+            <div class="opt-item"><input type="radio" name="area" id="a7" value="Assistente terapêutico"><label for="a7"><div class="opt-radio"></div>Assistente terapêutico</label></div>
             <div class="opt-item"><input type="radio" name="area" id="a6" value="Outra"><label for="a6"><div class="opt-radio"></div>Outra área</label></div>
           </div>
+          <div class="field" id="area-outra-wrap" style="display:none;margin-top:10px"><input type="text" id="area-outra-input" placeholder="Qual área?"></div>
           <div class="error-msg" id="err-area">Selecione sua área de atuação.</div>
         </div>
 
@@ -264,14 +266,25 @@ body{font-family:'DM Sans',sans-serif;background:var(--parchment);color:var(--in
         </div>
 
         <div class="question">
-          <label><span class="emoji">📄</span>Você usa materiais em PDF nas suas sessões ou orienta os pais com PDFs? <span class="required-star">*</span></label>
+          <label><span class="emoji">📄</span>Com que frequência você usa material em PDF nas suas sessões? <span class="required-star">*</span></label>
           <div class="opts">
-            <div class="opt-item"><input type="radio" name="usa_pdf" id="p1" value="Sim, uso com frequência"><label for="p1"><div class="opt-radio"></div>Sim, uso com frequência</label></div>
+            <div class="opt-item"><input type="radio" name="usa_pdf" id="p1" value="Com frequência"><label for="p1"><div class="opt-radio"></div>Com frequência</label></div>
             <div class="opt-item"><input type="radio" name="usa_pdf" id="p2" value="Às vezes"><label for="p2"><div class="opt-radio"></div>Às vezes</label></div>
             <div class="opt-item"><input type="radio" name="usa_pdf" id="p3" value="Raramente"><label for="p3"><div class="opt-radio"></div>Raramente</label></div>
             <div class="opt-item"><input type="radio" name="usa_pdf" id="p4" value="Não uso"><label for="p4"><div class="opt-radio"></div>Não uso, mas me interessa</label></div>
           </div>
           <div class="error-msg" id="err-pdf">Selecione uma opção.</div>
+        </div>
+
+        <div class="question">
+          <label><span class="emoji">👪</span>Com que frequência você orienta os pais com PDFs? <span class="required-star">*</span></label>
+          <div class="opts">
+            <div class="opt-item"><input type="radio" name="orienta_pdf" id="o1" value="Com frequência"><label for="o1"><div class="opt-radio"></div>Com frequência</label></div>
+            <div class="opt-item"><input type="radio" name="orienta_pdf" id="o2" value="Às vezes"><label for="o2"><div class="opt-radio"></div>Às vezes</label></div>
+            <div class="opt-item"><input type="radio" name="orienta_pdf" id="o3" value="Raramente"><label for="o3"><div class="opt-radio"></div>Raramente</label></div>
+            <div class="opt-item"><input type="radio" name="orienta_pdf" id="o4" value="Não oriento"><label for="o4"><div class="opt-radio"></div>Não oriento com PDFs</label></div>
+          </div>
+          <div class="error-msg" id="err-orienta">Selecione uma opção.</div>
         </div>
 
         <div class="question">
@@ -337,7 +350,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--parchment);color:var(--in
             <div class="opt-item"><input type="checkbox" name="temas" id="t6" value="Brincadeiras terapêuticas"><label for="t6"><div class="opt-check"></div>Brincadeiras com objetivo terapêutico</label></div>
             <div class="opt-item"><input type="checkbox" name="temas" id="t7" value="Orientação para pais"><label for="t7"><div class="opt-check"></div>Guias de orientação para pais</label></div>
             <div class="opt-item"><input type="checkbox" name="temas" id="t8" value="TEA e neurodiversidade"><label for="t8"><div class="opt-check"></div>TEA e neurodiversidade</label></div>
+            <div class="opt-item"><input type="checkbox" name="temas" id="t9" value="Outros"><label for="t9"><div class="opt-check"></div>Outros</label></div>
           </div>
+          <div class="field" id="temas-outro-wrap" style="display:none;margin-top:10px"><input type="text" id="temas-outro-input" placeholder="Quais outros temas?"></div>
           <div class="error-msg" id="err-temas">Selecione pelo menos um tema.</div>
         </div>
 
@@ -349,14 +364,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--parchment);color:var(--in
             <div class="opt-item"><input type="checkbox" name="formato" id="f3" value="Fichas e cartões"><label for="f3"><div class="opt-check"></div>Fichas e cartões imprimíveis</label></div>
             <div class="opt-item"><input type="checkbox" name="formato" id="f4" value="Kit completo com várias peças"><label for="f4"><div class="opt-check"></div>Kit completo com várias peças</label></div>
             <div class="opt-item"><input type="checkbox" name="formato" id="f5" value="Planilhas e formulários"><label for="f5"><div class="opt-check"></div>Planilhas de acompanhamento e formulários</label></div>
+            <div class="opt-item"><input type="checkbox" name="formato" id="f6" value="Outro"><label for="f6"><div class="opt-check"></div>Outro</label></div>
           </div>
+          <div class="field" id="formato-outro-wrap" style="display:none;margin-top:10px"><input type="text" id="formato-outro-input" placeholder="Qual outro formato?"></div>
           <div class="error-msg" id="err-formato">Selecione pelo menos um formato.</div>
-        </div>
-
-        <div class="question">
-          <label><span class="emoji">⭐</span>O quanto você indicaria materiais da Neuroplasticidar para outras colegas?</label>
-          <div class="scale-wrap" id="nps-scale"></div>
-          <div class="scale-labels"><span>Não indicaria</span><span>Indicaria com certeza</span></div>
         </div>
       </div>
 
@@ -450,22 +461,15 @@ const SUPABASE_URL='https://cifndytwoehbnmjllrml.supabase.co';
 const SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpZm5keXR3b2VoYm5tamxscm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NjM1OTIsImV4cCI6MjA5NDUzOTU5Mn0.Rkd_5t52cuQEJVPPN3sXPUukL6aEcGrwLtR2qx78Rto';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON);
 
-// Gera scale NPS
-const scale=document.getElementById('nps-scale');
-let npsVal=null;
-for(let i=1;i<=10;i++){
-  const btn=document.createElement('button');
-  btn.type='button';btn.className='scale-btn';btn.textContent=i;
-  btn.onclick=()=>{
-    npsVal=i;
-    document.querySelectorAll('.scale-btn').forEach((b,idx)=>b.classList.toggle('sel',idx<i));
-  };
-  scale.appendChild(btn);
-}
+// Campos "Outro/Outra" condicionais
+function toggleWrap(show,wrapId){const w=document.getElementById(wrapId);if(w)w.style.display=show?'block':'none';}
+document.querySelectorAll('[name="area"]').forEach(r=>r.addEventListener('change',()=>toggleWrap(document.querySelector('[name="area"][value="Outra"]')?.checked,'area-outra-wrap')));
+document.getElementById('t9')?.addEventListener('change',e=>toggleWrap(e.target.checked,'temas-outro-wrap'));
+document.getElementById('f6')?.addEventListener('change',e=>toggleWrap(e.target.checked,'formato-outro-wrap'));
 
 // Progresso
 function updateProgress(){
-  const required=['area','experiencia','usa_pdf','ja_pagou','preco'];
+  const required=['area','experiencia','usa_pdf','orienta_pdf','ja_pagou','preco'];
   let done=0;
   required.forEach(n=>{if(document.querySelector(`[name="${n}"]:checked`))done++;});
   const temas=document.querySelectorAll('[name="temas"]:checked').length;
@@ -474,7 +478,7 @@ function updateProgress(){
   const nome=document.getElementById('nome-input').value.trim();
   const email=document.getElementById('email-input').value.trim();
   if(nome&&email)done++;
-  const total=8;
+  const total=9;
   document.getElementById('progress-fill').style.width=Math.min(100,Math.round(done/total*100))+'%';
 }
 document.querySelectorAll('input').forEach(el=>el.addEventListener('change',updateProgress));
@@ -498,12 +502,16 @@ async function submitForm(e){
   }
 
   const area=check('area','err-area');
+  const areaOutra=document.getElementById('area-outra-input').value.trim();
   const exp=check('experiencia','err-exp');
   const pdf=check('usa_pdf','err-pdf');
+  const orientaPdf=check('orienta_pdf','err-orienta');
   const pagou=check('ja_pagou','err-pagou');
   const preco=check('preco','err-preco');
   const temas=checkMany('temas','err-temas');
+  const temasOutro=document.getElementById('temas-outro-input').value.trim();
   const formato=checkMany('formato','err-formato');
+  const formatoOutro=document.getElementById('formato-outro-input').value.trim();
   const nome=document.getElementById('nome-input').value.trim();
   const email=document.getElementById('email-input').value.trim();
   const wpp=document.getElementById('wpp-input').value.trim();
@@ -525,11 +533,12 @@ async function submitForm(e){
     const marketplace=document.querySelector('[name="interesse_marketplace"]:checked')?.value||null;
     const {error:insertError} = await sb.from('pesquisa_at').insert({
       nome,email,whatsapp:wpp||null,
-      area,experiencia:exp,
-      usa_pdf:pdf,ja_pagou:pagou,faixa_preco:preco,
-      temas_interesse:temas,formatos_preferidos:formato,
+      area,area_outra:areaOutra||null,experiencia:exp,
+      usa_pdf:pdf,orienta_pdf:orientaPdf,ja_pagou:pagou,faixa_preco:preco,
+      temas_interesse:temas,temas_outro:temasOutro||null,
+      formatos_preferidos:formato,formato_outro:formatoOutro||null,
       onde_pesquisa:ondePesquisa,sites_compra:sitesCompra||null,
-      nps:npsVal,sugestao:sugestao||null,
+      sugestao:sugestao||null,
       cria_materiais:cria,interesse_marketplace:marketplace,
       origem:'grupo_at',
     });
