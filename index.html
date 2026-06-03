@@ -6434,7 +6434,7 @@ function initCarousel(photos){
   // Slides
   document.getElementById('prod-carousel').innerHTML=carPhotos.map(src=>`
     <div style="min-width:100%;height:220px;flex-shrink:0">
-      <img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.parentElement.style.display='none'">
+      <img src="${src}" style="width:100%;height:100%;object-fit:contain;background:var(--parchment);display:block" onerror="this.parentElement.style.display='none'">
     </div>`).join('');
   // Dots — só aparecem se mais de 1 foto, quantidade exata
   const dots=document.getElementById('prod-carousel-dots');
