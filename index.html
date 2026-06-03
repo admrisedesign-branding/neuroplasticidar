@@ -4524,9 +4524,16 @@ async function loadDashboard(){
     set('ds-sessoes',sessLeads.length);
     set('ds-sessoes-new',newSL.length+' pendentes');
     const purch=await loadPurchasesFromDB();
-    const rev=purch.reduce((s,p)=>s+(parseFloat(p.amount||p.price||0)),0);
+    // Receita = compras (materiais+kits) + sessões pagas + kits por curadoria (pedidos_kit)
+    const{data:_sessPg}=await sb.from('sessoes_agendadas').select('valor_sinal').in('status',['sinal_pago','realizada']);
+    const{data:_kitPg}=await sb.from('pedidos_kit').select('valor_total').in('status',['pago','preparando','enviado','entregue']);
+    const revPurch=purch.reduce((s,p)=>s+(parseFloat(p.amount||p.price||0)),0);
+    const revSess=(_sessPg||[]).reduce((s,v)=>s+parseFloat(v.valor_sinal||0),0);
+    const revKit=(_kitPg||[]).reduce((s,v)=>s+parseFloat(v.valor_total||0),0);
+    const rev=revPurch+revSess+revKit;
+    const totalCompras=purch.length+(_sessPg||[]).length+(_kitPg||[]).length;
     set('ds-revenue','R$ '+rev.toFixed(2).replace('.',','));
-    set('ds-purchases',purch.length+' compras');
+    set('ds-purchases',totalCompras+' compras');
     // leads list
     const ldl=document.getElementById('ds-leads-list');
     if(ldl)ldl.innerHTML=quizLeads.slice(0,5).map(l=>`
@@ -5681,6 +5688,22 @@ async function loadAdminCompras(){
       data:s.pago_em||s.created_at,
     });
   });
+  const{data:pedKitsPg}=await sb.from('pedidos_kit')
+    .select('*')
+    .in('status',['pago','preparando','enviado','entregue'])
+    .order('pago_em',{ascending:false});
+  (pedKitsPg||[]).forEach(k=>{
+    lista.push({
+      _tipo:'kit',
+      cliente_nome:k.cliente_nome,
+      cliente_email:k.cliente_email,
+      item:`Kit ${k.kit_nome||'personalizado'} (curadoria)`,
+      valor:parseFloat(k.valor_total||0),
+      cupom:k.cupom_codigo||null,
+      metodo:'mp',
+      data:k.pago_em||k.created_at,
+    });
+  });
   lista.sort((a,b)=>new Date(b.data)-new Date(a.data));
   allComprasData=lista;
 
@@ -5754,6 +5777,25 @@ async function loadAdminRepasse(){
       _cat:'Sessão',
       repasse_paid:s.repasse_status==='pago',
       repasse_paid_at:s.repasse_pago_em,
+      application_fee:0,
+      payment_method:'mp',
+    });
+  });
+
+  // Adiciona kits por curadoria pagos (pedidos_kit) — rateio de kit (85/15)
+  const{data:pedKitsR}=await sb.from('pedidos_kit')
+    .select('*')
+    .in('status',['pago','preparando','enviado','entregue']);
+  (pedKitsR||[]).forEach(k=>{
+    allRepasseData.push({
+      id:'kit-'+k.id,_real_id:k.id,_src:'pedido_kit',_tipo:'kit',
+      amount:parseFloat(k.valor_total||0),
+      net_amount:parseFloat(k.valor_total||0),
+      created_at:k.pago_em||k.created_at,
+      _title:`Kit ${k.kit_nome||'personalizado'} — ${k.cliente_nome}`,
+      _cat:'Kit',
+      repasse_paid:k.repasse_status==='pago',
+      repasse_paid_at:k.repasse_pago_em,
       application_fee:0,
       payment_method:'mp',
     });
@@ -5879,7 +5921,7 @@ function renderRepasse(){
     const liquido=p.net_amount!=null?parseFloat(p.net_amount):parseFloat(p.amount);
     const taxa=parseFloat(p.amount)-liquido;
     const tipo=tipoLabels[p._tipo]||tipoLabels.material;
-    const idForBtn=p._real_id?`sess|${p._real_id}`:p.id;
+    const idForBtn=p._src==='pedido_kit'?`kit|${p._real_id}`:(p._real_id?`sess|${p._real_id}`:p.id);
     return `<tr style="${pago?'opacity:0.5':''}">
       <td style="font-size:12px">${dt}</td>
       <td>${p._title||'—'}</td>
@@ -5904,6 +5946,9 @@ async function markRepasse(id){
   if(id.startsWith('sess|')){
     const realId=id.replace('sess|','');
     await sb.from('sessoes_agendadas').update({repasse_status:'pago',repasse_pago_em:new Date().toISOString()}).eq('id',realId);
+  } else if(id.startsWith('kit|')){
+    const realId=id.replace('kit|','');
+    await sb.from('pedidos_kit').update({repasse_status:'pago',repasse_pago_em:new Date().toISOString()}).eq('id',realId);
   } else {
     await sb.from('purchases').update({repasse_paid:true,repasse_paid_at:new Date().toISOString()}).eq('id',id);
   }
@@ -5915,6 +5960,9 @@ async function unmarkRepasse(id){
   if(id.startsWith('sess|')){
     const realId=id.replace('sess|','');
     await sb.from('sessoes_agendadas').update({repasse_status:null,repasse_pago_em:null}).eq('id',realId);
+  } else if(id.startsWith('kit|')){
+    const realId=id.replace('kit|','');
+    await sb.from('pedidos_kit').update({repasse_status:null,repasse_pago_em:null}).eq('id',realId);
   } else {
     await sb.from('purchases').update({repasse_paid:false,repasse_paid_at:null}).eq('id',id);
   }
@@ -5927,7 +5975,9 @@ async function marcarTodosPagos(){
   const total=pendentes.reduce((s,p)=>s+calcJaquePart(p),0);
   if(!confirm(`Marcar ${pendentes.length} repasse(s) como pago(s) — total R$ ${total.toFixed(2).replace('.',',')}?`))return;
   for(const p of pendentes){
-    if(p._real_id){
+    if(p._src==='pedido_kit'){
+      await sb.from('pedidos_kit').update({repasse_status:'pago',repasse_pago_em:new Date().toISOString()}).eq('id',p._real_id);
+    } else if(p._real_id){
       await sb.from('sessoes_agendadas').update({repasse_status:'pago',repasse_pago_em:new Date().toISOString()}).eq('id',p._real_id);
     } else {
       await sb.from('purchases').update({repasse_paid:true,repasse_paid_at:new Date().toISOString()}).eq('id',p.id);
