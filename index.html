@@ -1458,9 +1458,9 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
           <p style="font-size:13px;color:var(--ink-lt);font-weight:300;margin-top:3px">Cálculo automático do quanto repassar via PIX</p>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="adm-filter-btn active" onclick="filterRepasse('month',this)">Este mês</button>
+          <button class="adm-filter-btn" onclick="filterRepasse('month',this)">Este mês</button>
           <button class="adm-filter-btn" onclick="filterRepasse('lastmonth',this)">Mês passado</button>
-          <button class="adm-filter-btn" onclick="filterRepasse('all',this)">Tudo</button>
+          <button class="adm-filter-btn active" onclick="filterRepasse('all',this)">Tudo</button>
           <button class="adm-filter-btn" onclick="filterRepasse('pending',this)">A pagar</button>
         </div>
       </div>
@@ -5750,7 +5750,7 @@ function filterCompras(tipo,el){
 const JAQUE_PIX='jaquelineaten@gmail.com';
 const SPLIT_RATES={material:0.70,kit:0.85,sessao:0.85};
 let allRepasseData=[];
-let currentRepasseFilter='month';
+let currentRepasseFilter='all';
 
 async function loadAdminRepasse(){
   const{data,error}=await sb.from('purchases').select('*').eq('payment_status','approved').order('created_at',{ascending:false});
