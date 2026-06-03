@@ -574,10 +574,10 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 .dlg-close:hover{background:var(--border);color:var(--ink)}
 
 /* Dialog produto */
-#dlg-produto .dialog{max-width:920px;width:100%;overflow:hidden}
-.dlg-prod-inner{display:grid;grid-template-columns:1fr 1fr;align-items:start}
-/* Área da imagem: QUADRADA (1:1), bege, imagem 4:3 centralizada dentro */
-.dlg-prod-preview{border-radius:var(--r-lg) 0 0 var(--r-lg);position:relative;overflow:hidden;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:0;font-size:80px;background:var(--parchment)}
+#dlg-produto .dialog{max-width:920px;width:100%;height:460px;overflow:hidden}
+.dlg-prod-inner{display:grid;grid-template-columns:1fr 1fr;height:100%}
+/* Área da imagem: QUADRADA (460x460), bege, imagem 4:3 centralizada dentro */
+.dlg-prod-preview{border-radius:var(--r-lg) 0 0 var(--r-lg);position:relative;overflow:hidden;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:0;font-size:80px;background:var(--parchment)}
 .dlg-prod-preview .dp-emoji{position:relative;z-index:1}
 .dlg-prod-preview img.cover-fill{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--parchment);z-index:0}
 /* Carrossel: ocupa a coluna, área quadrada (1:1), imagem 4:3 centralizada no bege */
@@ -593,7 +593,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 .dlg-carousel-btn.prev{left:10px}
 .dlg-carousel-btn.next{right:10px}
 .dlg-preview-label{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:rgba(0,0,0,0.3);background:rgba(255,255,255,0.6);padding:4px 12px;border-radius:50px}
-.dlg-prod-info{padding:40px;display:flex;flex-direction:column}
+.dlg-prod-info{padding:40px;display:flex;flex-direction:column;height:100%;overflow-y:auto}
 .dlg-prod-cat{font-size:10px;font-weight:500;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px}
 .dlg-prod-info h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:600;color:var(--ink);margin-bottom:8px;line-height:1.2}
 .dlg-for{font-size:12px;color:var(--ink-lt);margin-bottom:14px;font-weight:300}
