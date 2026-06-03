@@ -3700,7 +3700,7 @@ function openProduct(id){
   if(oldEmoji) oldEmoji.remove();
 
   // Monta lista de fotos
-  const photos=[p.cover_image,...(p.images||[])].filter(Boolean);
+  const photos=[...new Set([p.cover_image,...(p.images||[])].filter(Boolean))];
 
   if(photos.length>0){
     // Mostra primeira foto como cover de fundo
