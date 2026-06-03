@@ -577,14 +577,14 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 #dlg-produto .dialog{max-width:820px;width:100%}
 .dlg-prod-inner{display:grid;grid-template-columns:1fr 1fr;min-height:400px}
 .dlg-prod-preview{border-radius:var(--r-lg) 0 0 var(--r-lg);position:relative;overflow:hidden;min-height:400px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:40px;font-size:80px}
-.dlg-prod-preview img.cover-fill{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.dlg-prod-preview img.cover-fill{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--parchment);z-index:0}
 .dlg-prod-preview .dp-emoji{position:relative;z-index:1}
 /* Carrossel sobreposto na preview */
 .dlg-carousel-overlay{position:absolute;inset:0;z-index:2;display:none}
 .dlg-carousel-overlay.active{display:block}
 .dlg-carousel-inner{display:flex;height:100%;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform}
 .dlg-carousel-slide{min-width:100%;height:100%;flex-shrink:0}
-.dlg-carousel-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.dlg-carousel-slide img{width:100%;height:100%;object-fit:contain;display:block;background:var(--parchment)}
 .dlg-carousel-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:3}
 .dlg-carousel-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer;transition:all .25s;border:none;padding:0}
 .dlg-carousel-dot.active{background:#fff;width:18px;border-radius:3px}
@@ -4807,8 +4807,9 @@ function editMaterial(m){
   document.getElementById('adm-orig-price').value=m.original_price||'';
   document.getElementById('adm-tags').value=(m.tags||[]).join(', ');
   document.getElementById('adm-url').value=m.file_url||'';
-  // Fotos — preenche campos e mostra previews
-  const photos=[m.cover_image,...(m.images||[])].filter(Boolean);
+  // Fotos — usa m.images como fonte (já inclui a capa) e remove duplicatas
+  const raw=(m.images&&m.images.length)?m.images:(m.cover_image?[m.cover_image]:[]);
+  const photos=[...new Set(raw.filter(Boolean))];
   [1,2,3].forEach(n=>{
     const url=photos[n-1]||'';
     document.getElementById('adm-photo'+n).value=url;
