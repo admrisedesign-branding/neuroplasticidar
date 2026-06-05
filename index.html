@@ -415,6 +415,26 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.12;letter-spacing:-0
 .esp-features{list-style:none;display:flex;flex-direction:column;gap:14px;margin-bottom:36px}
 .esp-features li{display:flex;gap:14px;align-items:flex-start;font-size:14px;color:var(--ink-md);font-weight:300;line-height:1.6}
 .esp-features li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:7px}
+/* ===== SEÇÃO CRIADORES / PARCEIROS ===== */
+#criadores{background:var(--blue);padding:110px 56px}
+.criadores-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.criadores-info .eyebrow{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold-lt);margin-bottom:22px;display:block}
+.criadores-info h2{font-size:clamp(30px,3.4vw,44px);font-weight:700;color:#fff;margin-bottom:8px;line-height:1.12;letter-spacing:-0.025em}
+.criadores-info .lead{font-size:18px;color:rgba(255,255,255,0.82);line-height:1.7;font-weight:300;margin:20px 0 32px}
+.criadores-info .lead em{font-style:italic;color:#fff;font-weight:500}
+.criadores-features{list-style:none;display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
+.criadores-features li{display:flex;gap:14px;align-items:flex-start;font-size:15px;color:rgba(255,255,255,0.85);font-weight:300;line-height:1.6}
+.criadores-features li::before{content:'✓';color:var(--gold-lt);font-weight:700;flex-shrink:0}
+.criadores-note{font-size:15px;color:rgba(255,255,255,0.7);font-weight:300}
+.criadores-card{background:var(--white);border-radius:var(--r-lg);padding:40px;box-shadow:var(--shadow-lg)}
+.criadores-card-title{font-size:24px;font-weight:700;color:var(--ink);margin-bottom:4px;letter-spacing:-0.02em}
+.criadores-card-sub{font-size:14px;color:var(--ink-lt);margin-bottom:24px;font-weight:300}
+.criadores-btn{width:100%;background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:15px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s;margin-top:4px;font-family:inherit}
+.criadores-btn:hover{background:var(--blue-dk)}
+.criadores-btn:disabled{opacity:.6;cursor:default}
+.criadores-status{font-size:14px;margin-top:14px;text-align:center;font-weight:500;min-height:1px}
+.criadores-status.ok{color:var(--sage)}
+.criadores-status.err{color:var(--terra)}
 .esp-card{
   background:var(--blue);border-radius:var(--r-lg);
   padding:48px;display:flex;flex-direction:column;gap:32px;
@@ -835,8 +855,8 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
   #nav{padding:0 24px}
   .nav-links{display:none}
   section,#hero,#crenca,#formas,#manifesto,#contato{padding:72px 24px !important}
-  #materiais,#kits,#especialista,#quiz,#paraquem{padding:72px 24px !important}
-  .hero-inner,.crenca-inner,.kits-layout,.esp-inner,.contato-inner,.pq-grid{grid-template-columns:1fr}
+  #materiais,#kits,#especialista,#quiz,#paraquem,#criadores{padding:72px 24px !important}
+  .hero-inner,.crenca-inner,.kits-layout,.esp-inner,.contato-inner,.pq-grid,.criadores-inner{grid-template-columns:1fr}
   .hero-visual{justify-content:flex-start}
   .formas-grid{grid-template-columns:1fr;gap:1px}
 #dlg-produto{align-items:flex-end;padding:0}
@@ -1050,6 +1070,59 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
   </div>
   <div class="products-grid" id="products-grid"></div>
   <div class="no-results" id="no-results">Nenhum material encontrado com esses filtros.</div>
+</section>
+
+<!-- CRIADORES / PARCEIROS -->
+<section id="criadores">
+  <div class="criadores-inner">
+    <div class="criadores-info">
+      <p class="eyebrow">Para criadores de conteúdo</p>
+      <h2>Você cria materiais para crianças neurodivergentes?</h2>
+      <p class="lead">Terapeutas, fonoaudiólogos, pedagogos, psicólogos e outros profissionais: queremos colocar <em>seus</em> materiais nas mãos de famílias e de outros profissionais que precisam deles.</p>
+      <ul class="criadores-features">
+        <li>Sua autoria preservada e creditada</li>
+        <li>Alcance famílias e profissionais de todo o Brasil</li>
+        <li>Você define o material; cuidamos da venda e entrega</li>
+        <li>Sem custo para começar — vamos construir juntos</li>
+      </ul>
+      <p class="criadores-note">Deixe seu contato e a gente te chama para conversar. 💜</p>
+    </div>
+
+    <div class="criadores-card">
+      <h3 class="criadores-card-title">Quero saber mais</h3>
+      <p class="criadores-card-sub">Preencha e entraremos em contato.</p>
+      <form id="criadores-form" onsubmit="enviarInteresseCriador(event)">
+        <div class="field">
+          <label for="cri-nome">Nome completo *</label>
+          <input type="text" id="cri-nome" required placeholder="Seu nome">
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label for="cri-email">E-mail *</label>
+            <input type="email" id="cri-email" required placeholder="seu@email.com">
+          </div>
+          <div class="field">
+            <label for="cri-whatsapp">WhatsApp</label>
+            <input type="tel" id="cri-whatsapp" placeholder="(92) 9 9999-9999">
+          </div>
+        </div>
+        <div class="field">
+          <label for="cri-profissao">Profissão / Área</label>
+          <input type="text" id="cri-profissao" placeholder="Ex.: Fonoaudióloga, Pedagoga, Terapeuta Ocupacional...">
+        </div>
+        <div class="field">
+          <label for="cri-tipo">Que tipo de material você cria?</label>
+          <input type="text" id="cri-tipo" placeholder="Ex.: atividades de linguagem, jogos de emoções, rotinas visuais...">
+        </div>
+        <div class="field">
+          <label for="cri-msg">Mensagem (opcional)</label>
+          <textarea id="cri-msg" placeholder="Conte um pouco sobre o que você gostaria de oferecer."></textarea>
+        </div>
+        <button type="submit" class="criadores-btn" id="cri-submit">Tenho interesse</button>
+        <p class="criadores-status" id="cri-status"></p>
+      </form>
+    </div>
+  </div>
 </section>
 
 <!-- KITS -->
@@ -2998,6 +3071,42 @@ const IRMA_EMAIL='jaquelineaten@gmail.com';
 const IRMA_MP_EMAIL='jaquelineaten@gmail.com';
 const WPP='5592991479457';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON);
+
+// === Captura de interesse de criadores de materiais ===
+async function enviarInteresseCriador(e){
+  e.preventDefault();
+  const btn=document.getElementById('cri-submit');
+  const status=document.getElementById('cri-status');
+  const nome=document.getElementById('cri-nome').value.trim();
+  const email=document.getElementById('cri-email').value.trim();
+  const whatsapp=document.getElementById('cri-whatsapp').value.trim();
+  const profissao=document.getElementById('cri-profissao').value.trim();
+  const tipo=document.getElementById('cri-tipo').value.trim();
+  const msg=document.getElementById('cri-msg').value.trim();
+  status.className='criadores-status';
+  status.textContent='';
+  if(!nome||!email){ status.classList.add('err'); status.textContent='Preencha nome e e-mail, por favor.'; return; }
+  btn.disabled=true; btn.textContent='Enviando...';
+  try{
+    const{error}=await sb.from('criadores_interesse').insert({
+      nome, email,
+      whatsapp: whatsapp||null,
+      profissao: profissao||null,
+      tipo_material: tipo||null,
+      mensagem: msg||null,
+      origem: (location.hash||'').includes('linkedin')?'linkedin':'site'
+    });
+    if(error) throw error;
+    document.getElementById('criadores-form').reset();
+    status.classList.add('ok');
+    status.textContent='Recebido! 💜 Em breve a gente entra em contato.';
+  }catch(err){
+    status.classList.add('err');
+    status.textContent='Ops, não consegui enviar agora. Tente de novo em instantes.';
+  }finally{
+    btn.disabled=false; btn.textContent='Tenho interesse';
+  }
+}
 
 // Split config
 const SPLIT={
