@@ -429,6 +429,10 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.12;letter-spacing:-0
 .criadores-card{background:var(--white);border-radius:var(--r-lg);padding:40px;box-shadow:var(--shadow-lg)}
 .criadores-card-title{font-size:24px;font-weight:700;color:var(--ink);margin-bottom:4px;letter-spacing:-0.02em}
 .criadores-card-sub{font-size:14px;color:var(--ink-lt);margin-bottom:24px;font-weight:300}
+.perfil-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.perfil-tab{flex:1 1 calc(50% - 4px);background:var(--cream);border:1.5px solid var(--border);border-radius:12px;padding:11px 10px;font-size:13px;font-weight:500;color:var(--ink-md);cursor:pointer;transition:all .18s;font-family:inherit;line-height:1.2}
+.perfil-tab:hover{border-color:var(--border-md)}
+.perfil-tab.active{background:var(--blue-lt);border-color:var(--blue);color:var(--blue-dk);font-weight:600}
 .criadores-btn{width:100%;background:var(--blue);color:#fff;border:none;border-radius:var(--r);padding:15px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s;margin-top:4px;font-family:inherit}
 .criadores-btn:hover{background:var(--blue-dk)}
 .criadores-btn:disabled{opacity:.6;cursor:default}
@@ -1076,22 +1080,30 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 <section id="criadores">
   <div class="criadores-inner">
     <div class="criadores-info">
-      <p class="eyebrow">Para criadores de conteúdo</p>
-      <h2>Você cria materiais para crianças neurodivergentes?</h2>
-      <p class="lead">Terapeutas, fonoaudiólogos, pedagogos, psicólogos e outros profissionais: queremos colocar <em>seus</em> materiais nas mãos de famílias e de outros profissionais que precisam deles.</p>
-      <ul class="criadores-features">
-        <li>Sua autoria preservada e creditada</li>
+      <p class="eyebrow">Faça parte</p>
+      <h2 id="cri-titulo">Materiais que fazem diferença na vida de cada criança</h2>
+      <p class="lead" id="cri-lead">Seja você quem cria, quem atende, quem ensina ou quem cuida — queremos construir o melhor acervo de materiais para crianças neurodivergentes do Brasil, com embasamento e carinho. Conta pra gente quem é você.</p>
+      <ul class="criadores-features" id="cri-features">
+        <li>Conteúdo com embasamento, pensado por quem entende</li>
         <li>Alcance famílias e profissionais de todo o Brasil</li>
-        <li>Você define o material; cuidamos da venda e entrega</li>
-        <li>Sem custo para começar — vamos construir juntos</li>
+        <li>Construção colaborativa — vamos crescer juntos</li>
       </ul>
-      <p class="criadores-note">Deixe seu contato e a gente te chama para conversar. 💜</p>
+      <p class="criadores-note">Deixe seu contato e a gente entra em contato. 💜</p>
     </div>
 
     <div class="criadores-card">
-      <h3 class="criadores-card-title">Quero saber mais</h3>
-      <p class="criadores-card-sub">Preencha e entraremos em contato.</p>
+      <h3 class="criadores-card-title">Eu sou...</h3>
+      <p class="criadores-card-sub">Escolha o que mais combina com você.</p>
+
+      <div class="perfil-tabs" id="perfil-tabs">
+        <button type="button" class="perfil-tab active" data-perfil="criador" onclick="setPerfil(this)">Crio materiais</button>
+        <button type="button" class="perfil-tab" data-perfil="clinica" onclick="setPerfil(this)">Clínica / consultório</button>
+        <button type="button" class="perfil-tab" data-perfil="escola" onclick="setPerfil(this)">Escola / instituição</button>
+        <button type="button" class="perfil-tab" data-perfil="familia" onclick="setPerfil(this)">Mãe/pai ou cuidador(a)</button>
+      </div>
+
       <form id="criadores-form" onsubmit="enviarInteresseCriador(event)">
+        <input type="hidden" id="cri-perfil" value="criador">
         <div class="field">
           <label for="cri-nome">Nome completo *</label>
           <input type="text" id="cri-nome" required placeholder="Seu nome">
@@ -1106,17 +1118,17 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
             <input type="tel" id="cri-whatsapp" placeholder="(92) 9 9999-9999">
           </div>
         </div>
-        <div class="field">
-          <label for="cri-profissao">Profissão / Área</label>
+        <div class="field" id="field-profissao">
+          <label for="cri-profissao" id="label-profissao">Profissão / Área</label>
           <input type="text" id="cri-profissao" placeholder="Ex.: Fonoaudióloga, Pedagoga, Terapeuta Ocupacional...">
         </div>
-        <div class="field">
-          <label for="cri-tipo">Que tipo de material você cria?</label>
+        <div class="field" id="field-tipo">
+          <label for="cri-tipo" id="label-tipo">Que tipo de material você cria?</label>
           <input type="text" id="cri-tipo" placeholder="Ex.: atividades de linguagem, jogos de emoções, rotinas visuais...">
         </div>
         <div class="field">
-          <label for="cri-msg">Mensagem (opcional)</label>
-          <textarea id="cri-msg" placeholder="Conte um pouco sobre o que você gostaria de oferecer."></textarea>
+          <label for="cri-msg" id="label-msg">Mensagem (opcional)</label>
+          <textarea id="cri-msg" placeholder="Conte um pouco sobre o que você gostaria."></textarea>
         </div>
         <button type="submit" class="criadores-btn" id="cri-submit">Tenho interesse</button>
         <p class="criadores-status" id="cri-status"></p>
@@ -1124,6 +1136,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     </div>
   </div>
 </section>
+
 
 <!-- KITS -->
 <section id="kits">
@@ -3072,11 +3085,66 @@ const IRMA_MP_EMAIL='jaquelineaten@gmail.com';
 const WPP='5592991479457';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON);
 
-// === Captura de interesse de criadores de materiais ===
+// === Captura de interesse — multi-perfil ===
+const PERFIL_CFG={
+  criador:{
+    titulo:'Você cria materiais para crianças neurodivergentes?',
+    lead:'Terapeutas, fonoaudiólogos, pedagogos, psicólogos e outros profissionais: queremos colocar <em>seus</em> materiais nas mãos de quem precisa deles.',
+    features:['Sua autoria preservada e creditada','Alcance famílias e profissionais de todo o Brasil','Você define o material; cuidamos da venda e entrega'],
+    showProf:true, labelProf:'Profissão / Área', phProf:'Ex.: Fonoaudióloga, Pedagoga, Terapeuta Ocupacional...',
+    showTipo:true, labelTipo:'Que tipo de material você cria?', phTipo:'Ex.: atividades de linguagem, jogos de emoções, rotinas visuais...',
+    labelMsg:'Mensagem (opcional)', phMsg:'Conte um pouco sobre o que você gostaria de oferecer.'
+  },
+  clinica:{
+    titulo:'Conteúdo científico de qualidade para sua clínica',
+    lead:'Tenha à mão materiais com embasamento para usar com seus pacientes — prontos, organizados e pensados por especialistas. Menos tempo preparando, mais tempo cuidando.',
+    features:['Materiais com embasamento, prontos para aplicar','Acervo organizado por objetivo e faixa etária','Condições especiais para uso recorrente'],
+    showProf:true, labelProf:'Nome da clínica / especialidade', phProf:'Ex.: Clínica de Fonoaudiologia, Consultório de Psicologia...',
+    showTipo:true, labelTipo:'Que tipo de material você procura?', phTipo:'Ex.: linguagem, regulação emocional, funções executivas...',
+    labelMsg:'Mensagem (opcional)', phMsg:'Conte um pouco sobre a necessidade da sua clínica.'
+  },
+  escola:{
+    titulo:'Materiais para a sua escola ou instituição',
+    lead:'Apoie professores e famílias com materiais de desenvolvimento infantil prontos para aplicar — em sala de aula, no AEE ou para enviar pra casa.',
+    features:['Materiais para equipe pedagógica e famílias','Apoio à inclusão e ao desenvolvimento','Condições para instituições'],
+    showProf:true, labelProf:'Nome da escola / instituição', phProf:'Ex.: Escola Municipal..., Instituto...',
+    showTipo:true, labelTipo:'O que você procura?', phTipo:'Ex.: materiais para AEE, rotinas visuais, atividades por faixa...',
+    labelMsg:'Mensagem (opcional)', phMsg:'Conte um pouco sobre a sua escola ou instituição.'
+  },
+  familia:{
+    titulo:'Quer receber novidades e materiais novos?',
+    lead:'Deixe seu contato e avisamos quando lançarmos materiais novos, atividades gratuitas e dicas para apoiar o desenvolvimento do seu filho em casa.',
+    features:['Avisos de materiais e atividades novas','Dicas práticas para o dia a dia','Conteúdo gratuito de tempos em tempos'],
+    showProf:false, labelProf:'', phProf:'',
+    showTipo:true, labelTipo:'O que mais te interessa? (opcional)', phTipo:'Ex.: linguagem, sono e rotina, emoções...',
+    labelMsg:'Mensagem (opcional)', phMsg:'Conte um pouco sobre o que você procura.'
+  }
+};
+function setPerfil(btn){
+  document.querySelectorAll('.perfil-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const p=btn.dataset.perfil;
+  document.getElementById('cri-perfil').value=p;
+  const c=PERFIL_CFG[p];
+  document.getElementById('cri-titulo').innerHTML=c.titulo;
+  document.getElementById('cri-lead').innerHTML=c.lead;
+  document.getElementById('cri-features').innerHTML=c.features.map(f=>`<li>${f}</li>`).join('');
+  const fp=document.getElementById('field-profissao');
+  fp.style.display=c.showProf?'':'none';
+  document.getElementById('label-profissao').textContent=c.labelProf;
+  document.getElementById('cri-profissao').placeholder=c.phProf;
+  const ft=document.getElementById('field-tipo');
+  ft.style.display=c.showTipo?'':'none';
+  document.getElementById('label-tipo').textContent=c.labelTipo;
+  document.getElementById('cri-tipo').placeholder=c.phTipo;
+  document.getElementById('label-msg').textContent=c.labelMsg;
+  document.getElementById('cri-msg').placeholder=c.phMsg;
+}
 async function enviarInteresseCriador(e){
   e.preventDefault();
   const btn=document.getElementById('cri-submit');
   const status=document.getElementById('cri-status');
+  const perfil=document.getElementById('cri-perfil').value;
   const nome=document.getElementById('cri-nome').value.trim();
   const email=document.getElementById('cri-email').value.trim();
   const whatsapp=document.getElementById('cri-whatsapp').value.trim();
@@ -3089,6 +3157,7 @@ async function enviarInteresseCriador(e){
   btn.disabled=true; btn.textContent='Enviando...';
   try{
     const{error}=await sb.from('criadores_interesse').insert({
+      perfil,
       nome, email,
       whatsapp: whatsapp||null,
       profissao: profissao||null,
@@ -3098,6 +3167,7 @@ async function enviarInteresseCriador(e){
     });
     if(error) throw error;
     document.getElementById('criadores-form').reset();
+    document.getElementById('cri-perfil').value=perfil;
     status.classList.add('ok');
     status.textContent='Recebido! 💜 Em breve a gente entra em contato.';
   }catch(err){
