@@ -111,8 +111,10 @@ h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.12;letter-spacing:-0
 /* Vídeo de fundo */
 #hero-video{
   position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;opacity:0.45;pointer-events:none;z-index:0;
+  object-fit:cover;opacity:0;pointer-events:none;z-index:0;
+  transition:opacity 1s ease;
 }
+#hero-video.ready{opacity:0.45}
 .hero-overlay{
   position:absolute;inset:0;z-index:1;
   background:linear-gradient(135deg,rgba(26,63,191,0.55) 0%,rgba(15,40,130,0.42) 60%,rgba(10,25,80,0.6) 100%);
@@ -3289,9 +3291,10 @@ const _waitAndOpen=setInterval(()=>{
   renderBag();
   renderKitsList();
   window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>20));
-  // Vídeo hero — src só é definido via JS para evitar download automático
+  // Vídeo hero — fade-in quando pronto, pulado no mobile (hero azul já fica ótimo)
   const heroVid=document.getElementById('hero-video');
-  if(heroVid){
+  if(heroVid && !window.matchMedia('(max-width:768px)').matches){
+    heroVid.addEventListener('canplay',()=>heroVid.classList.add('ready'),{once:true});
     heroVid.src='https://cifndytwoehbnmjllrml.supabase.co/storage/v1/object/public/videos/6264294-uhd_3840_2160_25fps.mp4';
     heroVid.load();
     heroVid.play().catch(()=>{});
