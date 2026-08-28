@@ -1011,16 +1011,12 @@ body[data-modo="profissional"] .plano-bar.on{display:flex}
     <li><a href="#objetivos">Objetivos</a></li>
     <li><a href="#materiais">Materiais</a></li>
     <li><a href="#kits">Kits</a></li>
-    <li><a href="#profissionais">Profissionais</a></li>
+    <li><a href="/profissionais/">Sou profissional</a></li>
     <li><a href="#crenca">Sobre</a></li>
     <li><a href="/blog/">Blog</a></li>
     <li><a href="#contato">Contato</a></li>
   </ul>
   <div class="nav-right">
-    <div class="mode-sw" role="group" aria-label="Escolha seu perfil">
-      <button id="sw-fam" class="on" onclick="setModo('familia')">Família</button>
-      <button id="sw-pro" onclick="setModo('profissional')">Profissional</button>
-    </div>
     <div id="nav-user">
       <div class="av" id="nav-av">U</div>
       <span class="un" id="nav-un">Usuário</span>
@@ -1045,16 +1041,10 @@ body[data-modo="profissional"] .plano-bar.on{display:flex}
     <div>
       <p class="hero-eyebrow fu">Desenvolvimento infantil</p>
       <h1 class="hero-title fu d1">A criança se desenvolve<br><em>brincando.</em><br>Sempre foi assim.</h1>
-      <p class="hero-body fu d2" id="hero-body">A Neuroplasticidar é a ponte entre o plano de intervenção e o brinquedo certo — materiais e kits organizados por objetivo, para quem prescreve, para quem aplica e para quem cuida em casa.</p>
-      <div class="hero-doors fu d3">
-        <button class="door" onclick="entrar('profissional')">
-          <strong>Sou profissional</strong>
-          <span>Supervisor, fono, TO, fisio, psico, neuropsicopedagogo ou AT</span>
-        </button>
-        <button class="door" onclick="entrar('familia')">
-          <strong>Sou família</strong>
-          <span>Pai, mãe ou cuidador buscando apoio no dia a dia</span>
-        </button>
+      <p class="hero-body fu d2" id="hero-body">Materiais, kits e orientação organizados pelo que seu filho precisa desenvolver — para você saber o que fazer em casa, e não só na sessão.</p>
+      <div class="hero-acts fu d3">
+        <a href="#quiz" class="btn-gold">Descobrir o que meu filho precisa</a>
+        <a href="/sinais/" class="btn-outline-white">Percebi algo diferente</a>
       </div>
     </div>
     <div class="hero-visual fu d2">
@@ -1083,41 +1073,53 @@ body[data-modo="profissional"] .plano-bar.on{display:flex}
 </section>
 
 <!-- CRENÇA / SOBRE -->
-<section id="crenca" style="padding:130px 56px">
-  <div class="crenca-inner">
-    <div class="crenca-left">
-      <p class="eyebrow">Nossa missão</p>
-      <h2>Intenção é o que transforma brincadeira em <em>desenvolvimento.</em></h2>
-      <p>A Neuroplasticidar nasceu do encontro entre ciência e vivência real. Acreditamos que qualquer criança pode florescer — quando os adultos ao redor têm as ferramentas certas.</p>
-      <p>Nossos materiais apoiam, mas não substituem o acompanhamento profissional. Somos uma ponte entre o conhecimento técnico e o dia a dia das famílias.</p>
+<section id="sinais-links" style="background:var(--white);padding:96px 56px;border-top:1px solid var(--border)">
+  <div style="max-width:1200px;margin:0 auto">
+    <p class="eyebrow" style="font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:block">Antes do laudo</p>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,3.6vw,42px);font-weight:600;letter-spacing:-.02em;max-width:700px;line-height:1.18;margin-bottom:16px">Ainda não tem diagnóstico e só percebeu que algo está diferente?</h2>
+    <p style="font-size:16px;color:var(--ink-md);font-weight:300;line-height:1.7;max-width:620px;margin-bottom:36px">Escrevemos um guia para cada sinal que os pais mais pesquisam — o que costuma estar por trás, quando procurar avaliação e o que fazer em casa enquanto isso.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px;background:var(--border);border:1px solid var(--border)">
+      <a href="/sinais/meu-filho-nao-fala" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Meu filho não fala: o que pode estar acontecendo</a>
+      <a href="/sinais/crianca-nao-para-quieta" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que não para quieta: energia ou sinal de alguma coisa?</a>
+      <a href="/sinais/crianca-nao-olha-nos-olhos" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que não olha nos olhos: o que isso pode significar</a>
+      <a href="/sinais/crianca-explode-bate-descontrola" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que explode, bate e se descontrola</a>
+      <a href="/sinais/crianca-brinca-sozinha" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que só brinca sozinha e evita outras crianças</a>
+      <a href="/sinais/crianca-nao-aprende-ler" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que não aprende a ler e escrever</a>
+      <a href="/sinais/crianca-incomoda-barulho-textura" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que se incomoda com barulho, textura e toque</a>
+      <a href="/sinais/crianca-nao-se-veste-sozinha" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que não se veste, não come sozinha e depende para tudo</a>
+
     </div>
-    <div class="crenca-right">
-      <div class="belief-item">
-        <span class="belief-num">01</span>
-        <div>
-          <h4>A brincadeira é o trabalho da criança</h4>
-          <p>Não é perda de tempo. É o modo como o cérebro infantil aprende, processa e se organiza. Toda brincadeira com intenção é terapia.</p>
-        </div>
-      </div>
-      <div class="belief-item">
-        <span class="belief-num">02</span>
-        <div>
-          <h4>Os pais precisam de apoio, não de culpa</h4>
-          <p>Amar não é o mesmo que saber como estimular. Nosso papel é dar aos pais o conhecimento e as ferramentas que ninguém ensinou.</p>
-        </div>
-      </div>
-      <div class="belief-item">
-        <span class="belief-num">03</span>
-        <div>
-          <h4>Cada criança tem o seu tempo</h4>
-          <p>Desenvolvimento respeitoso significa seguir o ritmo da criança — com intenção, consistência e cuidado.</p>
-        </div>
+    <p style="margin-top:26px"><a href="/sinais/" style="color:var(--blue);font-weight:600;font-size:15px">Ver todos os sinais →</a></p>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="objetivos">
+  <div class="obj-inner">
+    <div class="plano-banner" id="plano-banner">
+      <p id="plano-banner-txt"></p>
+      <button onclick="limparPlano()">Ver todos os materiais</button>
+    </div>
+    <div class="obj-head">
+      <p class="eyebrow">A ponte</p>
+      <h2 id="obj-titulo">Tudo organizado por <em>objetivo</em>, não por diagnóstico.</h2>
+      <p id="obj-sub">Cada categoria abaixo corresponde a um objetivo de intervenção. Selecione os objetivos do plano e monte a lista que a família vai receber — com os materiais e brinquedos que atendem cada um.</p>
+    </div>
+    <div class="obj-bar">
+      <p style="font-size:13px;color:var(--ink-lt);font-weight:300" id="obj-dica">Toque em um objetivo para ver os materiais correspondentes.</p>
+    </div>
+    <div class="obj-grid" id="obj-grid"></div>
+    <div class="plano-bar" id="plano-bar">
+      <p><strong id="plano-count">0 objetivos</strong> selecionados — gere o link e envie para a família.</p>
+      <div class="plano-acts">
+        <input type="text" id="plano-prof" placeholder="Seu nome (opcional)" style="font-family:inherit;font-size:13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:99px;padding:11px 18px;min-width:170px;outline:none">
+        <button onclick="limparPlano()">Limpar</button>
+        <button class="pri" onclick="gerarPlano()">Gerar link do plano</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TRÊS FORMAS -->
 <section id="formas">
   <div class="formas-head">
     <p class="eyebrow">Como funciona</p>
@@ -1151,32 +1153,6 @@ body[data-modo="profissional"] .plano-bar.on{display:flex}
 
 <!-- MATERIAIS -->
 <!-- OBJETIVOS / TAXONOMIA -->
-<section id="objetivos">
-  <div class="obj-inner">
-    <div class="plano-banner" id="plano-banner">
-      <p id="plano-banner-txt"></p>
-      <button onclick="limparPlano()">Ver todos os materiais</button>
-    </div>
-    <div class="obj-head">
-      <p class="eyebrow">A ponte</p>
-      <h2 id="obj-titulo">Tudo organizado por <em>objetivo</em>, não por diagnóstico.</h2>
-      <p id="obj-sub">Cada categoria abaixo corresponde a um objetivo de intervenção. Selecione os objetivos do plano e monte a lista que a família vai receber — com os materiais e brinquedos que atendem cada um.</p>
-    </div>
-    <div class="obj-bar">
-      <p style="font-size:13px;color:var(--ink-lt);font-weight:300" id="obj-dica">Toque em um objetivo para ver os materiais correspondentes.</p>
-    </div>
-    <div class="obj-grid" id="obj-grid"></div>
-    <div class="plano-bar" id="plano-bar">
-      <p><strong id="plano-count">0 objetivos</strong> selecionados — gere o link e envie para a família.</p>
-      <div class="plano-acts">
-        <input type="text" id="plano-prof" placeholder="Seu nome (opcional)" style="font-family:inherit;font-size:13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:99px;padding:11px 18px;min-width:170px;outline:none">
-        <button onclick="limparPlano()">Limpar</button>
-        <button class="pri" onclick="gerarPlano()">Gerar link do plano</button>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section id="materiais">
   <div class="section-head">
     <div class="section-head-text">
@@ -1200,68 +1176,6 @@ body[data-modo="profissional"] .plano-bar.on{display:flex}
 </section>
 
 <!-- CRIADORES / PARCEIROS -->
-<section id="criadores">
-  <div class="criadores-inner">
-    <div class="criadores-info">
-      <p class="eyebrow">Faça parte</p>
-      <h2 id="cri-titulo">Materiais que fazem diferença na vida de cada criança</h2>
-      <p class="lead" id="cri-lead">Seja você quem cria, quem atende, quem ensina ou quem cuida — queremos construir o melhor acervo de materiais para crianças neurodivergentes do Brasil, com embasamento e carinho. Conta pra gente quem é você.</p>
-      <ul class="criadores-features" id="cri-features">
-        <li>Conteúdo com embasamento, pensado por quem entende</li>
-        <li>Alcance famílias e profissionais de todo o Brasil</li>
-        <li>Construção colaborativa — vamos crescer juntos</li>
-      </ul>
-      <p class="criadores-note">Deixe seu contato e a gente entra em contato. 💜</p>
-    </div>
-
-    <div class="criadores-card">
-      <h3 class="criadores-card-title">Eu sou...</h3>
-      <p class="criadores-card-sub">Escolha o que mais combina com você.</p>
-
-      <div class="perfil-tabs" id="perfil-tabs">
-        <button type="button" class="perfil-tab active" data-perfil="criador" onclick="setPerfil(this)">Crio materiais</button>
-        <button type="button" class="perfil-tab" data-perfil="clinica" onclick="setPerfil(this)">Clínica / consultório</button>
-        <button type="button" class="perfil-tab" data-perfil="escola" onclick="setPerfil(this)">Escola / instituição</button>
-        <button type="button" class="perfil-tab" data-perfil="familia" onclick="setPerfil(this)">Mãe/pai ou cuidador(a)</button>
-      </div>
-
-      <form id="criadores-form" onsubmit="enviarInteresseCriador(event)">
-        <input type="hidden" id="cri-perfil" value="criador">
-        <div class="field">
-          <label for="cri-nome">Nome completo *</label>
-          <input type="text" id="cri-nome" required placeholder="Seu nome">
-        </div>
-        <div class="form-grid">
-          <div class="field">
-            <label for="cri-email">E-mail *</label>
-            <input type="email" id="cri-email" required placeholder="seu@email.com">
-          </div>
-          <div class="field">
-            <label for="cri-whatsapp">WhatsApp</label>
-            <input type="tel" id="cri-whatsapp" placeholder="(92) 9 9999-9999">
-          </div>
-        </div>
-        <div class="field" id="field-profissao">
-          <label for="cri-profissao" id="label-profissao">Profissão / Área</label>
-          <input type="text" id="cri-profissao" placeholder="Ex.: Fonoaudióloga, Pedagoga, Terapeuta Ocupacional...">
-        </div>
-        <div class="field" id="field-tipo">
-          <label for="cri-tipo" id="label-tipo">Que tipo de material você cria?</label>
-          <input type="text" id="cri-tipo" placeholder="Ex.: atividades de linguagem, jogos de emoções, rotinas visuais...">
-        </div>
-        <div class="field">
-          <label for="cri-msg" id="label-msg">Mensagem (opcional)</label>
-          <textarea id="cri-msg" placeholder="Conte um pouco sobre o que você gostaria."></textarea>
-        </div>
-        <button type="submit" class="criadores-btn" id="cri-submit">Tenho interesse</button>
-        <p class="criadores-status" id="cri-status"></p>
-      </form>
-    </div>
-  </div>
-</section>
-
-
-<!-- KITS -->
 <section id="kits">
   <div class="kits-inner">
     <div class="kits-head">
@@ -1297,6 +1211,41 @@ body[data-modo="profissional"] .plano-bar.on{display:flex}
 
 <!-- ESPECIALISTA -->
 <!-- QUIZ -->
+<section id="especialista">
+  <div class="esp-inner">
+    <div class="esp-info">
+      <p class="eyebrow">Orientação para a família</p>
+      <h2>Quem passa o dia com ele <em>é você.</em></h2>
+      <p class="lead">A terapeuta vê seu filho algumas horas por semana. Você vive com ele o resto do tempo. Nas nossas sessões, quem aprende é você: como aplicar o que foi indicado, o que fazer nos momentos difíceis e como transformar a rotina de casa em estímulo.</p>
+      <ul class="esp-features">
+        <li>Partimos do que você observa em casa e do plano que seu filho já segue</li>
+        <li>Você aprende a usar os materiais e brinquedos indicados para os objetivos dele</li>
+        <li>Estratégias para os momentos que mais angustiam: crise, recusa, transição</li>
+        <li>Registro do que foi combinado, para você acompanhar e mostrar à equipe dele</li>
+        <li>Indicação de materiais para continuar sozinha entre uma sessão e outra</li>
+      </ul>
+      <p style="font-size:13px;color:var(--ink-lt);font-weight:300;line-height:1.65;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)">Orientação para a família, conduzida por profissional habilitada. Complementa o acompanhamento da criança &mdash; não substitui terapia, avaliação nem diagnóstico.</p>
+    </div>
+    <div class="esp-card">
+      <div class="esp-price-block">
+        <div class="esp-price"><sup>R$</sup>200<sub>/hora</sub></div>
+        <p class="esp-price-label">Sessão online ou presencial</p>
+      </div>
+      <ul class="esp-includes">
+        <li>Conversa inicial sobre o caso e o que você observa</li>
+        <li>Orientação prática, aplicada à rotina da sua casa</li>
+        <li>Plano de ação para as próximas semanas</li>
+        <li>Registro por escrito do que foi combinado</li>
+        <li>Indicação de materiais para o período</li>
+        <li>Online para todo o Brasil · Presencial em Manaus</li>
+      </ul>
+      <a href="javascript:void(0)" onclick="openSessaoDialog()" class="btn-wpp-white">Contar meu caso</a>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUEM -->
+<!-- PROFISSIONAIS -->
 <section id="quiz">
   <div class="quiz-bg-text">Quiz</div>
   <div class="quiz-inner">
@@ -1402,152 +1351,41 @@ body[data-modo="profissional"] .plano-bar.on{display:flex}
 </section>
 
 <!-- ESPECIALISTA -->
-<section id="especialista">
-  <div class="esp-inner">
-    <div class="esp-info">
-      <p class="eyebrow">Acompanhamento presencial</p>
-      <h2>Você não precisa fazer isso <em>sozinho.</em></h2>
-      <p class="lead">Uma Assistente de Desenvolvimento Infantil vai até sua casa e trabalha com seu filho através da brincadeira intencional — porque amar não é o mesmo que saber como estimular.</p>
-      <ul class="esp-features">
-        <li>Sessão planejada conforme o perfil e as necessidades do seu filho</li>
-        <li>Profissional trabalha diretamente com a criança, usando os brinquedos certos</li>
-        <li>Os pais participam e aprendem durante a sessão</li>
-        <li>Relatório de evolução ao final de cada encontro</li>
-        <li>Indicação de materiais complementares para continuar em casa</li>
-      </ul>
+<section id="crenca" style="padding:130px 56px">
+  <div class="crenca-inner">
+    <div class="crenca-left">
+      <p class="eyebrow">Nossa missão</p>
+      <h2>Intenção é o que transforma brincadeira em <em>desenvolvimento.</em></h2>
+      <p>A Neuroplasticidar nasceu do encontro entre ciência e vivência real. Acreditamos que qualquer criança pode florescer — quando os adultos ao redor têm as ferramentas certas.</p>
+      <p>Nossos materiais apoiam, mas não substituem o acompanhamento profissional. Somos uma ponte entre o conhecimento técnico e o dia a dia das famílias.</p>
     </div>
-    <div class="esp-card">
-      <div class="esp-price-block">
-        <div class="esp-price"><sup>R$</sup>200<sub>/hora</sub></div>
-        <p class="esp-price-label">Sessão presencial em casa</p>
+    <div class="crenca-right">
+      <div class="belief-item">
+        <span class="belief-num">01</span>
+        <div>
+          <h4>A brincadeira é o trabalho da criança</h4>
+          <p>Não é perda de tempo. É o modo como o cérebro infantil aprende, processa e se organiza. Toda brincadeira com intenção é terapia.</p>
+        </div>
       </div>
-      <ul class="esp-includes">
-        <li>Avaliação inicial do perfil da criança</li>
-        <li>Sessão de desenvolvimento pela brincadeira</li>
-        <li>Participação e orientação dos pais</li>
-        <li>Relatório de evolução por sessão</li>
-        <li>Indicação de materiais complementares</li>
-        <li>Atendimento em Manaus — AM</li>
-      </ul>
-      <a href="javascript:void(0)" onclick="openSessaoDialog()" class="btn-wpp-white">Agendar uma sessão</a>
-    </div>
-  </div>
-</section>
-
-<!-- PARA QUEM -->
-<!-- PROFISSIONAIS -->
-<section id="profissionais">
-  <div class="pf-inner">
-    <div class="pf-head">
-      <p class="eyebrow">Para quem prescreve</p>
-      <h2>Você monta o plano. A gente resolve <em>o resto da lista.</em></h2>
-      <p>Você define o objetivo da intervenção e a família precisa transformar isso em compra. Hoje ela sai procurando sozinha e volta com o brinquedo errado. Aqui, ela chega com a sua indicação já pronta.</p>
-    </div>
-    <div class="pf-grid">
-      <div class="pf-card">
-        <span class="pf-num">01</span>
-        <h3>Indique</h3>
-        <p>Selecione os objetivos do plano, gere um link com seu nome e envie para a família. Ela abre e vê só o que serve para aquela criança.</p>
-        <ul>
-          <li>Link único, com os objetivos já filtrados</li>
-          <li>Seu nome aparece para a família</li>
-          <li>Você acompanha o que foi indicado</li>
-        </ul>
+      <div class="belief-item">
+        <span class="belief-num">02</span>
+        <div>
+          <h4>Os pais precisam de apoio, não de culpa</h4>
+          <p>Amar não é o mesmo que saber como estimular. Nosso papel é dar aos pais o conhecimento e as ferramentas que ninguém ensinou.</p>
+        </div>
       </div>
-      <div class="pf-card">
-        <span class="pf-num">02</span>
-        <h3>Compre para a sua sala</h3>
-        <p>Kits e materiais para usar em atendimento, com condição para clínica, consultório e escola — comprando por objetivo, não por caixa fechada.</p>
-        <ul>
-          <li>Kits montados por objetivo de intervenção</li>
-          <li>Condição para volume e para instituição</li>
-          <li>Materiais digitais com licença de uso profissional</li>
-        </ul>
-      </div>
-      <div class="pf-card">
-        <span class="pf-num">03</span>
-        <h3>Revenda</h3>
-        <p>Para quem já vende material para as próprias famílias atendidas: trabalhe com o nosso acervo e receba por cada indicação convertida.</p>
-        <ul>
-          <li>Comissão por indicação que vira compra</li>
-          <li>Sem estoque e sem logística no seu nome</li>
-          <li>Material de apoio para orientar a família</li>
-        </ul>
-      </div>
-    </div>
-    <div class="pf-cta">
-      <a href="#criadores" class="btn-gold">Quero fazer parte</a>
-      <span class="note">Atendemos fono, TO, fisio, psicologia, neuropsicopedagogia, supervisão ABA e AT.</span>
-    </div>
-  </div>
-</section>
-
-<section id="paraquem">
-  <div class="pq-inner">
-    <div class="pq-head">
-      <p class="eyebrow">Para quem é</p>
-      <h2>Três pessoas na mesma história</h2>
-    </div>
-    <div class="pq-grid">
-      <div class="pq-card">
-        <span class="tag-role">Quem prescreve</span>
-        <h3>Supervisor e terapeuta</h3>
-        <p class="lead">Fono, TO, fisio, psicologia, neuropsicopedagogia e supervisão ABA. Quem define o objetivo e precisa que a família chegue com o material certo na próxima sessão.</p>
-        <ul class="pq-list">
-          <li>Acervo organizado por objetivo de intervenção</li>
-          <li>Link de indicação para enviar à família</li>
-          <li>Kits para usar em atendimento</li>
-          <li>Comissão por indicação convertida</li>
-        </ul>
-      </div>
-      <div class="pq-card">
-        <span class="tag-role">Quem aplica</span>
-        <h3>Acompanhante terapêutico</h3>
-        <p class="lead">Quem está com a criança todo dia, executando o plano de outra pessoa — e é quem mais consome material, muitas vezes tirando do próprio bolso.</p>
-        <ul class="pq-list">
-          <li>Materiais imprimíveis prontos para a sessão</li>
-          <li>Roteiro de aplicação junto de cada material</li>
-          <li>Assinatura com acervo liberado</li>
-          <li>Condição especial de AT</li>
-        </ul>
-      </div>
-      <div class="pq-card">
-        <span class="tag-role">Quem cuida em casa</span>
-        <h3>Pais e cuidadores</h3>
-        <p class="lead">Para quem recebeu o plano e não sabe o que comprar — ou ainda nem tem laudo, e só percebeu que alguma coisa está diferente.</p>
-        <ul class="pq-list">
-          <li>Objetivos traduzidos para linguagem do dia a dia</li>
-          <li>Kits montados conforme a indicação recebida</li>
-          <li>Especialista em casa quando precisar de apoio</li>
-          <li>Abordagem respeitosa e no ritmo da criança</li>
-        </ul>
+      <div class="belief-item">
+        <span class="belief-num">03</span>
+        <div>
+          <h4>Cada criança tem o seu tempo</h4>
+          <p>Desenvolvimento respeitoso significa seguir o ritmo da criança — com intenção, consistência e cuidado.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SINAIS: links internos -->
-<section id="sinais-links" style="background:var(--white);padding:96px 56px;border-top:1px solid var(--border)">
-  <div style="max-width:1200px;margin:0 auto">
-    <p class="eyebrow" style="font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:block">Antes do laudo</p>
-    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,3.6vw,42px);font-weight:600;letter-spacing:-.02em;max-width:700px;line-height:1.18;margin-bottom:16px">Ainda não tem diagnóstico e só percebeu que algo está diferente?</h2>
-    <p style="font-size:16px;color:var(--ink-md);font-weight:300;line-height:1.7;max-width:620px;margin-bottom:36px">Escrevemos um guia para cada sinal que os pais mais pesquisam — o que costuma estar por trás, quando procurar avaliação e o que fazer em casa enquanto isso.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px;background:var(--border);border:1px solid var(--border)">
-      <a href="/sinais/meu-filho-nao-fala" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Meu filho não fala: o que pode estar acontecendo</a>
-      <a href="/sinais/crianca-nao-para-quieta" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que não para quieta: energia ou sinal de alguma coisa?</a>
-      <a href="/sinais/crianca-nao-olha-nos-olhos" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que não olha nos olhos: o que isso pode significar</a>
-      <a href="/sinais/crianca-explode-bate-descontrola" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que explode, bate e se descontrola</a>
-      <a href="/sinais/crianca-brinca-sozinha" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que só brinca sozinha e evita outras crianças</a>
-      <a href="/sinais/crianca-nao-aprende-ler" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que não aprende a ler e escrever</a>
-      <a href="/sinais/crianca-incomoda-barulho-textura" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que se incomoda com barulho, textura e toque</a>
-      <a href="/sinais/crianca-nao-se-veste-sozinha" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que não se veste, não come sozinha e depende para tudo</a>
-
-    </div>
-    <p style="margin-top:26px"><a href="/sinais/" style="color:var(--blue);font-weight:600;font-size:15px">Ver todos os sinais →</a></p>
-  </div>
-</section>
-
-<!-- MANIFESTO -->
+<!-- TRÊS FORMAS -->
 <section id="manifesto">
   <div class="mf-inner">
     <div class="mf-rule"></div>
@@ -1560,6 +1398,18 @@ body[data-modo="profissional"] .plano-bar.on{display:flex}
 </section>
 
 <!-- CONTATO -->
+<!-- PONTE PARA PROFISSIONAIS -->
+<section id="ponte-prof" style="background:var(--ink);padding:72px 56px;color:#fff">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap">
+    <div style="flex:1;min-width:280px">
+      <p style="font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Você é profissional?</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,34px);font-weight:600;letter-spacing:-.02em;line-height:1.2;margin-bottom:12px">Você monta o plano. A gente resolve o resto da lista.</h2>
+      <p style="font-size:15.5px;font-weight:300;color:rgba(255,255,255,.62);line-height:1.7;max-width:540px">Acervo por objetivo de intervenção, link de indicação para enviar à família, condição para clínica e comissão por indicação convertida.</p>
+    </div>
+    <a href="/profissionais/" class="btn-gold" style="white-space:nowrap">Ver área do profissional</a>
+  </div>
+</section>
+
 <section id="contato">
   <div class="contato-inner">
     <div class="contato-info">
@@ -4102,29 +3952,15 @@ function rotulo(o){return modo==='profissional'?o.clin:o.fam;}
 function rotuloAlt(o){return modo==='profissional'?o.fam:o.clin;}
 
 function setModo(m,silent){
-  modo=m;
+  modo='familia';m='familia';
   document.body.setAttribute('data-modo',m);
-  try{localStorage.setItem('np_modo',m);}catch(e){}
-  const f=document.getElementById('sw-fam'),pr=document.getElementById('sw-pro');
-  if(f&&pr){f.classList.toggle('on',m==='familia');pr.classList.toggle('on',m==='profissional');}
-  const hb=document.getElementById('hero-body');
-  if(hb)hb.textContent = m==='profissional'
-    ? 'Acervo de materiais e brinquedos organizado por objetivo de intervenção. Selecione os objetivos do plano, gere o link e a família recebe exatamente o que você indicou.'
-    : 'A Neuroplasticidar é apoio para o dia a dia — materiais práticos, kits pedagógicos e especialista em casa, para que seu filho floresça no seu tempo.';
-  const ot=document.getElementById('obj-titulo'),os=document.getElementById('obj-sub'),od=document.getElementById('obj-dica');
-  if(ot)ot.innerHTML = m==='profissional'
-    ? 'Tudo organizado por <em>objetivo</em>, não por diagnóstico.'
-    : 'O que seu filho precisa <em>desenvolver</em> agora?';
-  if(os)os.textContent = m==='profissional'
-    ? 'Cada categoria abaixo é um objetivo de intervenção. Selecione os objetivos do plano e gere a lista que a família vai receber — com os materiais e brinquedos que atendem cada um.'
-    : 'Escolha o que mais faz sentido para o momento do seu filho. Se você recebeu uma indicação da terapeuta, ela já vem marcada aqui.';
-  if(od)od.textContent = m==='profissional'
-    ? 'Marque quantos objetivos quiser para montar a lista do plano.'
-    : 'Toque em um objetivo para ver os materiais correspondentes.';
+  const ot=document.getElementById('obj-titulo'),os=document.getElementById('obj-sub');
+  if(ot)ot.innerHTML='O que seu filho precisa <em>desenvolver</em> agora?';
+  if(os)os.textContent='Escolha o que mais faz sentido para o momento do seu filho. Se você recebeu uma indicação da terapeuta, ela já vem marcada aqui.';
   renderObjetivos();renderChips();
   if(typeof renderProducts==='function')renderProducts();
 }
-function entrar(m){setModo(m);document.getElementById('objetivos').scrollIntoView({behavior:'smooth'});}
+function entrar(m){document.getElementById('objetivos').scrollIntoView({behavior:'smooth'});}
 
 /* ══ GRID DE OBJETIVOS ══ */
 function renderObjetivos(){
