@@ -3,14 +3,30 @@
     {
       "source": "/:path*",
       "has": [
-        { "type": "host", "value": "neuroplasticidar.vercel.app" }
+        {
+          "type": "host",
+          "value": "neuroplasticidar.vercel.app"
+        }
       ],
       "destination": "https://neuroplasticidar.gruposja.com/:path*",
       "permanent": false
+    },
+    {
+      "source": "/blog/atraso-fala-criancas",
+      "destination": "/sinais/meu-filho-nao-fala",
+      "permanent": true
+    },
+    {
+      "source": "/blog/regulacao-emocional-criancas",
+      "destination": "/sinais/crianca-explode-bate-descontrola",
+      "permanent": true
     }
   ],
   "rewrites": [
-    { "source": "/m/:slug", "destination": "/api/material?slug=:slug" }
+    {
+      "source": "/m/:slug",
+      "destination": "/api/material?slug=:slug"
+    }
   ],
   "cleanUrls": true
 }
