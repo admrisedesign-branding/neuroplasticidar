@@ -1012,8 +1012,8 @@ body[data-modo="profissional"] .plano-bar.on{display:flex}
   <ul class="nav-links">
     <li><a href="/sinais/">Sinais</a></li>
     <li><a href="#objetivos">Objetivos</a></li>
-    <li><a href="#materiais">Materiais</a></li>
-    <li><a href="#kits">Kits</a></li>
+    <li><a href="/materiais/">Materiais</a></li>
+    <li><a href="/brinquedos/">Brinquedos</a></li>
     <li><a href="#especialista">Orientação</a></li>
     <li><a href="#crenca">Sobre</a></li>
     <li><a href="#contato">Contato</a></li>
@@ -1135,20 +1135,20 @@ body[data-modo="profissional"] .plano-bar.on{display:flex}
       <span class="forma-num">01</span>
       <h3>Materiais digitais</h3>
       <p>Guias práticos, roteiros de atividades e fichas pedagógicas para baixar e usar em casa — sem precisar de formação técnica. Alguns são gratuitos para sempre.</p>
-      <a href="#materiais" class="forma-link">Ver materiais →</a>
+      <a href="/materiais/" class="forma-link">Ver materiais →</a>
     </div>
     <div class="forma-card">
       <span class="forma-tag tag-kit">Kit físico</span>
       <span class="forma-num">02</span>
       <h3>Kits de brinquedos</h3>
       <p>Brinquedos pedagógicos selecionados conforme o perfil do seu filho, entregues em uma bolsa transparente pronta para usar. Cada peça tem um propósito.</p>
-      <a href="#kits" class="forma-link">Conhecer os kits →</a>
+      <a href="/brinquedos/" class="forma-link">Conhecer os kits →</a>
     </div>
     <div class="forma-card">
-      <span class="forma-tag tag-pro">Presencial</span>
+      <span class="forma-tag tag-pro">Online e presencial</span>
       <span class="forma-num">03</span>
-      <h3>Especialista em casa</h3>
-      <p>Uma Assistente de Desenvolvimento Infantil vai até sua casa e trabalha com seu filho através da brincadeira — enquanto você observa, aprende e participa.</p>
+      <h3>Orientação para a família</h3>
+      <p>Sessões em que quem aprende é você: como aplicar o que foi indicado e o que fazer nos momentos difíceis. Online ou presencial em Manaus.</p>
       <a href="#especialista" class="forma-link">Saber mais →</a>
     </div>
   </div>
@@ -2034,6 +2034,22 @@ body[data-modo="profissional"] .plano-bar.on{display:flex}
         <div class="field" style="margin-bottom:12px">
           <label>Descrição</label>
           <textarea id="br-descricao" style="min-height:60px" placeholder="O que esse brinquedo desenvolve?"></textarea>
+        </div>
+
+        <!-- Categoria / objetivo -->
+        <div class="field" style="margin-bottom:12px">
+          <label>Objetivo que trabalha *</label>
+          <select id="br-categoria">
+            <option value="">— escolha o objetivo —</option>
+              <option>Linguagem e fala</option><option>Comunicação</option>
+              <option>Aquisição de vocabulário</option><option>Coordenação motora fina</option>
+              <option>Coordenação motora grossa</option><option>Integração sensorial</option>
+              <option>Atividades de vida diária</option><option>Emoções e sentimentos</option>
+              <option>Pré-alfabetização</option><option>Alfabetização</option>
+              <option>Reforçadores lúdicos</option><option>Brinquedos simbólicos</option>
+              <option>Funções executivas</option>
+          </select>
+          <span style="font-size:11px;color:var(--ink-lt);font-weight:300;display:block;margin-top:5px">É por aqui que o brinquedo aparece nos filtros de /brinquedos/ e nas indicações.</span>
         </div>
 
         <!-- Custo + Preço venda lado a lado -->
@@ -3779,7 +3795,7 @@ function searchBrinquedos(){
 function openBrinquedoForm(){
   brinquedoEditandoId=null;
   document.getElementById('br-form-title').textContent='🧸 Novo brinquedo';
-  ['br-id','br-nome','br-descricao','br-custo','br-preco','br-estoque','br-fornecedor','br-tags','br-foto-url'].forEach(id=>{
+  ['br-id','br-nome','br-descricao','br-custo','br-preco','br-estoque','br-fornecedor','br-tags','br-foto-url','br-categoria'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.value='';
   });
   document.getElementById('br-estoque-min').value='2';
@@ -3797,6 +3813,7 @@ function editarBrinquedo(id){
   document.getElementById('br-id').value=id;
   document.getElementById('br-nome').value=b.nome||'';
   document.getElementById('br-descricao').value=b.descricao||'';
+  document.getElementById('br-categoria').value=b.categoria||'';
   document.getElementById('br-custo').value=b.custo||'';
   document.getElementById('br-preco').value=b.preco_venda||'';
   document.getElementById('br-estoque').value=b.estoque_atual||0;
@@ -3822,6 +3839,7 @@ async function saveBrinquedo(){
   const data={
     nome,
     descricao:document.getElementById('br-descricao').value.trim(),
+    categoria:document.getElementById('br-categoria').value||null,
     custo:parseFloat(document.getElementById('br-custo').value)||0,
     preco_venda:parseFloat(document.getElementById('br-preco').value)||0,
     estoque_atual:parseInt(document.getElementById('br-estoque').value)||0,
