@@ -1156,64 +1156,6 @@ body[data-modo="profissional"] .plano-bar.on{display:flex}
 
 <!-- MATERIAIS -->
 <!-- OBJETIVOS / TAXONOMIA -->
-<section id="materiais">
-  <div class="section-head">
-    <div class="section-head-text">
-      <p class="eyebrow">Materiais digitais</p>
-      <h2>Baixe e aplique em casa</h2>
-    </div>
-    <div class="search-wrap">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ink-lt);flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="search-input" placeholder="Buscar materiais..." oninput="filterProducts()">
-    </div>
-  </div>
-  <div class="mat-controls">
-    <button class="tab active" onclick="setTab('todos',this)">Todos</button>
-    <button class="tab" onclick="setTab('gratuito',this)">Gratuitos</button>
-<button class="tab" onclick="setTab('pago',this)">Completos</button>
-    <button class="tab" onclick="setTab('diy',this)">Atividades DIY</button>
-  </div>
-  <div class="mat-chips" id="mat-chips" style="display:flex;flex-wrap:wrap;gap:8px;max-width:1200px;margin:0 auto 32px"></div>
-  <div class="products-grid" id="products-grid"></div>
-  <div class="no-results" id="no-results">Nenhum material encontrado com esses filtros.</div>
-</section>
-
-<!-- CRIADORES / PARCEIROS -->
-<section id="kits">
-  <div class="kits-inner">
-    <div class="kits-head">
-      <p class="eyebrow">Kits de brinquedos</p>
-      <h2>O brinquedo certo para a necessidade certa.</h2>
-      <p>Cada kit é montado conforme o perfil do seu filho — brinquedos com propósito, selecionados por especialistas, entregues prontos para usar.</p>
-    </div>
-    <div class="kits-layout">
-      <div class="bag-stage">
-        <!-- Vídeo da bolsa — substitua pelo seu vídeo real -->
-        <div class="bag-video-wrap" id="bag-wrap">
-          <video
-            muted loop playsinline
-            disablepictureinpicture
-            disableremoteplayback
-            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none"
-            preload="none"
-            id="bag-video">
-          </video>
-          <div class="bag-video-label">
-            <div class="bvl-name">Kits Neuroplasticidar</div>
-            <div class="bvl-area">Brinquedos pedagógicos personalizados</div>
-          </div>
-        </div>
-        <div class="bag-dots" style="display:none" id="bag-dots"></div>
-      </div>
-      <div>
-        <div class="kits-list" id="kits-list"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ESPECIALISTA -->
-<!-- QUIZ -->
 <section id="especialista">
   <div class="esp-inner">
     <div class="esp-info">
@@ -3931,6 +3873,7 @@ function showKit(i){
   document.querySelectorAll('.kit-row').forEach((r,j)=>r.classList.toggle('active',j===i));
 }
 function renderKitsList(){
+  if(!document.getElementById('kits-list'))return;
   document.getElementById('kits-list').innerHTML=KITS.map((k,i)=>`
     <div class="kit-row ${i===0?'active':''}" onclick="showKit(${i})">
       <span class="kit-row-num">0${i+1}</span>
@@ -4007,8 +3950,7 @@ function tocarObjetivo(id){
     plano.includes(id)?plano=plano.filter(x=>x!==id):plano.push(id);
     renderObjetivos();
   }else{
-    planoFiltro=[id];activeChip=id;renderChips();renderProducts();
-    document.getElementById('materiais').scrollIntoView({behavior:'smooth'});
+    location.href='/materiais/?plano='+id;
   }
 }
 
@@ -4024,10 +3966,9 @@ function renderChips(){
 function gerarPlano(){
   if(!plano.length)return;
   const nome=(document.getElementById('plano-prof')||{}).value||'';
-  const u=new URL(location.origin+location.pathname);
+  const u=new URL(location.origin+'/materiais/');
   u.searchParams.set('plano',plano.join(','));
   if(nome.trim())u.searchParams.set('prof',nome.trim());
-  u.hash='materiais';
   const link=u.toString();
   const done=()=>{const b=document.querySelector('.plano-acts .pri');if(b){const t=b.textContent;b.textContent='Link copiado ✓';setTimeout(()=>b.textContent=t,2400);}};
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(link).then(done).catch(()=>prompt('Copie o link do plano:',link));}
@@ -4042,6 +3983,8 @@ function limparPlano(){
 function lerPlanoDaURL(){
   const q=new URLSearchParams(location.search);
   const pl=q.get('plano');if(!pl)return;
+  // links antigos de plano apontavam para a home; hoje o acervo vive em /materiais/
+  if(!document.getElementById('products-grid')){location.replace('/materiais/'+location.search);return;}
   const ids=pl.split(',').map(s=>s.trim()).filter(id=>OBJ(id));
   if(!ids.length)return;
   planoFiltro=ids;planoProf=(q.get('prof')||'').trim();
@@ -4058,6 +4001,7 @@ function lerPlanoDaURL(){
 
 
 function renderProducts(){
+  if(!document.getElementById('products-grid'))return;
   const q=document.getElementById('search-input').value.toLowerCase().trim();
   const list=materials.filter(p=>{
 const isDIY=(p.category||'').toLowerCase().includes('diy')||(p.tags||[]).some(t=>(t||'').toLowerCase().includes('diy'));
