@@ -913,6 +913,89 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     .admin-nav{flex-direction:row;overflow-x:auto;border-right:none;border-bottom:1px solid var(--border);padding:6px 14px;gap:4px}
     .admin-tab-btn{width:auto;white-space:nowrap;border-radius:50px}
   }
+
+/* ══ MODO / PORTAS ══ */
+.mode-sw{display:flex;gap:0;border:1px solid var(--border-md);border-radius:99px;padding:3px;background:var(--white)}
+.mode-sw button{border:0;background:transparent;font-family:inherit;font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--ink-lt);padding:7px 16px;border-radius:99px;cursor:pointer;transition:.2s;white-space:nowrap}
+.mode-sw button.on{background:var(--blue);color:#fff}
+.hero-doors{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.door{flex:1;min-width:210px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);border-radius:var(--r);padding:20px 22px;cursor:pointer;transition:.25s;text-align:left;font-family:inherit;color:#fff}
+.door:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.4);transform:translateY(-2px)}
+.door strong{display:block;font-size:16px;font-weight:600;margin-bottom:5px}
+.door span{display:block;font-size:13px;font-weight:300;color:rgba(255,255,255,.7);line-height:1.5}
+
+/* ══ OBJETIVOS ══ */
+#objetivos{background:var(--cream);padding:110px 56px}
+.obj-inner{max-width:1200px;margin:0 auto}
+.obj-head{margin-bottom:14px}
+.obj-head .eyebrow{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:block}
+.obj-head h2{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,46px);font-weight:600;color:var(--ink);letter-spacing:-.02em;max-width:760px;line-height:1.15}
+.obj-head p{font-size:16px;color:var(--ink-md);font-weight:300;line-height:1.7;max-width:640px;margin-top:16px}
+.obj-bar{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin:32px 0 26px;padding-bottom:22px;border-bottom:1px solid var(--border)}
+.obj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:2px;background:var(--border);border:1px solid var(--border)}
+.obj-card{background:var(--white);padding:24px 22px 20px;cursor:pointer;transition:.22s;position:relative;display:flex;flex-direction:column;gap:9px;min-height:158px}
+.obj-card:hover{background:var(--blue-lt)}
+.obj-card.sel{background:var(--blue-lt);box-shadow:inset 3px 0 0 var(--blue)}
+.obj-card h3{font-size:15.5px;font-weight:600;color:var(--ink);line-height:1.35;letter-spacing:-.01em;padding-right:24px}
+.obj-card .alt{font-size:12.5px;color:var(--ink-md);font-weight:300;line-height:1.5}
+.obj-card .profs{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto;padding-top:10px}
+.obj-card .profs span{font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;background:var(--parchment);color:var(--ink-md);border-radius:99px;padding:4px 9px}
+.obj-card .profs span.shared{background:var(--gold-lt);color:var(--gold-dk)}
+.obj-tick{position:absolute;top:20px;right:18px;width:20px;height:20px;border:1.5px solid var(--border-md);border-radius:6px;display:none;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700}
+body[data-modo="profissional"] .obj-tick{display:flex}
+.obj-card.sel .obj-tick{background:var(--blue);border-color:var(--blue)}
+
+/* ══ PLANO ══ */
+.plano-bar{position:sticky;bottom:0;z-index:60;margin-top:2px;background:var(--ink);color:#fff;border-radius:0 0 var(--r) var(--r);padding:18px 24px;display:none;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+body[data-modo="profissional"] .plano-bar.on{display:flex}
+.plano-bar p{font-size:13.5px;font-weight:300;color:rgba(255,255,255,.75);line-height:1.5}
+.plano-bar strong{color:#fff;font-weight:600}
+.plano-acts{display:flex;gap:10px;flex-wrap:wrap}
+.plano-acts button{font-family:inherit;font-size:13px;font-weight:600;border-radius:99px;padding:11px 20px;cursor:pointer;border:1px solid rgba(255,255,255,.28);background:transparent;color:#fff;transition:.2s}
+.plano-acts button:hover{background:rgba(255,255,255,.12)}
+.plano-acts button.pri{background:var(--gold);border-color:var(--gold);color:#231803}
+.plano-acts button.pri:hover{background:#EBA411}
+.plano-banner{max-width:1200px;margin:0 auto 34px;background:var(--gold-lt);border:1px solid #F0DCA8;border-radius:var(--r);padding:20px 24px;display:none;align-items:center;gap:16px;flex-wrap:wrap}
+.plano-banner.on{display:flex}
+.plano-banner p{font-size:14px;color:var(--gold-dk);line-height:1.6;flex:1;min-width:240px}
+.plano-banner b{font-weight:600}
+.plano-banner button{font-family:inherit;font-size:12.5px;font-weight:600;background:transparent;border:1px solid var(--gold);color:var(--gold-dk);border-radius:99px;padding:9px 16px;cursor:pointer}
+
+/* ══ PROFISSIONAIS ══ */
+#profissionais{background:var(--ink);padding:110px 56px;color:#fff}
+.pf-inner{max-width:1200px;margin:0 auto}
+.pf-head .eyebrow{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:block}
+.pf-head h2{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,46px);font-weight:600;letter-spacing:-.02em;max-width:720px;line-height:1.15}
+.pf-head h2 em{font-style:italic;color:var(--gold)}
+.pf-head p{font-size:16px;font-weight:300;color:rgba(255,255,255,.62);line-height:1.75;max-width:620px;margin-top:18px}
+.pf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(255,255,255,.1);margin-top:48px;border:1px solid rgba(255,255,255,.1)}
+.pf-card{background:var(--ink);padding:38px 32px;transition:.25s}
+.pf-card:hover{background:#1B1917}
+.pf-num{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--gold);margin-bottom:16px;display:block}
+.pf-card h3{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;margin-bottom:12px}
+.pf-card p{font-size:14px;font-weight:300;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:20px}
+.pf-card ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.pf-card li{font-size:13.5px;font-weight:300;color:rgba(255,255,255,.78);padding-left:18px;position:relative;line-height:1.6}
+.pf-card li:before{content:'';position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.pf-cta{margin-top:44px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.pf-cta .note{font-size:13px;font-weight:300;color:rgba(255,255,255,.45)}
+
+.pq-grid{grid-template-columns:repeat(3,1fr)}
+.pq-card .tag-role{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);background:var(--blue-lt);border-radius:99px;padding:5px 11px;margin-bottom:14px}
+
+@media(max-width:1000px){
+  .pf-grid,.pq-grid{grid-template-columns:1fr}
+  #objetivos,#profissionais{padding:80px 24px}
+  .obj-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+}
+@media(max-width:600px){
+  .obj-grid{grid-template-columns:1fr 1fr}
+  .obj-card{min-height:0;padding:18px 15px}
+  .obj-card h3{font-size:14px}
+  .obj-card .alt{display:none}
+  .hero-doors{flex-direction:column}
+}
+
 </style>
 </head>
 <body>
@@ -924,15 +1007,20 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     <img src="/assets/dino-wordmark.png" alt="Neuroplasticidar" class="logo-img-text" style="height:20px;object-fit:contain;transition:opacity .3s">
   </a>
   <ul class="nav-links">
-    <li><a href="#crenca">Sobre</a></li>
+    <li><a href="/sinais/">Sinais</a></li>
+    <li><a href="#objetivos">Objetivos</a></li>
     <li><a href="#materiais">Materiais</a></li>
     <li><a href="#kits">Kits</a></li>
-    <li><a href="#especialista">Especialista</a></li>
-    <li><a href="#quiz">Quiz</a></li>
+    <li><a href="#profissionais">Profissionais</a></li>
+    <li><a href="#crenca">Sobre</a></li>
     <li><a href="/blog/">Blog</a></li>
     <li><a href="#contato">Contato</a></li>
   </ul>
   <div class="nav-right">
+    <div class="mode-sw" role="group" aria-label="Escolha seu perfil">
+      <button id="sw-fam" class="on" onclick="setModo('familia')">Família</button>
+      <button id="sw-pro" onclick="setModo('profissional')">Profissional</button>
+    </div>
     <div id="nav-user">
       <div class="av" id="nav-av">U</div>
       <span class="un" id="nav-un">Usuário</span>
@@ -957,10 +1045,16 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     <div>
       <p class="hero-eyebrow fu">Desenvolvimento infantil</p>
       <h1 class="hero-title fu d1">A criança se desenvolve<br><em>brincando.</em><br>Sempre foi assim.</h1>
-      <p class="hero-body fu d2">A Neuroplasticidar é uma ferramenta de apoio para pais e cuidadores — com materiais práticos, kits pedagógicos e suporte especializado para que seu filho floresça no seu tempo.</p>
-      <div class="hero-acts fu d3">
-        <a href="#quiz" class="btn-gold">Descobrir o que meu filho precisa</a>
-        <a href="#formas" class="btn-outline-white">Como funciona</a>
+      <p class="hero-body fu d2" id="hero-body">A Neuroplasticidar é a ponte entre o plano de intervenção e o brinquedo certo — materiais e kits organizados por objetivo, para quem prescreve, para quem aplica e para quem cuida em casa.</p>
+      <div class="hero-doors fu d3">
+        <button class="door" onclick="entrar('profissional')">
+          <strong>Sou profissional</strong>
+          <span>Supervisor, fono, TO, fisio, psico, neuropsicopedagogo ou AT</span>
+        </button>
+        <button class="door" onclick="entrar('familia')">
+          <strong>Sou família</strong>
+          <span>Pai, mãe ou cuidador buscando apoio no dia a dia</span>
+        </button>
       </div>
     </div>
     <div class="hero-visual fu d2">
@@ -1056,6 +1150,33 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 </section>
 
 <!-- MATERIAIS -->
+<!-- OBJETIVOS / TAXONOMIA -->
+<section id="objetivos">
+  <div class="obj-inner">
+    <div class="plano-banner" id="plano-banner">
+      <p id="plano-banner-txt"></p>
+      <button onclick="limparPlano()">Ver todos os materiais</button>
+    </div>
+    <div class="obj-head">
+      <p class="eyebrow">A ponte</p>
+      <h2 id="obj-titulo">Tudo organizado por <em>objetivo</em>, não por diagnóstico.</h2>
+      <p id="obj-sub">Cada categoria abaixo corresponde a um objetivo de intervenção. Selecione os objetivos do plano e monte a lista que a família vai receber — com os materiais e brinquedos que atendem cada um.</p>
+    </div>
+    <div class="obj-bar">
+      <p style="font-size:13px;color:var(--ink-lt);font-weight:300" id="obj-dica">Toque em um objetivo para ver os materiais correspondentes.</p>
+    </div>
+    <div class="obj-grid" id="obj-grid"></div>
+    <div class="plano-bar" id="plano-bar">
+      <p><strong id="plano-count">0 objetivos</strong> selecionados — gere o link e envie para a família.</p>
+      <div class="plano-acts">
+        <input type="text" id="plano-prof" placeholder="Seu nome (opcional)" style="font-family:inherit;font-size:13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:99px;padding:11px 18px;min-width:170px;outline:none">
+        <button onclick="limparPlano()">Limpar</button>
+        <button class="pri" onclick="gerarPlano()">Gerar link do plano</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="materiais">
   <div class="section-head">
     <div class="section-head-text">
@@ -1072,17 +1193,8 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     <button class="tab" onclick="setTab('gratuito',this)">Gratuitos</button>
 <button class="tab" onclick="setTab('pago',this)">Completos</button>
     <button class="tab" onclick="setTab('diy',this)">Atividades DIY</button>
-    <div class="divider"></div>
-    <div class="divider"></div>
-    <button class="chip active" onclick="setChip('todos',this)">Todos os temas</button>
-    <button class="chip" onclick="setChip('telas',this)">Telas</button>
-    <button class="chip" onclick="setChip('funcoes',this)">Funções executivas</button>
-    <button class="chip" onclick="setChip('ludico',this)">Aprendizagem lúdica</button>
-    <button class="chip" onclick="setChip('sono',this)">Sono & rotina</button>
-    <button class="chip" onclick="setChip('emocoes',this)">Emoções</button>
-    <button class="chip" onclick="setChip('motricidade',this)">Motricidade</button>
-    <button class="chip" onclick="setChip('linguagem',this)">Linguagem & Fala</button>
   </div>
+  <div class="mat-chips" id="mat-chips" style="display:flex;flex-wrap:wrap;gap:8px;max-width:1200px;margin:0 auto 32px"></div>
   <div class="products-grid" id="products-grid"></div>
   <div class="no-results" id="no-results">Nenhum material encontrado com esses filtros.</div>
 </section>
@@ -1323,34 +1435,115 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
 </section>
 
 <!-- PARA QUEM -->
+<!-- PROFISSIONAIS -->
+<section id="profissionais">
+  <div class="pf-inner">
+    <div class="pf-head">
+      <p class="eyebrow">Para quem prescreve</p>
+      <h2>Você monta o plano. A gente resolve <em>o resto da lista.</em></h2>
+      <p>Você define o objetivo da intervenção e a família precisa transformar isso em compra. Hoje ela sai procurando sozinha e volta com o brinquedo errado. Aqui, ela chega com a sua indicação já pronta.</p>
+    </div>
+    <div class="pf-grid">
+      <div class="pf-card">
+        <span class="pf-num">01</span>
+        <h3>Indique</h3>
+        <p>Selecione os objetivos do plano, gere um link com seu nome e envie para a família. Ela abre e vê só o que serve para aquela criança.</p>
+        <ul>
+          <li>Link único, com os objetivos já filtrados</li>
+          <li>Seu nome aparece para a família</li>
+          <li>Você acompanha o que foi indicado</li>
+        </ul>
+      </div>
+      <div class="pf-card">
+        <span class="pf-num">02</span>
+        <h3>Compre para a sua sala</h3>
+        <p>Kits e materiais para usar em atendimento, com condição para clínica, consultório e escola — comprando por objetivo, não por caixa fechada.</p>
+        <ul>
+          <li>Kits montados por objetivo de intervenção</li>
+          <li>Condição para volume e para instituição</li>
+          <li>Materiais digitais com licença de uso profissional</li>
+        </ul>
+      </div>
+      <div class="pf-card">
+        <span class="pf-num">03</span>
+        <h3>Revenda</h3>
+        <p>Para quem já vende material para as próprias famílias atendidas: trabalhe com o nosso acervo e receba por cada indicação convertida.</p>
+        <ul>
+          <li>Comissão por indicação que vira compra</li>
+          <li>Sem estoque e sem logística no seu nome</li>
+          <li>Material de apoio para orientar a família</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pf-cta">
+      <a href="#criadores" class="btn-gold">Quero fazer parte</a>
+      <span class="note">Atendemos fono, TO, fisio, psicologia, neuropsicopedagogia, supervisão ABA e AT.</span>
+    </div>
+  </div>
+</section>
+
 <section id="paraquem">
   <div class="pq-inner">
     <div class="pq-head">
       <p class="eyebrow">Para quem é</p>
-      <h2>Pais, cuidadores e profissionais</h2>
+      <h2>Três pessoas na mesma história</h2>
     </div>
     <div class="pq-grid">
       <div class="pq-card">
-        <h3>Pais e Cuidadores</h3>
-        <p class="lead">Para quem quer apoiar o desenvolvimento do filho em casa, com ferramentas acessíveis e fundamentadas em ciência — sem precisar de formação técnica.</p>
+        <span class="tag-role">Quem prescreve</span>
+        <h3>Supervisor e terapeuta</h3>
+        <p class="lead">Fono, TO, fisio, psicologia, neuropsicopedagogia e supervisão ABA. Quem define o objetivo e precisa que a família chegue com o material certo na próxima sessão.</p>
         <ul class="pq-list">
-          <li>Guias práticos para aplicar hoje mesmo</li>
-          <li>Kits com brinquedos pedagógicos selecionados</li>
-          <li>Especialista em casa quando precisar de mais suporte</li>
-          <li>Abordagem respeitosa e no ritmo da criança</li>
+          <li>Acervo organizado por objetivo de intervenção</li>
+          <li>Link de indicação para enviar à família</li>
+          <li>Kits para usar em atendimento</li>
+          <li>Comissão por indicação convertida</li>
         </ul>
       </div>
       <div class="pq-card">
-        <h3>Profissionais de Saúde</h3>
-        <p class="lead">Para terapeutas, psicopedagogas e educadores que buscam materiais complementares baseados em neurociência para usar com seus pacientes e famílias.</p>
+        <span class="tag-role">Quem aplica</span>
+        <h3>Acompanhante terapêutico</h3>
+        <p class="lead">Quem está com a criança todo dia, executando o plano de outra pessoa — e é quem mais consome material, muitas vezes tirando do próprio bolso.</p>
         <ul class="pq-list">
-          <li>Materiais de apoio com base científica</li>
-          <li>Recursos para orientar as famílias no dia a dia</li>
-          <li>Kits para uso em sessões e atendimentos</li>
-          <li>Linguagem técnica traduzida para o cotidiano</li>
+          <li>Materiais imprimíveis prontos para a sessão</li>
+          <li>Roteiro de aplicação junto de cada material</li>
+          <li>Assinatura com acervo liberado</li>
+          <li>Condição especial de AT</li>
+        </ul>
+      </div>
+      <div class="pq-card">
+        <span class="tag-role">Quem cuida em casa</span>
+        <h3>Pais e cuidadores</h3>
+        <p class="lead">Para quem recebeu o plano e não sabe o que comprar — ou ainda nem tem laudo, e só percebeu que alguma coisa está diferente.</p>
+        <ul class="pq-list">
+          <li>Objetivos traduzidos para linguagem do dia a dia</li>
+          <li>Kits montados conforme a indicação recebida</li>
+          <li>Especialista em casa quando precisar de apoio</li>
+          <li>Abordagem respeitosa e no ritmo da criança</li>
         </ul>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- SINAIS: links internos -->
+<section id="sinais-links" style="background:var(--white);padding:96px 56px;border-top:1px solid var(--border)">
+  <div style="max-width:1200px;margin:0 auto">
+    <p class="eyebrow" style="font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:block">Antes do laudo</p>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,3.6vw,42px);font-weight:600;letter-spacing:-.02em;max-width:700px;line-height:1.18;margin-bottom:16px">Ainda não tem diagnóstico e só percebeu que algo está diferente?</h2>
+    <p style="font-size:16px;color:var(--ink-md);font-weight:300;line-height:1.7;max-width:620px;margin-bottom:36px">Escrevemos um guia para cada sinal que os pais mais pesquisam — o que costuma estar por trás, quando procurar avaliação e o que fazer em casa enquanto isso.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2px;background:var(--border);border:1px solid var(--border)">
+      <a href="/sinais/meu-filho-nao-fala" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Meu filho não fala: o que pode estar acontecendo</a>
+      <a href="/sinais/crianca-nao-para-quieta" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que não para quieta: energia ou sinal de alguma coisa?</a>
+      <a href="/sinais/crianca-nao-olha-nos-olhos" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que não olha nos olhos: o que isso pode significar</a>
+      <a href="/sinais/crianca-explode-bate-descontrola" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que explode, bate e se descontrola</a>
+      <a href="/sinais/crianca-brinca-sozinha" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que só brinca sozinha e evita outras crianças</a>
+      <a href="/sinais/crianca-nao-aprende-ler" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que não aprende a ler e escrever</a>
+      <a href="/sinais/crianca-incomoda-barulho-textura" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que se incomoda com barulho, textura e toque</a>
+      <a href="/sinais/crianca-nao-se-veste-sozinha" style="background:var(--white);padding:22px 24px;font-size:15px;font-weight:500;color:var(--ink);line-height:1.45;transition:.2s" onmouseover="this.style.background='var(--blue-lt)'" onmouseout="this.style.background='var(--white)'">Criança que não se veste, não come sozinha e depende para tudo</a>
+
+    </div>
+    <p style="margin-top:26px"><a href="/sinais/" style="color:var(--blue);font-weight:600;font-size:15px">Ver todos os sinais →</a></p>
   </div>
 </section>
 
@@ -1460,6 +1653,7 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     <button class="admin-tab-btn" id="tab-pesquisas" onclick="adminTab('pesquisas',this)">📋 Pesquisas</button>
     <button class="admin-tab-btn" id="tab-compras" onclick="adminTab('compras',this)">🧾 Compras</button>
     <button class="admin-tab-btn" id="tab-repasse" onclick="adminTab('repasse',this)" style="color:var(--sage)">💰 Repasse Jaque</button>
+    <button class="admin-tab-btn" id="tab-artigos" onclick="adminTab('artigos',this)">📝 Artigos</button>
     <button class="admin-tab-btn" id="tab-equipe" onclick="adminTab('equipe',this)">👥 Equipe</button>
   </div>
   <div class="admin-content">
@@ -1692,6 +1886,69 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
     <!-- ════════ FIM ABA REPASSE ════════ -->
 
     <!-- MATERIAIS -->
+
+    <!-- ══════════ ARTIGOS ══════════ -->
+    <div class="admin-section" id="adm-artigos">
+
+      <div class="admin-form" id="art-editor" style="display:none">
+        <h3 id="art-editor-titulo">Novo artigo</h3>
+        <input type="hidden" id="art-id">
+
+        <div class="form-grid">
+          <div class="field"><label>Título da página (H1)</label><input type="text" id="art-h1" placeholder="Meu filho não fala: o que pode estar acontecendo"></div>
+          <div class="field"><label>Título para o Google (title)</label><input type="text" id="art-title" placeholder="Até 60 caracteres"></div>
+          <div class="field"><label>Endereço (slug)</label><input type="text" id="art-slug" placeholder="meu-filho-nao-fala"></div>
+          <div class="field"><label>Pasta</label><select id="art-pasta"><option value="sinais">sinais</option><option value="blog">blog</option></select></div>
+          <div class="field"><label>Categoria (badge)</label><input type="text" id="art-badge" placeholder="Linguagem e Fala"></div>
+          <div class="field"><label>Tempo de leitura</label><input type="text" id="art-tempo" placeholder="6 min de leitura"></div>
+        </div>
+
+        <div class="field"><label>Descrição — vira o subtítulo e o texto no Google (até 155 caracteres)</label>
+          <textarea id="art-desc" style="min-height:64px" oninput="artContaDesc()"></textarea>
+          <span class="adm-msg" id="art-desc-count"></span></div>
+
+        <div class="field"><label>Palavras-chave (separadas por vírgula)</label><input type="text" id="art-kw"></div>
+        <div class="field"><label>Autoria</label><input type="text" id="art-autor" placeholder="Jaqueline — Neuropsicopedagoga"></div>
+
+        <div class="field"><label>Abertura do texto</label>
+          <textarea id="art-lead" style="min-height:110px" placeholder="Parágrafo de abertura. Separe parágrafos com uma linha em branco."></textarea></div>
+
+        <div class="field"><label>Objetivos ligados a este sinal</label>
+          <div id="art-objetivos" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
+
+        <div id="art-rep-por_tras"></div>
+        <div id="art-rep-quando"></div>
+        <div class="field"><label>Observação abaixo da lista (caixa amarela)</label>
+          <textarea id="art-quando_nota" style="min-height:64px"></textarea></div>
+        <div id="art-rep-profissionais"></div>
+        <div id="art-rep-em_casa"></div>
+        <div id="art-rep-faq"></div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:20px">
+          <button class="btn-save" onclick="salvarArtigo()">Salvar rascunho</button>
+          <button class="btn-save" style="background:var(--parchment);color:var(--ink);border:1px solid var(--border-md)" onclick="previewArtigo()">Ver preview</button>
+          <button class="btn-save" id="art-btn-pub" onclick="publicarArtigo()" style="background:var(--sage)">Publicar no site</button>
+          <button class="btn-save" style="background:transparent;color:var(--ink-lt);border:1px solid var(--border)" onclick="fecharEditorArtigo()">Fechar</button>
+          <span class="adm-msg" id="art-msg"></span>
+        </div>
+        <p style="font-size:12px;color:var(--ink-lt);margin-top:10px;font-weight:300">
+          Publicar grava o arquivo no repositório e o site republica sozinho em cerca de um minuto.</p>
+      </div>
+
+      <div class="admin-form">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px">
+          <h3 style="margin:0">Artigos</h3>
+          <button class="btn-save" onclick="novoArtigo()">+ Novo artigo</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="adm-table">
+            <thead><tr><th>Título</th><th>Endereço</th><th>Situação</th><th>Atualizado</th><th></th></tr></thead>
+            <tbody id="art-tbody"><tr><td colspan="5" style="text-align:center;color:var(--ink-lt);padding:24px;font-weight:300">Carregando…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <div class="admin-section" id="adm-materiais">
       <div class="admin-form">
         <h3>Novo material digital</h3>
@@ -1699,9 +1956,14 @@ footer{background:var(--ink);color:rgba(255,255,255,0.55);padding:48px 56px}
           <div class="field"><label>Título</label><input type="text" id="adm-title" placeholder="Nome do material"></div>
           <div class="field"><label>Categoria</label>
             <select id="adm-cat">
-              <option>Redução de telas</option><option>Funções executivas</option>
-              <option>Aprendizagem lúdica</option><option>Sono & Rotina</option>
-              <option>Regulação emocional</option><option>Linguagem</option><option>Motricidade</option>
+              <option>Linguagem e fala</option><option>Comunicação</option>
+              <option>Aquisição de vocabulário</option><option>Coordenação motora fina</option>
+              <option>Coordenação motora grossa</option><option>Integração sensorial</option>
+              <option>Atividades de vida diária</option><option>Emoções e sentimentos</option>
+              <option>Pré-alfabetização</option><option>Alfabetização</option>
+              <option>Reforçadores lúdicos</option><option>Brinquedos simbólicos</option>
+              <option>Funções executivas</option><option>Redução de telas</option>
+              <option>Sono e rotina</option>
             </select>
           </div>
           <div class="field"><label>Faixa etária</label><input type="text" id="adm-age" placeholder="Ex: 3–7 anos"></div>
@@ -3286,7 +3548,13 @@ const _waitAndOpen=setInterval(()=>{
     setTimeout(()=>clearInterval(_waitAndOpen),5000);
   }
   loadSession();
+  let modoSalvo='familia';
+  try{modoSalvo=localStorage.getItem('np_modo')||'familia';}catch(e){}
+  if(new URLSearchParams(location.search).get('plano'))modoSalvo='familia';
+  setModo(modoSalvo);
   await loadMaterials();
+  lerPlanoDaURL();
+  renderChips();
   renderProducts();
   renderBag();
   renderKitsList();
@@ -3398,7 +3666,8 @@ function adminTab(tab,el){
     'pesquisas':loadAdminPesquisas,
     'equipe':loadEquipe,
     'materiais':loadAdminMateriais,
-    'kits':loadAdminKits
+    'kits':loadAdminKits,
+    'artigos':loadAdminArtigos
   };
   if(reloaders[tab])try{reloaders[tab]();}catch(e){console.error('Erro carregando aba',tab,e);}
 }
@@ -3804,15 +4073,142 @@ function renderKitsList(){
 }
 
 /* PRODUTOS */
-const TEMA={telas:['telas','Redução de telas','tela'],funcoes:['funcoes','Funções executivas','funcao'],ludico:['ludico','lúdica','ludica'],sono:['sono','Sono','rotina'],emocoes:['emocoes','emoci','Regulação emocional'],motricidade:['motricidade','motora','coordena'],linguagem:['linguagem','fala']};
+/* ══ TAXONOMIA ÚNICA — objetivo de intervenção ══
+   clin = nome clínico (profissional) · fam = nome em linguagem de família
+   profs = especialidades que usam · match = termos que casam com category do banco */
+const TAXONOMIA=[
+ {id:'linguagem',      clin:'Linguagem e fala',          fam:'Falar e se expressar',        profs:['Fono'],                        match:['linguagem','fala']},
+ {id:'comunicacao',    clin:'Comunicação',               fam:'Se fazer entender',           profs:['Fono'],                        match:['comunica','pecs','alternativa']},
+ {id:'vocabulario',    clin:'Aquisição de vocabulário',  fam:'Aprender palavras novas',     profs:['Fono','Neuropsicoped.'],       match:['vocabul','categoriza','categorias','nomea','palavra']},
+ {id:'motora-fina',    clin:'Coordenação motora fina',   fam:'Mãos, pinça e traçado',       profs:['TO'],                          match:['motora fina','fina','pinça','preens','grafo','motricidade']},
+ {id:'motora-grossa',  clin:'Coordenação motora grossa', fam:'Corpo, equilíbrio e força',   profs:['Fisio'],                       match:['motora grossa','grossa','equilíb','equilib','postur']},
+ {id:'sensorial',      clin:'Integração sensorial',      fam:'Sons, texturas e toque',      profs:['TO'],                          match:['sensor','tátil','tatil','vestibul','propriocep']},
+ {id:'avd',            clin:'Atividades de vida diária', fam:'Vestir, comer e higiene',     profs:['TO'],                          match:['avd','vida diária','vida diaria','autonomia','higiene']},
+ {id:'emocoes',        clin:'Emoções e sentimentos',     fam:'Lidar com o que sente',       profs:['Psicólogo'],                   match:['emoc','sentiment','regulação emocional','regulacao']},
+ {id:'pre-alfa',       clin:'Pré-alfabetização',         fam:'Preparar para ler',           profs:['Neuropsicoped.'],              match:['pré-alfa','pre-alfa','pré alfa','fonológ','fonolog']},
+ {id:'alfa',           clin:'Alfabetização',             fam:'Ler e escrever',              profs:['Neuropsicoped.'],              match:['alfabetiz','leitura','escrita','sílab','silab']},
+ {id:'reforcadores',   clin:'Reforçadores lúdicos',      fam:'Motivar e engajar',           profs:['Supervisor ABA','Neuropsicoped.'], match:['reforçad','reforcad','pareamento','lúdica','ludica','ludico']},
+ {id:'simbolico',      clin:'Brinquedos simbólicos',     fam:'Faz de conta',                profs:['TO','Psicólogo'],              match:['simból','simbol','faz de conta','imagina']},
+ {id:'funcoes',        clin:'Funções executivas',        fam:'Atenção, foco e planejamento',profs:['Neuropsicoped.','Psicólogo'],  match:['funções executivas','funcoes','executiva','atenção','foco','memória de trabalho']},
+ {id:'telas',          clin:'Redução de telas',          fam:'Menos telas',                 profs:[],                              match:['telas','tela'], soFamilia:true},
+ {id:'sono',           clin:'Sono e rotina',             fam:'Sono e rotina',               profs:[],                              match:['sono','rotina'], soFamilia:true}
+];
+const OBJ=id=>TAXONOMIA.find(o=>o.id===id);
+function matchObj(id,cat){const o=OBJ(id);if(!o)return false;const c=(cat||'').toLowerCase();return o.match.some(m=>c.includes(m.toLowerCase()));}
+
+/* ══ MODO: familia | profissional ══ */
+let modo='familia', plano=[], planoFiltro=null, planoProf='';
+function rotulo(o){return modo==='profissional'?o.clin:o.fam;}
+function rotuloAlt(o){return modo==='profissional'?o.fam:o.clin;}
+
+function setModo(m,silent){
+  modo=m;
+  document.body.setAttribute('data-modo',m);
+  try{localStorage.setItem('np_modo',m);}catch(e){}
+  const f=document.getElementById('sw-fam'),pr=document.getElementById('sw-pro');
+  if(f&&pr){f.classList.toggle('on',m==='familia');pr.classList.toggle('on',m==='profissional');}
+  const hb=document.getElementById('hero-body');
+  if(hb)hb.textContent = m==='profissional'
+    ? 'Acervo de materiais e brinquedos organizado por objetivo de intervenção. Selecione os objetivos do plano, gere o link e a família recebe exatamente o que você indicou.'
+    : 'A Neuroplasticidar é apoio para o dia a dia — materiais práticos, kits pedagógicos e especialista em casa, para que seu filho floresça no seu tempo.';
+  const ot=document.getElementById('obj-titulo'),os=document.getElementById('obj-sub'),od=document.getElementById('obj-dica');
+  if(ot)ot.innerHTML = m==='profissional'
+    ? 'Tudo organizado por <em>objetivo</em>, não por diagnóstico.'
+    : 'O que seu filho precisa <em>desenvolver</em> agora?';
+  if(os)os.textContent = m==='profissional'
+    ? 'Cada categoria abaixo é um objetivo de intervenção. Selecione os objetivos do plano e gere a lista que a família vai receber — com os materiais e brinquedos que atendem cada um.'
+    : 'Escolha o que mais faz sentido para o momento do seu filho. Se você recebeu uma indicação da terapeuta, ela já vem marcada aqui.';
+  if(od)od.textContent = m==='profissional'
+    ? 'Marque quantos objetivos quiser para montar a lista do plano.'
+    : 'Toque em um objetivo para ver os materiais correspondentes.';
+  renderObjetivos();renderChips();
+  if(typeof renderProducts==='function')renderProducts();
+}
+function entrar(m){setModo(m);document.getElementById('objetivos').scrollIntoView({behavior:'smooth'});}
+
+/* ══ GRID DE OBJETIVOS ══ */
+function renderObjetivos(){
+  const g=document.getElementById('obj-grid');if(!g)return;
+  const lista=TAXONOMIA.filter(o=>modo==='profissional'?!o.soFamilia:true);
+  g.innerHTML=lista.map(o=>{
+    const sel = modo==='profissional' ? plano.includes(o.id) : (planoFiltro||[]).includes(o.id);
+    const alt = rotuloAlt(o)===rotulo(o) ? '' : `<p class="alt">${rotuloAlt(o)}</p>`;
+    return `
+    <div class="obj-card${sel?' sel':''}" onclick="tocarObjetivo('${o.id}')">
+      <div class="obj-tick">✓</div>
+      <h3>${rotulo(o)}</h3>
+      ${alt}
+      <div class="profs">${o.profs.map(pr=>`<span class="${o.profs.length>1?'shared':''}">${pr}</span>`).join('')}</div>
+    </div>`;}).join('');
+  const bar=document.getElementById('plano-bar');
+  if(bar){bar.classList.toggle('on',plano.length>0);
+    const c=document.getElementById('plano-count');
+    if(c)c.textContent=plano.length+(plano.length===1?' objetivo':' objetivos');}
+}
+function tocarObjetivo(id){
+  if(modo==='profissional'){
+    plano.includes(id)?plano=plano.filter(x=>x!==id):plano.push(id);
+    renderObjetivos();
+  }else{
+    planoFiltro=[id];activeChip=id;renderChips();renderProducts();
+    document.getElementById('materiais').scrollIntoView({behavior:'smooth'});
+  }
+}
+
+/* ══ CHIPS DE MATERIAIS ══ */
+function renderChips(){
+  const c=document.getElementById('mat-chips');if(!c)return;
+  const lista=TAXONOMIA.filter(o=>modo==='profissional'?!o.soFamilia:true);
+  c.innerHTML=`<button class="chip${activeChip==='todos'?' active':''}" onclick="setChip('todos',this)">Todos os objetivos</button>`+
+    lista.map(o=>`<button class="chip${activeChip===o.id?' active':''}" onclick="setChip('${o.id}',this)">${rotulo(o)}</button>`).join('');
+}
+
+/* ══ PLANO: gerar e receber ══ */
+function gerarPlano(){
+  if(!plano.length)return;
+  const nome=(document.getElementById('plano-prof')||{}).value||'';
+  const u=new URL(location.origin+location.pathname);
+  u.searchParams.set('plano',plano.join(','));
+  if(nome.trim())u.searchParams.set('prof',nome.trim());
+  u.hash='materiais';
+  const link=u.toString();
+  const done=()=>{const b=document.querySelector('.plano-acts .pri');if(b){const t=b.textContent;b.textContent='Link copiado ✓';setTimeout(()=>b.textContent=t,2400);}};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(link).then(done).catch(()=>prompt('Copie o link do plano:',link));}
+  else prompt('Copie o link do plano:',link);
+  if(window.gtag)gtag('event','gerar_plano',{objetivos:plano.join(','),profissional:nome});
+}
+function limparPlano(){
+  plano=[];planoFiltro=null;planoProf='';activeChip='todos';
+  const b=document.getElementById('plano-banner');if(b)b.classList.remove('on');
+  renderObjetivos();renderChips();renderProducts();
+}
+function lerPlanoDaURL(){
+  const q=new URLSearchParams(location.search);
+  const pl=q.get('plano');if(!pl)return;
+  const ids=pl.split(',').map(s=>s.trim()).filter(id=>OBJ(id));
+  if(!ids.length)return;
+  planoFiltro=ids;planoProf=(q.get('prof')||'').trim();
+  const b=document.getElementById('plano-banner'),t=document.getElementById('plano-banner-txt');
+  if(b&&t){
+    const nomes=ids.map(id=>rotulo(OBJ(id))).join(', ');
+    t.innerHTML=(planoProf?`<b>${planoProf}</b> indicou `:'Sua terapeuta indicou ')+
+      `estes objetivos para o seu filho: <b>${nomes}</b>. Os materiais abaixo já estão filtrados por essa indicação.`;
+    b.classList.add('on');
+  }
+  renderObjetivos();
+  if(window.gtag)gtag('event','abriu_plano',{objetivos:ids.join(','),profissional:planoProf});
+}
+
+
 function renderProducts(){
   const q=document.getElementById('search-input').value.toLowerCase().trim();
   const list=materials.filter(p=>{
 const isDIY=(p.category||'').toLowerCase().includes('diy')||(p.tags||[]).some(t=>(t||'').toLowerCase().includes('diy'));
     const mT=activeTab==='todos'||(activeTab==='gratuito'&&p.is_free)||(activeTab==='pago'&&!p.is_free&&!isDIY)||(activeTab==='diy'&&isDIY);
-    const mC=activeChip==='todos'||(TEMA[activeChip]||[activeChip]).some(v=>p.category.toLowerCase().includes(v.toLowerCase()));
+    const mP=!planoFiltro||planoFiltro.some(id=>matchObj(id,p.category));
+    const mC=activeChip==='todos'||matchObj(activeChip,p.category);
     const mQ=!q||p.title.toLowerCase().includes(q)||p.category.toLowerCase().includes(q);
-    return mT&&mC&&mQ;
+    return mT&&mC&&mQ&&mP;
   });
   document.getElementById('no-results').style.display=list.length?'none':'block';
   document.getElementById('products-grid').innerHTML=list.map(p=>`
@@ -3842,7 +4238,7 @@ const isDIY=(p.category||'').toLowerCase().includes('diy')||(p.tags||[]).some(t=
 }
 function filterProducts(){renderProducts();}
 function setTab(t,el){activeTab=t;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));el.classList.add('active');renderProducts();}
-function setChip(c,el){activeChip=c;document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));el.classList.add('active');renderProducts();}
+function setChip(c,el){activeChip=c;document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));if(el)el.classList.add('active');renderProducts();}
 
 /* PRODUTO DIALOG */
 function slugify(text){
@@ -4962,6 +5358,190 @@ async function renderGraficoRepasseMensal(){
 
 /* MATERIAIS ADMIN */
 let editingMaterialId=null;
+
+
+/* ══════════════════ ARTIGOS (admin) ══════════════════ */
+const ART_REPS={
+  por_tras:{rotulo:'O que costuma estar por trás',campos:['titulo','texto'],ph:['Ritmo próprio de desenvolvimento','Explicação em um parágrafo…']},
+  quando:{rotulo:'Quando procurar avaliação',campos:['texto'],ph:['Aos 2 anos: tem menos de 50 palavras…']},
+  profissionais:{rotulo:'Qual profissional avalia isso',campos:['titulo','texto'],ph:['Fonoaudiólogo','O que essa especialidade faz…']},
+  em_casa:{rotulo:'O que dá para fazer em casa',campos:['titulo','texto'],ph:['Narre o que você está fazendo','Como fazer, em um parágrafo…']},
+  faq:{rotulo:'Perguntas frequentes',campos:['pergunta','resposta'],ph:['Pergunta que os pais fazem?','Resposta direta…']}
+};
+let artAtual=null;
+
+function artRep(chave,itens){
+  const c=ART_REPS[chave], el=document.getElementById('art-rep-'+chave);
+  if(!el)return;
+  el.innerHTML=`<div class="field"><label>${c.rotulo}</label><div id="art-lista-${chave}"></div>
+    <button class="btn-save" style="margin-top:8px;background:var(--parchment);color:var(--ink);border:1px solid var(--border-md);padding:8px 16px;font-size:12px" onclick="artAdd('${chave}')">+ Adicionar</button></div>`;
+  const lista=document.getElementById('art-lista-'+chave);
+  (itens&&itens.length?itens:[]).forEach(it=>artLinha(lista,chave,it));
+}
+function artLinha(lista,chave,it){
+  const c=ART_REPS[chave], d=document.createElement('div');
+  d.className='art-item';
+  d.style.cssText='border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:8px;background:var(--cream);position:relative';
+  d.innerHTML=c.campos.map((f,i)=>
+    f==='titulo'||f==='pergunta'
+      ? `<input type="text" data-f="${f}" placeholder="${c.ph[i]}" value="${(it&&it[f]||'').replace(/"/g,'&quot;')}" style="margin-bottom:6px;font-weight:500">`
+      : `<textarea data-f="${f}" placeholder="${c.ph[i]}" style="min-height:70px">${it&&it[f]||''}</textarea>`
+  ).join('')+
+  `<button onclick="this.parentNode.remove()" title="Remover" style="position:absolute;top:8px;right:8px;background:none;border:0;color:var(--ink-lt);font-size:18px;cursor:pointer;line-height:1">×</button>`;
+  lista.appendChild(d);
+}
+function artAdd(chave){artLinha(document.getElementById('art-lista-'+chave),chave,null);}
+function artLer(chave){
+  const c=ART_REPS[chave];
+  return [...document.querySelectorAll('#art-lista-'+chave+' .art-item')].map(d=>{
+    const o={};c.campos.forEach(f=>{o[f]=(d.querySelector(`[data-f="${f}"]`)||{}).value?.trim()||'';});
+    return o;
+  }).filter(o=>Object.values(o).some(v=>v));
+}
+function artLerSimples(chave){return artLer(chave).map(o=>o.texto).filter(Boolean);}
+
+function artObjetivos(sel){
+  const el=document.getElementById('art-objetivos');if(!el)return;
+  sel=sel||[];
+  el.innerHTML=TAXONOMIA.map(o=>
+    `<label style="display:inline-flex;align-items:center;gap:6px;background:${sel.includes(o.id)?'var(--blue-lt)':'#fff'};border:1px solid var(--border);border-radius:50px;padding:7px 14px;cursor:pointer;font-size:13px">
+      <input type="checkbox" value="${o.id}" ${sel.includes(o.id)?'checked':''} onchange="this.parentNode.style.background=this.checked?'var(--blue-lt)':'#fff'">
+      ${o.clin}</label>`).join('');
+}
+function artContaDesc(){
+  const v=document.getElementById('art-desc').value.length;
+  const el=document.getElementById('art-desc-count');
+  el.textContent=v+'/155';
+  el.style.color=v>155?'#DC2626':(v<80?'var(--ink-lt)':'var(--sage)');
+}
+function artMsg(t,cor){
+  const el=document.getElementById('art-msg');
+  el.textContent=t;el.style.color=cor||'var(--sage)';
+  if(t)setTimeout(()=>{if(el.textContent===t)el.textContent='';},6000);
+}
+
+async function loadAdminArtigos(){
+  const tb=document.getElementById('art-tbody');if(!tb)return;
+  const{data,error}=await sb.from('artigos').select('*').order('updated_at',{ascending:false});
+  if(error){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:#DC2626;padding:24px">Erro ao carregar. A tabela <code>artigos</code> já foi criada no Supabase?</td></tr>';return;}
+  if(!data||!data.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--ink-lt);padding:24px;font-weight:300">Nenhum artigo ainda.</td></tr>';return;}
+  tb.innerHTML=data.map(a=>`<tr>
+    <td style="font-weight:500">${a.h1||'(sem título)'}</td>
+    <td style="font-size:12px;color:var(--ink-lt)">/${a.pasta}/${a.slug}</td>
+    <td><span class="${a.status==='publicado'?'badge-free':'badge-paid'}">${a.status==='publicado'?'Publicado':'Rascunho'}</span></td>
+    <td style="font-size:12px">${new Date(a.updated_at).toLocaleDateString('pt-BR')}</td>
+    <td style="white-space:nowrap">
+      <button class="btn-save" style="padding:6px 14px;font-size:12px" onclick="editarArtigo('${a.id}')">Editar</button>
+      ${a.status==='publicado'?`<a class="btn-save" style="padding:6px 14px;font-size:12px;text-decoration:none;background:var(--parchment);color:var(--ink);border:1px solid var(--border-md)" href="/${a.pasta}/${a.slug}" target="_blank">Ver</a>`:''}
+    </td></tr>`).join('');
+}
+
+function novoArtigo(){
+  artAtual=null;
+  document.getElementById('art-editor').style.display='block';
+  document.getElementById('art-editor-titulo').textContent='Novo artigo';
+  ['art-id','art-h1','art-title','art-slug','art-badge','art-desc','art-kw','art-lead','art-quando_nota'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('art-pasta').value='sinais';
+  document.getElementById('art-tempo').value='6 min de leitura';
+  document.getElementById('art-autor').value='Equipe Neuroplasticidar';
+  Object.keys(ART_REPS).forEach(k=>artRep(k,[]));
+  artObjetivos([]);artContaDesc();
+  document.getElementById('art-btn-pub').style.display='none';
+  document.getElementById('art-editor').scrollIntoView({behavior:'smooth'});
+}
+
+async function editarArtigo(id){
+  const{data:a,error}=await sb.from('artigos').select('*').eq('id',id).single();
+  if(error||!a){artMsg('Não consegui abrir esse artigo.','#DC2626');return;}
+  artAtual=a;
+  document.getElementById('art-editor').style.display='block';
+  document.getElementById('art-editor-titulo').textContent='Editando: '+a.h1;
+  const set=(i,v)=>document.getElementById(i).value=v||'';
+  set('art-id',a.id);set('art-h1',a.h1);set('art-title',a.title_seo);set('art-slug',a.slug);
+  set('art-badge',a.badge);set('art-desc',a.descricao);set('art-kw',a.keywords);
+  set('art-autor',a.autor);set('art-tempo',a.tempo_leitura);set('art-lead',a.lead);
+  set('art-quando_nota',a.quando_nota);
+  document.getElementById('art-pasta').value=a.pasta||'sinais';
+  artRep('por_tras',a.por_tras);
+  artRep('quando',(a.quando||[]).map(t=>({texto:t})));
+  artRep('profissionais',a.profissionais);
+  artRep('em_casa',a.em_casa);
+  artRep('faq',a.faq);
+  artObjetivos(a.objetivos||[]);artContaDesc();
+  document.getElementById('art-btn-pub').style.display='';
+  document.getElementById('art-editor').scrollIntoView({behavior:'smooth'});
+}
+function fecharEditorArtigo(){document.getElementById('art-editor').style.display='none';artAtual=null;}
+
+function artPayload(){
+  const g=i=>document.getElementById(i).value.trim();
+  return{
+    h1:g('art-h1'),title_seo:g('art-title')||g('art-h1'),slug:g('art-slug'),
+    pasta:document.getElementById('art-pasta').value,badge:g('art-badge'),
+    descricao:g('art-desc'),keywords:g('art-kw'),autor:g('art-autor'),
+    tempo_leitura:g('art-tempo'),lead:g('art-lead'),quando_nota:g('art-quando_nota'),
+    por_tras:artLer('por_tras'),quando:artLerSimples('quando'),
+    profissionais:artLer('profissionais'),em_casa:artLer('em_casa'),faq:artLer('faq'),
+    objetivos:[...document.querySelectorAll('#art-objetivos input:checked')].map(c=>c.value)
+  };
+}
+
+async function salvarArtigo(){
+  const p=artPayload();
+  if(!p.h1||!p.slug){artMsg('Título e endereço são obrigatórios.','#DC2626');return;}
+  if(!/^[a-z0-9-]+$/.test(p.slug)){artMsg('O endereço só aceita letras minúsculas, números e hífen.','#DC2626');return;}
+  const id=document.getElementById('art-id').value;
+  let r;
+  if(id) r=await sb.from('artigos').update(p).eq('id',id).select().single();
+  else    r=await sb.from('artigos').insert([{...p,status:'rascunho'}]).select().single();
+  if(r.error){artMsg('Erro ao salvar: '+r.error.message,'#DC2626');return;}
+  document.getElementById('art-id').value=r.data.id;
+  artAtual=r.data;
+  document.getElementById('art-btn-pub').style.display='';
+  artMsg('Rascunho salvo.');
+  loadAdminArtigos();
+}
+
+async function chamarPublicar(corpo){
+  const{data:{session}}=await sb.auth.getSession();
+  if(!session){throw new Error('Sua sessão expirou. Entre de novo.');}
+  const r=await fetch('/api/publicar-artigo',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
+    body:JSON.stringify(corpo)
+  });
+  const j=await r.json();
+  if(!r.ok)throw new Error(j.erro||'Falhou');
+  return j;
+}
+
+async function previewArtigo(){
+  await salvarArtigo();
+  const id=document.getElementById('art-id').value;
+  if(!id)return;
+  artMsg('Gerando preview…','var(--ink-lt)');
+  try{
+    const{html}=await chamarPublicar({id,preview:true});
+    const w=window.open('','_blank');
+    w.document.write(html);w.document.close();
+    artMsg('Preview aberto em outra aba.');
+  }catch(e){artMsg('Erro no preview: '+e.message,'#DC2626');}
+}
+
+async function publicarArtigo(){
+  const id=document.getElementById('art-id').value;
+  if(!id){artMsg('Salve o rascunho primeiro.','#DC2626');return;}
+  const p=artPayload();
+  if(!p.descricao){artMsg('A descrição é obrigatória para publicar.','#DC2626');return;}
+  if(!confirm('Publicar no site?\n\nO arquivo vai para o repositório e o site republica em cerca de um minuto.'))return;
+  await salvarArtigo();
+  artMsg('Publicando…','var(--ink-lt)');
+  try{
+    const j=await chamarPublicar({id});
+    artMsg('Publicado. '+j.aviso);
+    loadAdminArtigos();
+  }catch(e){artMsg('Erro ao publicar: '+e.message,'#DC2626');}
+}
 
 async function loadAdminMateriais(){
   const{data}=await sb.from('materials').select('*').order('created_at',{ascending:false});
