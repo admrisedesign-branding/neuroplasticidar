@@ -1110,6 +1110,44 @@ body[data-nav="solido"] #site-main{padding-top:72px}
   #nav .nav-right{gap:6px}
 }
 
+
+/* ─── Página do brinquedo ─── */
+a.brq-card{text-decoration:none;color:inherit;transition:transform .2s,box-shadow .2s}
+a.brq-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(15,14,12,.09)}
+.brq-img{position:relative}
+.brq-selo{position:absolute;top:10px;left:10px;background:#fff;color:var(--ink-md);font-size:11px;font-weight:600;border-radius:50px;padding:5px 10px}
+.bq-trilha{font-size:13.5px;color:var(--ink-lt);margin-bottom:22px}
+.bq-trilha a{color:var(--ink-md);text-decoration:none}
+.bq-trilha a:hover{color:var(--blue)}
+.bq-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:start}
+.bq-foto{aspect-ratio:1/1;background:var(--parchment);border-radius:var(--r);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.bq-foto img{width:100%;height:100%;object-fit:cover}
+.bq-foto .ph{font-size:72px;opacity:.25}
+.bq-obj{display:inline-block;font-size:13.5px;font-weight:600;color:var(--blue);text-decoration:none;margin-bottom:12px}
+.bq-obj:hover{text-decoration:underline}
+.bq-info h1{font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,44px);font-weight:600;letter-spacing:-.02em;line-height:1.12;color:var(--ink);margin:0 0 14px}
+.bq-faixa{font-size:14px;color:var(--ink-md);margin-bottom:22px}
+.bq-desc{font-size:16.5px;color:var(--ink-md);font-weight:300;line-height:1.75;margin-bottom:28px;white-space:pre-line}
+.bq-preco{font-size:30px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.bq-estoque{font-size:13.5px;margin-bottom:22px}
+.bq-estoque.ok{color:var(--sage)}
+.bq-estoque.enc{color:var(--gold-dk,#7C5206)}
+.bq-acoes{display:flex;flex-direction:column;gap:10px;max-width:400px}
+.bq-acoes a{display:block;text-align:center;font-size:15.5px;font-weight:600;padding:16px 24px;border-radius:50px;text-decoration:none}
+.bq-comprar{background:var(--ink);color:#fff}
+.bq-comprar:hover{background:var(--blue)}
+.bq-kit{border:1px solid var(--border-md);color:var(--ink)}
+.bq-kit:hover{border-color:var(--ink)}
+.bq-quem{margin-top:30px;padding-top:24px;border-top:1px solid var(--border);font-size:14px;color:var(--ink-md);line-height:1.7}
+.bq-quem strong{color:var(--ink);font-weight:600}
+.bq-rel{margin-top:72px}
+.bq-rel h2{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,32px);font-weight:600;color:var(--ink);margin:0 0 8px}
+.bq-rel p.s{font-size:15px;color:var(--ink-md);font-weight:300;margin:0 0 24px}
+.bq-vazio{text-align:center;padding:90px 20px}
+.bq-vazio h1{font-family:'Playfair Display',serif;font-size:32px;margin-bottom:12px}
+@media(max-width:860px){.bq-grid{grid-template-columns:1fr;gap:22px}.bq-acoes{max-width:none}.bq-foto{aspect-ratio:4/3}.bq-rel{margin-top:52px}}
+@media(max-width:640px){body[data-nav="solido"] #site-main{padding-top:64px}.bq-trilha{margin-bottom:14px}}
+
 /* Foco visível para teclado */
 a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
