@@ -19,13 +19,13 @@
 <link rel="preconnect" href="https://cifndytwoehbnmjllrml.supabase.co" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<title>Brinquedo — Neuroplasticidar</title>
-<meta name="description" content="Brinquedo pedagógico selecionado por especialistas, organizado pelo objetivo de desenvolvimento que trabalha.">
-<link rel="canonical" href="https://neuroplasticidar.gruposja.com/brinquedo/">
-<meta property="og:title" content="Brinquedo — Neuroplasticidar">
-<meta property="og:description" content="Brinquedo pedagógico selecionado por especialistas, organizado pelo objetivo de desenvolvimento que trabalha.">
-<meta property="og:url" content="https://neuroplasticidar.gruposja.com/brinquedo/">
-<link rel="stylesheet" href="/assets/app.css?v=1790091780">
+<title>Brinquedos pedagógicos e kits — Neuroplasticidar</title>
+<meta name="description" content="Brinquedos pedagógicos para crianças neurodivergentes, organizados por objetivo: sensorial, motor, linguagem, simbólico e mais. Kits prontos ou avulsos.">
+<link rel="canonical" href="https://neuroplasticidar.gruposja.com/brinquedos/">
+<meta property="og:title" content="Brinquedos pedagógicos e kits — Neuroplasticidar">
+<meta property="og:description" content="Brinquedos pedagógicos para crianças neurodivergentes, organizados por objetivo: sensorial, motor, linguagem, simbólico e mais. Kits prontos ou avulsos.">
+<meta property="og:url" content="https://neuroplasticidar.gruposja.com/brinquedos/">
+<link rel="stylesheet" href="/assets/app.css?v=1790096018">
 <style>
 .brq-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
 .brq-img{aspect-ratio:4/3;background:var(--parchment);display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -57,7 +57,7 @@
     <a href="/admin/" id="nav-painel" style="display:none">Painel</a>
     <div id="nav-user">
       <div class="av" id="nav-av">U</div>
-      <span class="un" id="nav-un">Usuário</span>
+      <a href="/conta/" class="un" id="nav-un" style="text-decoration:none">Usuário</a>
       <button class="btn-logout" onclick="logout()">Sair</button>
     </div>
     <button class="btn-nav-primary" id="nav-login-btn" onclick="openAuth()">Entrar</button>
@@ -70,14 +70,64 @@
   <a href="/brinquedos/">Brinquedos</a>
   <a href="/orientacao/">Orientação</a>
   <a href="/sinais/">Conteúdos</a>
+  <a href="/conta/">Minha conta</a>
   <a href="/profissionais/" class="nav-prof">Para profissionais</a>
 </div>
 
 <div id="site-main">
 
-<section class="bloco creme" style="padding-top:44px">
-  <div class="bloco-in" id="bq-raiz">
-    <p style="color:var(--ink-lt);font-weight:300">Carregando brinquedo…</p>
+<header class="pg-topo">
+  <div class="bloco-in">
+    <h1>Brinquedos e kits</h1>
+    <p>Brinquedos pedagógicos organizados pelo objetivo que cada um desenvolve. Escolha um kit pronto ou busque um brinquedo avulso.</p>
+    <div class="busca-pg" role="search">
+      <label for="brq-busca" style="position:absolute;left:-9999px">Buscar brinquedo</label>
+      <input type="search" id="brq-busca" placeholder="Ex.: sensorial, encaixe, faz de conta..." oninput="filtrarBrq()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" name="busca-np" data-form-type="other">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+    </div>
+  </div>
+</header>
+<section id="kits">
+  <div class="kits-inner">
+    <div class="kits-head">
+      <p class="eyebrow">Kits de brinquedos</p>
+      <h2>O brinquedo certo para a necessidade certa.</h2>
+      <p>Cada kit é montado conforme o perfil do seu filho — brinquedos com propósito, selecionados por especialistas, entregues prontos para usar.</p>
+    </div>
+    <div class="kits-layout">
+      <div class="bag-stage">
+        <!-- Vídeo da bolsa — substitua pelo seu vídeo real -->
+        <div class="bag-video-wrap" id="bag-wrap">
+          <video
+            muted loop playsinline
+            disablepictureinpicture
+            disableremoteplayback
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none"
+            preload="none"
+            id="bag-video">
+          </video>
+          <div class="bag-video-label">
+            <div class="bvl-name">Kits Neuroplasticidar</div>
+            <div class="bvl-area">Brinquedos pedagógicos personalizados</div>
+          </div>
+        </div>
+        <div class="bag-dots" style="display:none" id="bag-dots"></div>
+      </div>
+      <div>
+        <div class="kits-list" id="kits-list"></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="catalogo-brq" class="bloco claro">
+  <div class="bloco-in">
+    <div class="bloco-top"><div>
+      <h2>Brinquedos avulsos</h2>
+      <p>Cada brinquedo indica o objetivo que trabalha. Filtre pelo que a criança precisa agora.</p>
+    </div></div>
+    <div id="brq-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px"></div>
+    <p id="brq-info" style="font-size:13.5px;color:var(--ink-lt);font-weight:300;margin-bottom:16px"></p>
+    <div id="brq-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px"></div>
   </div>
 </section>
 
@@ -100,92 +150,61 @@
 </div>
 <a href="https://wa.me/5592991479457?text=Oi!%20Vim%20pelo%20site%20da%20Neuroplasticidar" target="_blank" rel="noopener" class="wa-float" aria-label="Falar no WhatsApp" onclick="if(window.gtag)gtag('event','whatsapp_flutuante')"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.04 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.26.59 4.46 1.72 6.4L3.2 28.8l6.56-1.72a12.74 12.74 0 0 0 6.28 1.6h.01c7.06 0 12.8-5.74 12.8-12.8S23.1 3.2 16.04 3.2zm0 23.04h-.01c-1.9 0-3.77-.51-5.4-1.48l-.39-.23-4.02 1.05 1.07-3.92-.25-.4a10.6 10.6 0 0 1-1.62-5.66c0-5.87 4.78-10.64 10.65-10.64 2.84 0 5.51 1.11 7.52 3.12a10.57 10.57 0 0 1 3.11 7.53c0 5.87-4.78 10.63-10.66 10.63zm5.84-7.97c-.32-.16-1.89-.93-2.19-1.04-.29-.11-.5-.16-.71.16-.21.32-.82 1.03-1 1.24-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.89-1.78-2.21-.19-.32-.02-.5.14-.66.15-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.71-1.72-.98-2.35-.26-.62-.52-.53-.71-.54l-.61-.01c-.21 0-.56.08-.85.4-.29.32-1.11 1.09-1.11 2.65s1.14 3.08 1.29 3.29c.16.21 2.24 3.42 5.43 4.8.76.33 1.35.52 1.81.67.76.24 1.45.21 2 .13.61-.09 1.89-.77 2.15-1.52.27-.75.27-1.38.19-1.52-.08-.13-.29-.21-.61-.37z"/></svg></a>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/assets/partials.js?v=1790091780"></script>
-<script src="/assets/app.js?v=1790091780"></script>
+<script src="/assets/partials.js?v=1790096018"></script>
+<script src="/assets/app.js?v=1790096018"></script>
 <script>
-(function(){
-  const id=new URLSearchParams(location.search).get('id');
-  const raiz=document.getElementById('bq-raiz');
-  const WA='5592991479457';
-  const brl=v=>'R$ '+Number(v).toFixed(2).replace('.',',');
-  const objDe=cat=>TAXONOMIA.find(o=>matchObj(o.id,cat||''));
-
-  function vazio(){
-    raiz.innerHTML=`<div class="bq-vazio"><h1>Brinquedo não encontrado</h1>
-      <p style="color:var(--ink-md);font-weight:300;margin-bottom:26px">Ele pode ter saído do catálogo. Veja os brinquedos disponíveis.</p>
-      <a class="btn-claro" href="/brinquedos/">Ver brinquedos</a></div>`;
-  }
-  if(!id){vazio();return;}
-
-  async function carregar(){
-    const{data:b,error}=await sb.from('brinquedos').select('*').eq('id',id).single();
-    if(error||!b){vazio();return;}
-    const o=objDe(b.categoria);
-    const semEstoque=b.estoque_atual!=null&&Number(b.estoque_atual)<=0;
-    const preco=b.preco_venda?brl(b.preco_venda):null;
-    const msg=encodeURIComponent(`Oi! Tenho interesse no brinquedo "${b.nome}"${preco?' ('+preco+')':''} que vi no site: ${location.href}`);
-
-    document.title=b.nome+' — Brinquedos Neuroplasticidar';
-    const md=document.querySelector('meta[name="description"]');
-    if(md)md.setAttribute('content',(b.descricao||'Brinquedo pedagógico selecionado por especialistas.').slice(0,155));
-
-    raiz.innerHTML=`
-      <p class="bq-trilha"><a href="/brinquedos/">Brinquedos</a>${o?` &nbsp;/&nbsp; <a href="/materiais/?plano=${o.id}">${o.fam}</a>`:''}</p>
-      <div class="bq-grid">
-        <div class="bq-foto">${b.foto_url?`<img src="${b.foto_url}" alt="${(b.nome||'').replace(/"/g,'')}">`:'<span class="ph">🧸</span>'}</div>
-        <div class="bq-info">
-          ${o?`<a class="bq-obj" href="/materiais/?plano=${o.id}">${o.fam}</a>`:''}
-          <h1>${b.nome||''}</h1>
-          ${b.faixa_etaria?`<p class="bq-faixa">Indicado para ${b.faixa_etaria}</p>`:''}
-          ${b.descricao?`<p class="bq-desc">${b.descricao}</p>`:''}
-          ${preco?`<p class="bq-preco">${preco}</p>`:''}
-          <p class="bq-estoque ${semEstoque?'enc':'ok'}">${semEstoque?'Sob encomenda — confirmamos o prazo pelo WhatsApp':'Disponível para envio'}</p>
-          <div class="bq-acoes">
-            <a class="bq-comprar" href="https://wa.me/${WA}?text=${msg}" target="_blank" rel="noopener" id="bq-btn">Comprar pelo WhatsApp</a>
-            <a class="bq-kit" href="/brinquedos/#kits">Ver os kits com este objetivo</a>
-          </div>
-          ${o?`<div class="bq-quem"><strong>Objetivo:</strong> ${o.clin}${o.profs&&o.profs.length?`<br><strong>Trabalhado por:</strong> ${o.profs.join(', ')}`:''}</div>`:''}
+/* ══ Catálogo de brinquedos ══ */
+let BRQ=[], brqChip='todos';
+const nrm=s=>(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+function buscaBrq(t){document.getElementById('brq-busca').value=t;filtrarBrq();
+  document.getElementById('catalogo-brq').scrollIntoView({behavior:'smooth'});}
+function setBrqChip(id,el){brqChip=id;
+  document.querySelectorAll('#brq-chips .chip').forEach(c=>c.classList.remove('active'));
+  if(el)el.classList.add('active'); filtrarBrq();}
+function renderBrqChips(){
+  const c=document.getElementById('brq-chips'); if(!c)return;
+  const lista=TAXONOMIA.filter(o=>!o.soFamilia);
+  c.innerHTML='<button class="chip active" onclick="setBrqChip(\'todos\',this)">Todos os objetivos</button>'+
+    lista.map(o=>`<button class="chip" onclick="setBrqChip('${o.id}',this)">${o.fam}</button>`).join('');
+}
+function filtrarBrq(){
+  const q=nrm((document.getElementById('brq-busca')||{}).value||'');
+  const r=BRQ.filter(b=>{
+    const cat=b.categoria||'';
+    const txt=nrm([b.nome,b.descricao,cat,(b.tags||[]).join(' ')].filter(Boolean).join(' '));
+    return (!q||txt.includes(q)) && (brqChip==='todos'||matchObj(brqChip,cat));
+  });
+  const g=document.getElementById('brq-grid'), info=document.getElementById('brq-info');
+  info.textContent = r.length? `${r.length} ${r.length===1?'brinquedo':'brinquedos'}` : '';
+  g.innerHTML = r.length ? r.map(b=>`
+    <a class="brq-card" href="/brinquedo/?id=${b.id}">
+      <div class="brq-img">${(b.estoque_atual!=null&&Number(b.estoque_atual)<=0)?'<span class="brq-selo">Sob encomenda</span>':''}${b.foto_url?`<img src="${b.foto_url}" alt="${(b.nome||'').replace(/"/g,'')}" loading="lazy">`:'<span class="ph">🧸</span>'}</div>
+      <div class="brq-body">
+        <p class="brq-cat">${b.categoria||'Geral'}</p>
+        <h3>${b.nome||''}</h3>
+        <p class="d">${(b.descricao||'').substring(0,90)}</p>
+        <div class="brq-pe">
+          <span class="brq-preco">${b.preco_venda?'R$ '+Number(b.preco_venda).toFixed(2).replace('.',','):'Sob consulta'}</span>
+          ${b.faixa_etaria?`<span class="brq-faixa">${b.faixa_etaria}</span>`:''}
         </div>
       </div>
-      <div class="bq-rel" id="bq-mat" style="display:none">
-        <h2>Materiais para o mesmo objetivo</h2>
-        <p class="s">Para continuar o trabalho com a criança entre uma brincadeira e outra.</p>
-        <div class="vitrine" id="bq-mat-grid"></div>
-      </div>
-      <div class="bq-rel" id="bq-outros" style="display:none">
-        <h2>Outros brinquedos para ${o?o.fam.toLowerCase():'este objetivo'}</h2>
-        <div id="bq-outros-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;margin-top:22px"></div>
-      </div>`;
-
-    document.getElementById('bq-btn').addEventListener('click',()=>{
-      if(window.gtag)gtag('event','comprar_brinquedo_whatsapp',{item_id:b.id,item_name:b.nome,value:b.preco_venda||0});
-    });
-    if(window.gtag)gtag('event','view_item',{item_id:b.id,item_name:b.nome,item_category:b.categoria});
-
-    // materiais do mesmo objetivo (o núcleo carrega os materiais em paralelo)
-    if(o){
-      let t=0; const iv=setInterval(()=>{
-        if(materials.length||++t>40){clearInterval(iv);
-          const l=materials.filter(p=>matchObj(o.id,p.category)).slice(0,4);
-          if(l.length){document.getElementById('bq-mat-grid').innerHTML=l.map(cardMaterial).join('');
-            document.getElementById('bq-mat').style.display='block';}
-        }},150);
-      // outros brinquedos do mesmo objetivo
-      const{data:todos}=await sb.from('brinquedos').select('*').order('created_at',{ascending:false});
-      const out=(todos||[]).filter(x=>x.id!=b.id&&matchObj(o.id,x.categoria||'')).slice(0,4);
-      if(out.length){
-        document.getElementById('bq-outros-grid').innerHTML=out.map(x=>`
-          <a class="brq-card" href="/brinquedo/?id=${x.id}">
-            <div class="brq-img">${x.foto_url?`<img src="${x.foto_url}" alt="" loading="lazy">`:'<span class="ph">🧸</span>'}</div>
-            <div class="brq-body"><h3>${x.nome||''}</h3>
-              <div class="brq-pe"><span class="brq-preco">${x.preco_venda?brl(x.preco_venda):'Sob consulta'}</span></div></div>
-          </a>`).join('');
-        document.getElementById('bq-outros').style.display='block';
-      }
-    }
+    </a>`).join('')
+    : `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--ink-lt)">
+         <p style="font-family:'Playfair Display',serif;font-size:21px;color:var(--ink-md);margin-bottom:6px">Nada encontrado</p>
+         <p style="font-size:14px;font-weight:300">Tente outra palavra ou limpe o filtro.</p></div>`;
+}
+async function carregarBrq(){
+  try{
+    const{data,error}=await sb.from('brinquedos').select('*').order('created_at',{ascending:false});
+    if(error)throw error;
+    BRQ=data||[]; renderBrqChips(); filtrarBrq();
+  }catch(e){
+    document.getElementById('brq-info').textContent='';
+    document.getElementById('brq-grid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--ink-lt);font-weight:300">Não consegui carregar os brinquedos agora.</div>';
   }
-  carregar();
-})();
-</script>
+}
+document.addEventListener('DOMContentLoaded',()=>{setTimeout(carregarBrq,300);});
+
+if(typeof renderKitsList==='function')renderKitsList();</script>
 </body>
 </html>
