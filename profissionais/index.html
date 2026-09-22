@@ -1,308 +1,198 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-0XB74DEMLS"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-0XB74DEMLS');</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-0XB74DEMLS');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Para profissionais: material por objetivo de intervenção &mdash; Neuroplasticidar</title>
-<meta name="description" content="Acervo de materiais e brinquedos organizado por objetivo de intervenção. Indique para a família com um link, compre para a sua sala e receba por indicação convertida.">
-<meta name="keywords" content="material para fonoaudiólogo, material terapeuta ocupacional, material terapia ABA, brinquedo pedagógico para clínica, material neuropsicopedagogia, recursos para acompanhante terapêutico">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Para profissionais &mdash; Neuroplasticidar">
-<meta property="og:description" content="Material por objetivo de intervenção. Indique, compre para a sua sala, revenda.">
-<meta property="og:url" content="https://neuroplasticidar.gruposja.com/profissionais/">
-<meta property="og:image" content="https://neuroplasticidar.gruposja.com/dino-logo.png">
-<meta property="og:locale" content="pt_BR">
-<link rel="canonical" href="https://neuroplasticidar.gruposja.com/profissionais/">
+
+<link rel="icon" type="image/png" href="/dino-logo.png">
+<link rel="apple-touch-icon" href="/dino-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cifndytwoehbnmjllrml.supabase.co" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script type="application/ld+json">[{"@context": "https://schema.org", "@type": "WebPage", "name": "Para profissionais — Neuroplasticidar", "description": "Acervo de materiais e brinquedos organizado por objetivo de intervenção, para fonoaudiólogos, terapeutas ocupacionais, fisioterapeutas, psicólogos, neuropsicopedagogos, supervisores ABA e acompanhantes terapêuticos.", "inLanguage": "pt-BR", "mainEntityOfPage": "https://neuroplasticidar.gruposja.com/profissionais/"}, {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Início", "item": "https://neuroplasticidar.gruposja.com/"}, {"@type": "ListItem", "position": 2, "name": "Para profissionais", "item": "https://neuroplasticidar.gruposja.com/profissionais/"}]}]</script>
-<style>
-*,::before,::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --ink:#0F0E0C;--ink-md:#44403C;--ink-lt:#A8A29E;
-  --blue:#1A3FBF;--blue-dk:#122E9A;--blue-lt:#EEF2FF;
-  --sage:#2E6B3E;--sage-lt:#D1FAE5;
-  --gold:#D4900A;--gold-lt:#FEF3C7;
-  --terra:#B45309;--cream:#FAF9F6;--parchment:#F5F2EA;
-  --border:#E7E5E0;--shadow:0 4px 24px rgba(0,0,0,0.06);
-  --r:12px;
-}
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;line-height:1.7}
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Para profissionais — Neuroplasticidar</title>
+<meta name="description" content="Acervo de materiais e brinquedos por objetivo de intervenção. Monte uma indicação e envie à família com um link.">
+<link rel="canonical" href="https://neuroplasticidar.gruposja.com/profissionais/">
+<meta property="og:title" content="Para profissionais — Neuroplasticidar">
+<meta property="og:description" content="Acervo de materiais e brinquedos por objetivo de intervenção. Monte uma indicação e envie à família com um link.">
+<meta property="og:url" content="https://neuroplasticidar.gruposja.com/profissionais/">
+<link rel="stylesheet" href="/assets/app.css?v=1790096018">
 
-/* Header */
-.blog-nav{background:#fff;border-bottom:1px solid var(--border);padding:18px 24px;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);background:rgba(255,255,255,0.95)}
-.blog-nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.blog-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.blog-logo img{width:36px;height:36px;border-radius:50%}
-.blog-logo span{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--blue)}
-.blog-nav-links{display:flex;gap:24px;align-items:center}
-.blog-nav-links a{color:var(--ink-md);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
-.blog-nav-links a:hover{color:var(--blue)}
-.btn-back{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;padding:8px 16px;border-radius:50px;text-decoration:none;font-size:13px;font-weight:500;transition:all .2s}
-.btn-back:hover{background:var(--blue-dk)}
-
-/* Hero do artigo */
-.article-hero{padding:60px 24px 40px;background:linear-gradient(180deg,#fff 0%,var(--cream) 100%);text-align:center}
-.article-hero-inner{max-width:780px;margin:0 auto}
-.category-badge{display:inline-block;padding:6px 14px;background:var(--blue-lt);color:var(--blue);border-radius:50px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px}
-.article-title{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,46px);font-weight:700;color:var(--ink);line-height:1.15;margin-bottom:18px;letter-spacing:-0.01em}
-.article-subtitle{font-size:clamp(15px,2vw,18px);color:var(--ink-md);font-weight:300;line-height:1.6;max-width:640px;margin:0 auto 24px}
-.article-meta{display:flex;justify-content:center;align-items:center;gap:18px;font-size:13px;color:var(--ink-lt);flex-wrap:wrap}
-.article-meta span{display:inline-flex;align-items:center;gap:5px}
-
-/* Conteúdo */
-.article-body{max-width:720px;margin:0 auto;padding:20px 24px 60px}
-.article-body h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--ink);margin:40px 0 16px;line-height:1.25;letter-spacing:-0.01em}
-.article-body h3{font-family:'Playfair Display',serif;font-size:21px;font-weight:600;color:var(--ink);margin:32px 0 12px;line-height:1.3}
-.article-body p{font-size:17px;color:var(--ink-md);margin-bottom:18px;line-height:1.75}
-.article-body ul,.article-body ol{margin:0 0 22px 28px;color:var(--ink-md);font-size:17px}
-.article-body li{margin-bottom:8px;line-height:1.7}
-.article-body strong{color:var(--ink);font-weight:600}
-.article-body em{font-style:italic}
-.article-body a{color:var(--blue);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px}
-.article-body a:hover{color:var(--blue-dk)}
-.article-body blockquote{border-left:3px solid var(--blue);padding:14px 22px;margin:24px 0;background:var(--blue-lt);color:var(--ink-md);font-style:italic;border-radius:0 8px 8px 0}
-.callout{background:var(--gold-lt);border-radius:var(--r);padding:20px 22px;margin:28px 0;border:1px solid #F59E0B33}
-.callout-title{font-weight:700;color:#78350F;margin-bottom:8px;font-size:14px;text-transform:uppercase;letter-spacing:0.5px}
-.callout p{margin:0;color:#78350F;font-size:15px}
-
-/* CTA final */
-.article-cta{background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dk) 100%);color:#fff;padding:40px 28px;border-radius:16px;text-align:center;margin:50px auto;max-width:680px}
-.article-cta h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:10px}
-.article-cta p{font-size:15px;color:rgba(255,255,255,0.85);font-weight:300;margin-bottom:20px;max-width:480px;margin-left:auto;margin-right:auto}
-.article-cta .btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.article-cta a{display:inline-block;padding:13px 26px;border-radius:50px;text-decoration:none;font-weight:600;font-size:14px;transition:all .2s}
-.cta-primary{background:#fff;color:var(--blue)}
-.cta-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.15)}
-.cta-secondary{background:rgba(255,255,255,0.12);color:#fff;border:1.5px solid rgba(255,255,255,0.3)}
-.cta-secondary:hover{background:rgba(255,255,255,0.2)}
-
-/* Artigos relacionados */
-.related{max-width:1100px;margin:0 auto;padding:0 24px 60px}
-.related h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:24px}
-.related-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
-.related-card{background:#fff;border-radius:var(--r);padding:22px;border:1px solid var(--border);text-decoration:none;transition:all .25s;display:block}
-.related-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--blue-lt)}
-.related-cat{font-size:10px;color:var(--blue);font-weight:600;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px}
-.related-card h3{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:var(--ink);line-height:1.35;margin-bottom:6px}
-.related-card p{font-size:13px;color:var(--ink-lt);line-height:1.5}
-
-/* Footer */
-.blog-footer{background:#fff;border-top:1px solid var(--border);padding:40px 24px;text-align:center;color:var(--ink-lt);font-size:13px}
-.blog-footer a{color:var(--blue);text-decoration:none}
-
-@media(max-width:640px){
-  .blog-nav-links{display:none}
-  .article-hero{padding:40px 20px 28px}
-  .article-body{padding:14px 20px 40px}
-  .article-body p,.article-body ul,.article-body ol{font-size:16px}
-}
-
-.pf-hero{background:var(--ink);color:#fff;padding:96px 24px 84px}
-.pf-hero-in{max-width:860px;margin:0 auto}
-.pf-eyebrow{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
-.pf-hero h1{font-family:'Playfair Display',serif;font-size:clamp(32px,5.4vw,52px);font-weight:600;line-height:1.14;letter-spacing:-.025em;margin-bottom:20px}
-.pf-hero h1 em{font-style:italic;color:var(--gold)}
-.pf-hero p{font-size:17.5px;font-weight:300;color:rgba(255,255,255,.66);line-height:1.75;max-width:620px}
-.pf-hero .acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
-.pf-hero .acts a{font-size:14.5px;font-weight:600;padding:14px 26px;border-radius:50px;text-decoration:none;border:1px solid rgba(255,255,255,.28);color:#fff;transition:all .2s}
-.pf-hero .acts a.pri{background:var(--gold);border-color:var(--gold);color:#231803}
-.pf-hero .acts a:hover{opacity:.88}
-.sec{max-width:1000px;margin:0 auto;padding:84px 24px}
-.sec h2{font-family:'Playfair Display',serif;font-size:clamp(26px,3.6vw,38px);font-weight:600;letter-spacing:-.02em;line-height:1.2;margin-bottom:16px;color:var(--ink)}
-.sec .sub{font-size:16.5px;color:var(--ink-md);font-weight:300;line-height:1.75;max-width:620px;margin-bottom:44px}
-.tres{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-.tres > div{background:#fff;padding:32px 28px}
-.tres .num{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--gold);margin-bottom:14px}
-.tres h3{font-family:'Playfair Display',serif;font-size:21px;font-weight:600;margin-bottom:10px;color:var(--ink)}
-.tres p{font-size:15px;font-weight:300;color:var(--ink-md);line-height:1.7;margin-bottom:18px}
-.tres ul{list-style:none;margin:0;padding:0}
-.tres li{font-size:14px;font-weight:300;color:var(--ink-md);padding:7px 0 7px 16px;position:relative;line-height:1.6}
-.tres li:before{content:'';position:absolute;left:0;top:15px;width:5px;height:5px;border-radius:50%;background:var(--gold)}
-.esp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:2px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-.esp-grid > div{background:#fff;padding:22px 24px}
-.esp-grid h3{font-size:15.5px;font-weight:600;color:var(--ink);margin-bottom:6px}
-.esp-grid p{font-size:14px;font-weight:300;color:var(--ink-md);line-height:1.6;margin:0}
-.faixa{background:var(--parchment);padding:0}
-.form-wrap{max-width:1000px;margin:0 auto;padding:84px 24px;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-.form-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:32px}
-.perfil-tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px}
-.perfil-tab{background:var(--cream);border:1px solid var(--border);border-radius:50px;padding:9px 15px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--ink-md);cursor:pointer;transition:all .2s}
-.perfil-tab.active{background:var(--blue);border-color:var(--blue);color:#fff}
-.fld{margin-bottom:14px}
-.fld label{display:block;font-size:12px;font-weight:500;color:var(--ink-md);margin-bottom:6px}
-.fld input,.fld textarea,.fld select{width:100%;background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:14.5px;color:var(--ink);outline:none;transition:border-color .2s}
-.fld input:focus,.fld textarea:focus{border-color:var(--blue)}
-.fld textarea{min-height:88px;resize:vertical}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.btn-env{width:100%;background:var(--sage);color:#fff;border:0;border-radius:50px;padding:15px;font-family:'DM Sans',sans-serif;font-size:14.5px;font-weight:600;cursor:pointer;transition:background .2s;margin-top:6px}
-.btn-env:hover{background:#4a6b4a}
-.form-msg{font-size:14px;margin-top:12px;text-align:center;min-height:20px}
-@media(max-width:900px){.tres{grid-template-columns:1fr}.form-wrap{grid-template-columns:1fr;gap:34px}}
-</style>
 </head>
-<body>
-
-<nav class="blog-nav">
-  <div class="blog-nav-inner">
-    <a href="/profissionais/" class="blog-logo"><img src="/dino-logo.png" alt="Neuroplasticidar"><span>Neuroplasticidar <em style="font-style:normal;font-weight:400;color:var(--ink-lt);font-size:13px">· profissionais</em></span></a>
-    <div class="blog-nav-links">
-      <a href="#formas">Como funciona</a>
-      <a href="#especialidades">Especialidades</a>
-      <a href="/#objetivos">Acervo</a>
-      <a href="#cadastro">Cadastro</a>
+<body data-nav="solido">
+<nav id="nav">
+  <a href="/" class="nav-logo" aria-label="Neuroplasticidar — página inicial">
+    <img src="/assets/dino-icon.png" alt="" style="width:44px;height:44px;object-fit:contain;flex-shrink:0">
+    <img src="/assets/dino-wordmark.png" alt="Neuroplasticidar" class="logo-img-text" style="height:20px;object-fit:contain">
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/materiais/">Materiais</a></li>
+    <li><a href="/brinquedos/">Brinquedos</a></li>
+    <li><a href="/orientacao/">Orientação</a></li>
+    <li><a href="/sinais/">Conteúdos</a></li>
+    <li><a href="/profissionais/" class="nav-prof" aria-current="page">Para profissionais</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="/admin/" id="nav-painel" style="display:none">Painel</a>
+    <div id="nav-user">
+      <div class="av" id="nav-av">U</div>
+      <a href="/conta/" class="un" id="nav-un" style="text-decoration:none">Usuário</a>
+      <button class="btn-logout" onclick="logout()">Sair</button>
     </div>
-    <a href="/" class="btn-back">&larr; Área da família</a>
+    <button class="btn-nav-primary" id="nav-login-btn" onclick="openAuth()">Entrar</button>
+    <button class="nav-burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mob-menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
+<div class="mob-menu" id="mob-menu">
+  <a href="/">Home</a>
+  <a href="/materiais/">Materiais</a>
+  <a href="/brinquedos/">Brinquedos</a>
+  <a href="/orientacao/">Orientação</a>
+  <a href="/sinais/">Conteúdos</a>
+  <a href="/conta/">Minha conta</a>
+  <a href="/profissionais/" class="nav-prof">Para profissionais</a>
+</div>
+
+<div id="site-main">
 
 <header class="pf-hero">
-  <div class="pf-hero-in">
-    <p class="pf-eyebrow">Para quem prescreve e para quem aplica</p>
+  <div class="bloco-in">
     <h1>Você monta o plano. A gente resolve <em>o resto da lista.</em></h1>
-    <p>Você define o objetivo da intervenção e a família precisa transformar isso em compra. Hoje ela sai procurando sozinha, pergunta em grupo de WhatsApp e volta com o brinquedo errado. Aqui ela chega com a sua indicação já pronta.</p>
-    <div class="acts">
-      <a class="pri" href="#cadastro">Quero fazer parte</a>
-      <a href="/#objetivos">Ver o acervo por objetivo</a>
+    <p>Um acervo organizado por objetivo de intervenção, para você indicar à família exatamente o que ela precisa — sem ela sair procurando sozinha e voltar com o material errado.</p>
+    <div class="pf-acts">
+      <a class="pri" href="#indicar">Montar uma indicação</a>
+      <a href="#cadastro">Quero fazer parte</a>
     </div>
   </div>
 </header>
 
-<section class="sec" id="formas">
-  <h2>Três formas de trabalhar com a gente</h2>
-  <p class="sub">Você escolhe a que faz sentido para o seu atendimento. Nenhuma delas exige exclusividade nem estoque no seu nome.</p>
-  <div class="tres">
-    <div>
-      <p class="num">01</p>
-      <h3>Indique</h3>
-      <p>Selecione os objetivos do plano no acervo, gere um link com o seu nome e envie para a família. Ela abre e vê só o que serve para aquela criança.</p>
-      <ul>
-        <li>Link único, com os objetivos filtrados</li>
-        <li>Seu nome aparece para a família</li>
-        <li>Você acompanha o que foi indicado</li>
-      </ul>
-    </div>
-    <div>
-      <p class="num">02</p>
-      <h3>Compre para a sua sala</h3>
-      <p>Materiais e kits para usar em atendimento, com condição para clínica, consultório e escola &mdash; comprando por objetivo, não por caixa fechada.</p>
-      <ul>
-        <li>Kits montados por objetivo</li>
-        <li>Condição para volume e instituição</li>
-        <li>Digitais com licença de uso profissional</li>
-      </ul>
-    </div>
-    <div>
-      <p class="num">03</p>
-      <h3>Revenda</h3>
-      <p>Para quem já vende material para as próprias famílias atendidas: trabalhe com o nosso acervo e receba por cada indicação convertida.</p>
-      <ul>
-        <li>Comissão por indicação que vira compra</li>
-        <li>Sem estoque e sem logística no seu nome</li>
-        <li>Material de apoio para orientar a família</li>
-      </ul>
+<section class="bloco claro">
+  <div class="bloco-in">
+    <div class="bloco-top"><div><h2>Como trabalhar com a gente</h2>
+      <p>Nenhuma das formas exige exclusividade, estoque ou cadastro para começar.</p></div></div>
+    <div class="pf-tres">
+      <div><h3>Indique</h3><p>Marque os objetivos do plano, coloque seu nome e envie o link para a família. Ela abre o acervo já filtrado, com a sua indicação no topo.</p></div>
+      <div><h3>Use em atendimento</h3><p>Materiais para imprimir e brinquedos para a sua sala, escolhidos pelo objetivo que você trabalha — não por caixa fechada.</p></div>
+      <div><h3>Crie material com a gente</h3><p>Se você desenvolve atividades próprias, elas podem entrar no acervo com seu nome, depois de passar pela nossa curadoria.</p></div>
     </div>
   </div>
 </section>
 
-<div class="faixa">
-<section class="sec" id="especialidades">
-  <h2>Organizado pela sua lógica, não pelo diagnóstico</h2>
-  <p class="sub">Todo o acervo é indexado por objetivo de intervenção. Você procura pelo que trabalha, não por faixa etária nem por laudo.</p>
-  <div class="esp-grid">
-    <div><h3>Fonoaudiologia</h3><p>Linguagem e fala, comunicação e aquisição de vocabulário.</p></div>
-    <div><h3>Terapia ocupacional</h3><p>Motora fina, integração sensorial, atividades de vida diária e brincar simbólico.</p></div>
-    <div><h3>Fisioterapia</h3><p>Coordenação motora grossa, equilíbrio e postura.</p></div>
-    <div><h3>Psicologia</h3><p>Emoções e sentimentos, regulação e habilidades sociais.</p></div>
-    <div><h3>Neuropsicopedagogia</h3><p>Pré-alfabetização, alfabetização, vocabulário e reforçadores lúdicos.</p></div>
-    <div><h3>Supervisão ABA</h3><p>Reforçadores, pareamento e material para os objetivos do plano.</p></div>
-    <div><h3>Acompanhante terapêutico</h3><p>Material imprimível pronto para a sessão do dia a dia.</p></div>
-  </div>
-</section>
-</div>
-
-<section class="sec" id="cadastro" style="padding-bottom:0">
-  <h2>Vamos conversar</h2>
-  <p class="sub">Deixe seu contato e a gente responde para entender como você atende e o que faz sentido para o seu caso.</p>
-</section>
-
-<div class="form-wrap">
-  <div>
-    <h3 style="font-family:'Playfair Display',serif;font-size:23px;font-weight:600;margin-bottom:14px;color:var(--ink)">O acervo se constrói com quem atende</h3>
-    <p style="font-size:15.5px;font-weight:300;color:var(--ink-md);line-height:1.75;margin-bottom:16px">Queremos construir o melhor acervo de materiais para crianças neurodivergentes do Brasil &mdash; com embasamento, e feito por quem está na sala todo dia.</p>
-    <p style="font-size:15.5px;font-weight:300;color:var(--ink-md);line-height:1.75">Se você cria material, atende em clínica, coordena uma escola ou trabalha como acompanhante terapêutico, conta pra gente quem é você.</p>
-  </div>
-
-  <div class="form-card">
-    <h3 style="font-size:17px;font-weight:600;margin-bottom:4px;color:var(--ink)">Eu sou...</h3>
-    <p style="font-size:13.5px;color:var(--ink-lt);font-weight:300;margin-bottom:18px">Escolha o que mais combina com você.</p>
-
-    <div class="perfil-tabs">
-      <button type="button" class="perfil-tab active" data-perfil="criador" onclick="setPerfil(this)">Crio materiais</button>
-      <button type="button" class="perfil-tab" data-perfil="clinica" onclick="setPerfil(this)">Clínica / consultório</button>
-      <button type="button" class="perfil-tab" data-perfil="escola" onclick="setPerfil(this)">Escola / instituição</button>
-      <button type="button" class="perfil-tab" data-perfil="at" onclick="setPerfil(this)">Acompanhante terapêutico</button>
+<section class="bloco creme" id="indicar">
+  <div class="bloco-in">
+    <div class="bloco-top"><div><h2>Montar uma indicação</h2>
+      <p>Marque os objetivos do plano da criança. O link leva a família direto aos materiais desses objetivos.</p></div></div>
+    <div class="ind-objs" id="ind-objs"></div>
+    <div class="ind-linha">
+      <input type="text" id="ind-nome" placeholder="Seu nome, como a família conhece você" autocomplete="name">
+      <button id="ind-btn" disabled>Gerar e copiar link</button>
     </div>
+    <p class="ind-res" id="ind-res" aria-live="polite"></p>
+  </div>
+</section>
 
-    <form id="frm" onsubmit="enviar(event)">
-      <input type="hidden" id="perfil" value="criador">
-      <div class="fld"><label for="nome">Nome completo *</label><input type="text" id="nome" required placeholder="Seu nome"></div>
-      <div class="g2">
-        <div class="fld"><label for="email">E-mail *</label><input type="email" id="email" required placeholder="seu@email.com"></div>
-        <div class="fld"><label for="whatsapp">WhatsApp</label><input type="tel" id="whatsapp" placeholder="(92) 9 9999-9999"></div>
+<section class="bloco claro">
+  <div class="bloco-in">
+    <div class="bloco-top"><div><h2>Organizado pela sua especialidade</h2>
+      <p>O acervo é indexado por objetivo de intervenção. Você procura pelo que trabalha.</p></div>
+      <a class="ver-todos" href="/materiais/">Ver o acervo completo</a></div>
+    <div class="pf-esp"><div><strong>Fonoaudiologia</strong><span>Linguagem e fala, comunicação e aquisição de vocabulário.</span></div><div><strong>Terapia ocupacional</strong><span>Motora fina, integração sensorial, atividades de vida diária e brincar simbólico.</span></div><div><strong>Fisioterapia</strong><span>Coordenação motora grossa, equilíbrio e postura.</span></div><div><strong>Psicologia</strong><span>Emoções e sentimentos, regulação e habilidades sociais.</span></div><div><strong>Neuropsicopedagogia</strong><span>Pré-alfabetização, alfabetização, vocabulário e reforçadores lúdicos.</span></div><div><strong>Supervisão ABA</strong><span>Reforçadores, pareamento e material para os objetivos do plano.</span></div><div><strong>Acompanhante terapêutico</strong><span>Material pronto para imprimir e aplicar na sessão do dia a dia.</span></div></div>
+  </div>
+</section>
+
+<section class="bloco creme" id="cadastro">
+  <div class="bloco-in cad">
+    <div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,3.6vw,40px);font-weight:600;margin:0 0 14px">Vamos conversar</h2>
+      <p style="font-size:16px;color:var(--ink-md);font-weight:300;line-height:1.75">Conte quem você é e como atende. Respondemos para entender o que faz sentido para o seu trabalho.</p>
+    </div>
+    <div class="cad-form">
+      <div class="perfis" role="group" aria-label="Seu perfil">
+        <button type="button" aria-pressed="true" data-p="clinica">Atendo em clínica ou consultório</button>
+        <button type="button" aria-pressed="false" data-p="at">Sou acompanhante terapêutico</button>
+        <button type="button" aria-pressed="false" data-p="criador">Crio materiais</button>
+        <button type="button" aria-pressed="false" data-p="escola">Escola ou instituição</button>
       </div>
-      <div class="fld"><label for="profissao" id="lbl-prof">Profissão / especialidade</label>
-        <input type="text" id="profissao" placeholder="Ex.: Fonoaudióloga, Terapeuta Ocupacional, Supervisora ABA..."></div>
-      <div class="fld"><label for="msg">Como você atende hoje?</label>
-        <textarea id="msg" placeholder="Conte um pouco sobre o seu trabalho e o que você procura."></textarea></div>
-      <button type="submit" class="btn-env" id="btn">Enviar</button>
-      <p class="form-msg" id="msg-ret"></p>
-    </form>
+      <label for="cd-nome">Nome completo</label><input id="cd-nome" autocomplete="name">
+      <div class="g2">
+        <div><label for="cd-email">E-mail</label><input id="cd-email" type="email" autocomplete="email"></div>
+        <div><label for="cd-wa">WhatsApp</label><input id="cd-wa" type="tel" autocomplete="tel" placeholder="(92) 9 9999-9999"></div>
+      </div>
+      <label for="cd-prof">Profissão ou especialidade</label><input id="cd-prof" placeholder="Ex.: fonoaudióloga, supervisora ABA">
+      <label for="cd-msg">Como você atende hoje?</label><textarea id="cd-msg"></textarea>
+      <button class="env" id="cd-btn">Enviar</button>
+      <p class="cad-ret" id="cd-ret" aria-live="polite"></p>
+    </div>
   </div>
+</section>
+
+<footer>
+  <div class="ft-inner">
+    <div class="ft-logo">
+      <img src="/assets/dino-icon.png" alt="Neuroplasticidar" style="width:36px;height:36px;object-fit:contain;flex-shrink:0">
+      <img src="/assets/dino-wordmark.png" alt="Neuroplasticidar" style="height:18px;object-fit:contain;filter:brightness(10) saturate(0);opacity:0.85">
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+      <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:flex-end">
+        <button onclick="openDialog('dlg-termos')" style="background:none;border:none;font-size:12px;color:rgba(255,255,255,0.55);cursor:pointer;font-family:'DM Sans',sans-serif;padding:0" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Termos de Uso</button>
+        <button onclick="openDialog('dlg-privacidade')" style="background:none;border:none;font-size:12px;color:rgba(255,255,255,0.55);cursor:pointer;font-family:'DM Sans',sans-serif;padding:0" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Política de Privacidade</button>
+        <a href="mailto:neuroplasticidar@gmail.com" style="font-size:12px;color:rgba(255,255,255,0.55);text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">neuroplasticidar@gmail.com</a>
+      </div>
+      <p class="ft-disc">Nossos materiais apoiam, mas não substituem o acompanhamento profissional. © 2026 Neuroplasticidar. Manaus — AM.</p>
+    </div>
+  </div>
+<p style="margin-top:14px;font-size:13px"><a href="/sobre/" style="color:inherit">Sobre</a> &nbsp;&nbsp; <a href="/contato/" style="color:inherit">Contato</a> &nbsp;&nbsp; <a href="/quiz/" style="color:inherit">Quiz</a> &nbsp;&nbsp; <a href="/profissionais/" style="color:inherit">Para profissionais</a></p></footer>
 </div>
-
-<footer class="blog-footer">
-  <p style="max-width:680px;margin:0 auto 10px;line-height:1.6">Materiais de apoio ao desenvolvimento infantil. Nada aqui substitui avaliação ou acompanhamento profissional.</p>
-  <p>&copy; 2026 Neuroplasticidar &middot; Manaus, AM &middot; <a href="/">Área da família</a> &middot; <a href="/sinais/">Sinais</a> &middot; <a href="#cadastro">Cadastro</a></p>
-</footer>
-
+<a href="https://wa.me/5592991479457?text=Oi!%20Vim%20pelo%20site%20da%20Neuroplasticidar" target="_blank" rel="noopener" class="wa-float" aria-label="Falar no WhatsApp" onclick="if(window.gtag)gtag('event','whatsapp_flutuante')"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.04 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.26.59 4.46 1.72 6.4L3.2 28.8l6.56-1.72a12.74 12.74 0 0 0 6.28 1.6h.01c7.06 0 12.8-5.74 12.8-12.8S23.1 3.2 16.04 3.2zm0 23.04h-.01c-1.9 0-3.77-.51-5.4-1.48l-.39-.23-4.02 1.05 1.07-3.92-.25-.4a10.6 10.6 0 0 1-1.62-5.66c0-5.87 4.78-10.64 10.65-10.64 2.84 0 5.51 1.11 7.52 3.12a10.57 10.57 0 0 1 3.11 7.53c0 5.87-4.78 10.63-10.66 10.63zm5.84-7.97c-.32-.16-1.89-.93-2.19-1.04-.29-.11-.5-.16-.71.16-.21.32-.82 1.03-1 1.24-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.89-1.78-2.21-.19-.32-.02-.5.14-.66.15-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.71-1.72-.98-2.35-.26-.62-.52-.53-.71-.54l-.61-.01c-.21 0-.56.08-.85.4-.29.32-1.11 1.09-1.11 2.65s1.14 3.08 1.29 3.29c.16.21 2.24 3.42 5.43 4.8.76.33 1.35.52 1.81.67.76.24 1.45.21 2 .13.61-.09 1.89-.77 2.15-1.52.27-.75.27-1.38.19-1.52-.08-.13-.29-.21-.61-.37z"/></svg></a>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/partials.js?v=1790096018"></script>
+<script src="/assets/app.js?v=1790096018"></script>
 <script>
-const SB=window.supabase.createClient('https://cifndytwoehbnmjllrml.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNpZm5keXR3b2VoYm5tamxscm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NjM1OTIsImV4cCI6MjA5NDUzOTU5Mn0.Rkd_5t52cuQEJVPPN3sXPUukL6aEcGrwLtR2qx78Rto');
-function setPerfil(el){
-  document.querySelectorAll('.perfil-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('perfil').value=el.dataset.perfil;
-  const l=document.getElementById('lbl-prof');
-  l.textContent = el.dataset.perfil==='escola' ? 'Nome da instituição'
-    : el.dataset.perfil==='clinica' ? 'Nome da clínica' : 'Profissão / especialidade';
-}
-async function enviar(e){
-  e.preventDefault();
-  const btn=document.getElementById('btn'), ret=document.getElementById('msg-ret');
-  const v=i=>document.getElementById(i).value.trim();
-  if(!v('nome')||!v('email')){ret.textContent='Preencha nome e e-mail.';ret.style.color='#DC2626';return;}
-  btn.disabled=true;btn.textContent='Enviando...';
-  try{
-    const{error}=await SB.from('criadores_interesse').insert({
-      nome:v('nome'), email:v('email'), whatsapp:v('whatsapp'),
-      perfil:document.getElementById('perfil').value,
-      profissao:v('profissao'), mensagem:v('msg'), origem:'pagina_profissionais'
-    });
-    if(error)throw error;
-    ret.textContent='Recebido. A gente entra em contato em breve.';ret.style.color='var(--sage)';
-    document.getElementById('frm').reset();
-    if(window.gtag)gtag('event','cadastro_profissional',{perfil:document.getElementById('perfil').value});
-  }catch(err){
-    ret.textContent='Não consegui enviar agora. Tente de novo em instantes.';ret.style.color='#DC2626';
-  }
-  btn.disabled=false;btn.textContent='Enviar';
-}
+(function(){
+  // montador de indicação
+  const box=document.getElementById('ind-objs'), btn=document.getElementById('ind-btn'), nome=document.getElementById('ind-nome'), res=document.getElementById('ind-res');
+  box.innerHTML=TAXONOMIA.filter(o=>!o.soFamilia).map(o=>`<label><input type="checkbox" value="${o.id}"> ${o.clin}</label>`).join('');
+  const marcados=()=>[...box.querySelectorAll('input:checked')].map(i=>i.value);
+  box.addEventListener('change',()=>{btn.disabled=!marcados().length;});
+  btn.addEventListener('click',async()=>{
+    const u=new URL(location.origin+'/materiais/');
+    u.searchParams.set('plano',marcados().join(','));
+    if(nome.value.trim())u.searchParams.set('prof',nome.value.trim());
+    const link=u.toString();
+    try{await navigator.clipboard.writeText(link);res.innerHTML='Link copiado. Cole no WhatsApp da família:<br><strong>'+link+'</strong>';}
+    catch(e){res.innerHTML='Copie o link:<br><strong>'+link+'</strong>';}
+    if(window.gtag)gtag('event','gerar_indicacao',{objetivos:marcados().join(','),profissional:nome.value.trim()});
+  });
+  // cadastro
+  let perfil='clinica';
+  document.querySelectorAll('.perfis button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.perfis button').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true'); perfil=b.dataset.p;
+  }));
+  document.getElementById('cd-btn').addEventListener('click',async()=>{
+    const v=i=>document.getElementById(i).value.trim(), ret=document.getElementById('cd-ret'), b=document.getElementById('cd-btn');
+    if(!v('cd-nome')||!v('cd-email')){ret.textContent='Preencha nome e e-mail.';ret.style.color='#B42318';return;}
+    b.disabled=true;b.textContent='Enviando…';
+    try{
+      const{error}=await sb.from('criadores_interesse').insert({nome:v('cd-nome'),email:v('cd-email'),whatsapp:v('cd-wa'),perfil,profissao:v('cd-prof'),mensagem:v('cd-msg'),origem:'pagina_profissionais'});
+      if(error)throw error;
+      ret.textContent='Recebido. Entramos em contato em breve.';ret.style.color='var(--sage)';
+      ['cd-nome','cd-email','cd-wa','cd-prof','cd-msg'].forEach(i=>document.getElementById(i).value='');
+      if(window.gtag)gtag('event','cadastro_profissional',{perfil});
+    }catch(e){ret.textContent='Não consegui enviar agora. Tente de novo ou chame no WhatsApp.';ret.style.color='#B42318';}
+    b.disabled=false;b.textContent='Enviar';
+  });
+})();
 </script>
-
 </body>
 </html>
