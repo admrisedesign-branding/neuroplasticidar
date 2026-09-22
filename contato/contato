@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0XB74DEMLS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-0XB74DEMLS');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" type="image/png" href="/dino-logo.png">
+<link rel="apple-touch-icon" href="/dino-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cifndytwoehbnmjllrml.supabase.co" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Contato — Neuroplasticidar</title>
+<meta name="description" content="Fale com a Neuroplasticidar: dúvidas sobre materiais, kits, orientação para a família ou parceria profissional.">
+<link rel="canonical" href="https://neuroplasticidar.gruposja.com/contato/">
+<meta property="og:title" content="Contato — Neuroplasticidar">
+<meta property="og:description" content="Fale com a Neuroplasticidar: dúvidas sobre materiais, kits, orientação para a família ou parceria profissional.">
+<meta property="og:url" content="https://neuroplasticidar.gruposja.com/contato/">
+<link rel="stylesheet" href="/assets/app.css?v=1790049940">
+
+</head>
+<body data-nav="solido">
+<nav id="nav">
+  <a href="/" class="nav-logo" aria-label="Neuroplasticidar — página inicial">
+    <img src="/assets/dino-icon.png" alt="" style="width:44px;height:44px;object-fit:contain;flex-shrink:0">
+    <img src="/assets/dino-wordmark.png" alt="Neuroplasticidar" class="logo-img-text" style="height:20px;object-fit:contain">
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/materiais/">Materiais</a></li>
+    <li><a href="/brinquedos/">Brinquedos</a></li>
+    <li><a href="/orientacao/">Orientação</a></li>
+    <li><a href="/sinais/">Conteúdos</a></li>
+    <li><a href="/profissionais/" class="nav-prof">Para profissionais</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="/admin/" id="nav-painel" style="display:none">Painel</a>
+    <div id="nav-user">
+      <div class="av" id="nav-av">U</div>
+      <span class="un" id="nav-un">Usuário</span>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+    </div>
+    <button class="btn-nav-primary" id="nav-login-btn" onclick="openAuth()">Entrar</button>
+    <button class="nav-burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mob-menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-menu" id="mob-menu">
+  <a href="/">Home</a>
+  <a href="/materiais/">Materiais</a>
+  <a href="/brinquedos/">Brinquedos</a>
+  <a href="/orientacao/">Orientação</a>
+  <a href="/sinais/">Conteúdos</a>
+  <a href="/profissionais/" class="nav-prof">Para profissionais</a>
+</div>
+
+<div id="site-main">
+
+<header class="pg-topo">
+  <div class="bloco-in">
+    <h1>Contato</h1>
+    <p>Escreva para a gente. Respondemos em até dois dias úteis — ou chame no WhatsApp, no botão verde.</p>
+  </div>
+</header>
+<section id="contato">
+  <div class="contato-inner">
+    <div class="contato-info">
+      <p class="eyebrow">Contato</p>
+      <h2>Vamos conversar?</h2>
+      <p>Ainda tem dúvidas? Não sabe por onde começar? Preencha o formulário e nossa equipe entra em contato em até 48 horas.</p>
+      <div class="contact-channels">
+        <div class="ch-item">
+          <div><span class="ch-label">Instagram</span><a href="https://instagram.com/neuroplasticidar" target="_blank">@neuroplasticidar</a></div>
+        </div>
+        <div class="ch-item">
+          <div><span class="ch-label">WhatsApp</span><a href="https://wa.me/5592991479457" target="_blank">(92) 99914-7945</a></div>
+        </div>
+        <div class="ch-item">
+          <div><span class="ch-label">E-mail</span><a href="mailto:neuroplasticidar@gmail.com">neuroplasticidar@gmail.com</a></div>
+        </div>
+      </div>
+      <!-- Atalhos pras ações principais -->
+      <div style="margin-top:32px;padding:20px 24px;background:var(--blue-lt);border-radius:var(--r);border-left:3px solid var(--blue)">
+        <p style="font-size:13px;font-weight:600;color:var(--blue-dk);margin-bottom:8px">Quer agir agora?</p>
+        <p style="font-size:13px;color:var(--ink-md);line-height:1.6;font-weight:300;margin-bottom:10px">Use os atalhos rápidos:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <a href="javascript:void(0)" onclick="openSessaoDialog()" style="font-size:12px;padding:6px 12px;background:var(--blue);color:#fff;border-radius:20px;text-decoration:none;font-weight:500">🏠 Agendar sessão</a>
+          <a href="#materiais" style="font-size:12px;padding:6px 12px;background:var(--blue);color:#fff;border-radius:20px;text-decoration:none;font-weight:500">📄 Ver materiais</a>
+          <a href="#quiz" style="font-size:12px;padding:6px 12px;background:var(--blue);color:#fff;border-radius:20px;text-decoration:none;font-weight:500">🎯 Fazer o quiz</a>
+        </div>
+      </div>
+    </div>
+    <div class="contato-form-wrap">
+      <h3>Envie uma mensagem</h3>
+
+      <div class="field"><label>Nome</label><input type="text" id="ct-name" placeholder="Como posso te chamar?"></div>
+      <div class="field"><label>E-mail</label><input type="email" id="ct-email" placeholder="seu@email.com"></div>
+      <div class="field"><label>WhatsApp <span style="font-weight:300;color:var(--ink-lt)">(opcional)</span></label><input type="tel" id="ct-wpp" placeholder="(92) 99999-9999"></div>
+      <div class="field"><label>Você é</label>
+        <select id="ct-perfil">
+          <option>Pai, mãe ou cuidador</option>
+          <option>Profissional de saúde</option>
+          <option>Educador</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="field"><label>Mensagem</label><textarea id="ct-msg" placeholder="Conte um pouco sobre sua dúvida ou o que você busca..."></textarea></div>
+      <button class="btn-submit" id="ct-btn" onclick="submitContact()">Enviar mensagem</button>
+      <p style="font-size:11px;color:var(--ink-lt);margin-top:12px;text-align:center;font-weight:300">Nossa equipe retorna em até 48 horas úteis.</p>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="ft-inner">
+    <div class="ft-logo">
+      <img src="/assets/dino-icon.png" alt="Neuroplasticidar" style="width:36px;height:36px;object-fit:contain;flex-shrink:0">
+      <img src="/assets/dino-wordmark.png" alt="Neuroplasticidar" style="height:18px;object-fit:contain;filter:brightness(10) saturate(0);opacity:0.85">
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+      <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:flex-end">
+        <button onclick="openDialog('dlg-termos')" style="background:none;border:none;font-size:12px;color:rgba(255,255,255,0.55);cursor:pointer;font-family:'DM Sans',sans-serif;padding:0" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Termos de Uso</button>
+        <button onclick="openDialog('dlg-privacidade')" style="background:none;border:none;font-size:12px;color:rgba(255,255,255,0.55);cursor:pointer;font-family:'DM Sans',sans-serif;padding:0" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Política de Privacidade</button>
+        <a href="mailto:neuroplasticidar@gmail.com" style="font-size:12px;color:rgba(255,255,255,0.55);text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">neuroplasticidar@gmail.com</a>
+      </div>
+      <p class="ft-disc">Nossos materiais apoiam, mas não substituem o acompanhamento profissional. © 2026 Neuroplasticidar. Manaus — AM.</p>
+    </div>
+  </div>
+<p style="margin-top:14px;font-size:13px"><a href="/sobre/" style="color:inherit">Sobre</a> &nbsp;&nbsp; <a href="/contato/" style="color:inherit">Contato</a> &nbsp;&nbsp; <a href="/quiz/" style="color:inherit">Quiz</a> &nbsp;&nbsp; <a href="/profissionais/" style="color:inherit">Para profissionais</a></p></footer>
+</div>
+<a href="https://wa.me/5592991479457?text=Oi!%20Vim%20pelo%20site%20da%20Neuroplasticidar" target="_blank" rel="noopener" class="wa-float" aria-label="Falar no WhatsApp" onclick="if(window.gtag)gtag('event','whatsapp_flutuante')"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.04 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.26.59 4.46 1.72 6.4L3.2 28.8l6.56-1.72a12.74 12.74 0 0 0 6.28 1.6h.01c7.06 0 12.8-5.74 12.8-12.8S23.1 3.2 16.04 3.2zm0 23.04h-.01c-1.9 0-3.77-.51-5.4-1.48l-.39-.23-4.02 1.05 1.07-3.92-.25-.4a10.6 10.6 0 0 1-1.62-5.66c0-5.87 4.78-10.64 10.65-10.64 2.84 0 5.51 1.11 7.52 3.12a10.57 10.57 0 0 1 3.11 7.53c0 5.87-4.78 10.63-10.66 10.63zm5.84-7.97c-.32-.16-1.89-.93-2.19-1.04-.29-.11-.5-.16-.71.16-.21.32-.82 1.03-1 1.24-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.89-1.78-2.21-.19-.32-.02-.5.14-.66.15-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.71-1.72-.98-2.35-.26-.62-.52-.53-.71-.54l-.61-.01c-.21 0-.56.08-.85.4-.29.32-1.11 1.09-1.11 2.65s1.14 3.08 1.29 3.29c.16.21 2.24 3.42 5.43 4.8.76.33 1.35.52 1.81.67.76.24 1.45.21 2 .13.61-.09 1.89-.77 2.15-1.52.27-.75.27-1.38.19-1.52-.08-.13-.29-.21-.61-.37z"/></svg></a>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/partials.js?v=1790049940"></script>
+<script src="/assets/app.js?v=1790049940"></script>
+
+</body>
+</html>
