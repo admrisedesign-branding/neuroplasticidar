@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0XB74DEMLS"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-0XB74DEMLS');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="icon" type="image/png" href="/dino-logo.png">
+<link rel="apple-touch-icon" href="/dino-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cifndytwoehbnmjllrml.supabase.co" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Quiz do desenvolvimento — Neuroplasticidar</title>
+<meta name="description" content="Responda algumas perguntas sobre o dia a dia do seu filho e receba a indicação de materiais e brinquedos para o momento dele.">
+<link rel="canonical" href="https://neuroplasticidar.gruposja.com/quiz/">
+<meta property="og:title" content="Quiz do desenvolvimento — Neuroplasticidar">
+<meta property="og:description" content="Responda algumas perguntas sobre o dia a dia do seu filho e receba a indicação de materiais e brinquedos para o momento dele.">
+<meta property="og:url" content="https://neuroplasticidar.gruposja.com/quiz/">
+<link rel="stylesheet" href="/assets/app.css?v=1790091780">
+
+</head>
+<body data-nav="solido">
+<nav id="nav">
+  <a href="/" class="nav-logo" aria-label="Neuroplasticidar — página inicial">
+    <img src="/assets/dino-icon.png" alt="" style="width:44px;height:44px;object-fit:contain;flex-shrink:0">
+    <img src="/assets/dino-wordmark.png" alt="Neuroplasticidar" class="logo-img-text" style="height:20px;object-fit:contain">
+  </a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/materiais/">Materiais</a></li>
+    <li><a href="/brinquedos/">Brinquedos</a></li>
+    <li><a href="/orientacao/">Orientação</a></li>
+    <li><a href="/sinais/">Conteúdos</a></li>
+    <li><a href="/profissionais/" class="nav-prof">Para profissionais</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="/admin/" id="nav-painel" style="display:none">Painel</a>
+    <div id="nav-user">
+      <div class="av" id="nav-av">U</div>
+      <span class="un" id="nav-un">Usuário</span>
+      <button class="btn-logout" onclick="logout()">Sair</button>
+    </div>
+    <button class="btn-nav-primary" id="nav-login-btn" onclick="openAuth()">Entrar</button>
+    <button class="nav-burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="mob-menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-menu" id="mob-menu">
+  <a href="/">Home</a>
+  <a href="/materiais/">Materiais</a>
+  <a href="/brinquedos/">Brinquedos</a>
+  <a href="/orientacao/">Orientação</a>
+  <a href="/sinais/">Conteúdos</a>
+  <a href="/profissionais/" class="nav-prof">Para profissionais</a>
+</div>
+
+<div id="site-main">
+
+<header class="pg-topo">
+  <div class="bloco-in">
+    <h1>Não sabe por onde começar?</h1>
+    <p>Responda algumas perguntas sobre o dia a dia do seu filho e receba a indicação do que faz sentido para o momento dele. Gratuito.</p>
+  </div>
+</header>
+<section id="quiz">
+  <div class="quiz-bg-text">Quiz</div>
+  <div class="quiz-inner">
+    <p class="eyebrow">Quiz de desenvolvimento</p>
+    <h2>Qual é a necessidade do seu filho?</h2>
+    <p class="lead">Responda algumas perguntas e receba uma indicação personalizada — gratuita, sem compromisso.</p>
+    <div class="quiz-card">
+      <div class="quiz-progress" id="quiz-progress">
+        <div class="qp-bar active"></div>
+        <div class="qp-bar"></div>
+        <div class="qp-bar"></div>
+        <div class="qp-bar"></div>
+      </div>
+      <!-- Q1 -->
+      <div class="quiz-step active" id="qs1">
+        <p class="quiz-q">O que você mais observa no seu filho?</p>
+        <p class="quiz-qsub">Selecione quantas quiser — seja honesta.</p>
+        <div class="quiz-opt-grid" id="q1-opts">
+          <button class="quiz-opt" onclick="toggleOpt(this,'agitado')"><span class="quiz-check"></span>Muito agitado, não para quieto</button>
+          <button class="quiz-opt" onclick="toggleOpt(this,'explosivo')"><span class="quiz-check"></span>Explode, bate, perde o controle</button>
+          <button class="quiz-opt" onclick="toggleOpt(this,'sozinho')"><span class="quiz-check"></span>Prefere brincar sozinho, evita contato</button>
+          <button class="quiz-opt" onclick="toggleOpt(this,'fala-pouco')"><span class="quiz-check"></span>Fala pouco ou tem dificuldade de se expressar</button>
+          <button class="quiz-opt" onclick="toggleOpt(this,'trava')"><span class="quiz-check"></span>Trava diante de desafios, fica paralisado</button>
+          <button class="quiz-opt" onclick="toggleOpt(this,'impulsivo')"><span class="quiz-check"></span>Muito impulsivo, age sem pensar</button>
+          <button class="quiz-opt" onclick="toggleOpt(this,'concentracao')"><span class="quiz-check"></span>Não consegue se concentrar por tempo algum</button>
+          <button class="quiz-opt" onclick="toggleOpt(this,'desiste')"><span class="quiz-check"></span>Desiste rapidamente quando encontra dificuldade</button>
+        </div>
+        <button class="btn-quiz" onclick="quizNext(1)">Continuar</button>
+      </div>
+      <!-- Q2 -->
+      <div class="quiz-step" id="qs2">
+        <p class="quiz-q">Qual a idade do seu filho?</p>
+        <p class="quiz-qsub">Isso nos ajuda a indicar materiais adequados para a fase dele.</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="selectOpt(this,'0-2')"><span class="quiz-check"></span>0 a 2 anos</button>
+          <button class="quiz-opt" onclick="selectOpt(this,'3-5')"><span class="quiz-check"></span>3 a 5 anos</button>
+          <button class="quiz-opt" onclick="selectOpt(this,'6-9')"><span class="quiz-check"></span>6 a 9 anos</button>
+          <button class="quiz-opt" onclick="selectOpt(this,'10+')"><span class="quiz-check"></span>10 anos ou mais</button>
+        </div>
+        <button class="btn-quiz" onclick="quizNext(2)">Continuar</button>
+      </div>
+      <!-- Q3 -->
+      <div class="quiz-step" id="qs3">
+        <p class="quiz-q">Como prefere começar?</p>
+        <p class="quiz-qsub">Não existe resposta errada — cada família tem o seu momento.</p>
+        <div class="quiz-opts">
+          <button class="quiz-opt" onclick="selectOpt(this,'kit')"><span class="quiz-check"></span>Quero um kit com brinquedos para usar em casa</button>
+          <button class="quiz-opt" onclick="selectOpt(this,'acomp')"><span class="quiz-check"></span>Quero uma especialista para vir em casa</button>
+          <button class="quiz-opt" onclick="selectOpt(this,'digital')"><span class="quiz-check"></span>Quero começar com um guia digital gratuito</button>
+        </div>
+        <button class="btn-quiz" onclick="quizNext(3)">Continuar</button>
+      </div>
+      <!-- Q4: Coleta completa (igual modal de curadoria) -->
+      <div class="quiz-step" id="qs4">
+        <p class="quiz-q">Pra te enviar a indicação certa</p>
+        <p class="quiz-qsub">Preencha seus dados — nossa especialista vai analisar e entrar em contato em até 48h pelo WhatsApp.</p>
+        <div class="quiz-field"><label>Seu nome</label><input type="text" id="q-name" placeholder="Como posso te chamar?"></div>
+        <div class="quiz-field"><label>E-mail</label><input type="email" id="q-email" placeholder="seu@email.com"></div>
+        <div class="quiz-field"><label>WhatsApp</label><input type="tel" id="q-wpp" placeholder="(92) 9XXXX-XXXX"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="quiz-field"><label>Estado</label>
+            <select id="q-uf" style="width:100%;padding:12px 14px;border-radius:var(--r);border:1px solid var(--border);font-size:14px;font-family:'DM Sans',sans-serif;background:#fff">
+              <option value="AM">AM</option>
+              <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+              <option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option>
+              <option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option>
+              <option value="MG">MG</option><option value="MS">MS</option><option value="MT">MT</option>
+              <option value="PA">PA</option><option value="PB">PB</option><option value="PE">PE</option>
+              <option value="PI">PI</option><option value="PR">PR</option><option value="RJ">RJ</option>
+              <option value="RN">RN</option><option value="RO">RO</option><option value="RR">RR</option>
+              <option value="RS">RS</option><option value="SC">SC</option><option value="SE">SE</option>
+              <option value="SP">SP</option><option value="TO">TO</option>
+            </select>
+          </div>
+          <div class="quiz-field"><label>Cidade</label><input type="text" id="q-cidade" value="Manaus"></div>
+        </div>
+        <div class="quiz-field"><label>Bairro</label><input type="text" id="q-bairro" placeholder="Ex: Adrianópolis"></div>
+        <div class="quiz-field"><label>Tem algum kit preferido? <span style="font-weight:300;color:var(--ink-lt)">(opcional)</span></label>
+          <select id="q-kit-pref" style="width:100%;padding:12px 14px;border-radius:var(--r);border:1px solid var(--border);font-size:14px;font-family:'DM Sans',sans-serif;background:#fff">
+            <option value="">Quero a sugestão da especialista</option>
+          </select>
+        </div>
+        <div class="quiz-field"><label>O que você quer estimular ou desenvolver?</label>
+          <textarea id="q-foco" style="min-height:70px;width:100%;padding:12px 14px;border-radius:var(--r);border:1px solid var(--border);font-size:14px;font-family:'DM Sans',sans-serif;resize:vertical" placeholder="Ex: Concentração, regulação emocional, motricidade fina, comunicação..."></textarea>
+        </div>
+        <button class="btn-quiz" onclick="submitQuiz()">Ver meu resultado</button>
+      </div>
+      <!-- Resultado -->
+      <div class="quiz-step" id="qs-result">
+        <div class="quiz-result">
+          <div class="qr-marker" id="qr-marker">🎒</div>
+          <div class="qr-kit" id="qr-kit-name">Kit Equilíbrio</div>
+          <div class="qr-area" id="qr-area">Regulação Emocional e Sensorial</div>
+          <p class="qr-desc" id="qr-desc">Com base nas suas respostas, este kit foi pensado para apoiar o desenvolvimento do seu filho.</p>
+          <!-- Botões dinâmicos — preenchidos pelo JS conforme a resposta Q3 -->
+          <div id="qr-actions" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"></div>
+          <p class="qr-note">Nossa equipe entrará em contato pelo e-mail informado em até 48 horas.</p>
+          <button onclick="resetQuiz()" style="background:none;border:none;font-size:12px;color:var(--ink-lt);cursor:pointer;margin-top:12px;font-family:'DM Sans',sans-serif;font-weight:300">Refazer o quiz</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="ft-inner">
+    <div class="ft-logo">
+      <img src="/assets/dino-icon.png" alt="Neuroplasticidar" style="width:36px;height:36px;object-fit:contain;flex-shrink:0">
+      <img src="/assets/dino-wordmark.png" alt="Neuroplasticidar" style="height:18px;object-fit:contain;filter:brightness(10) saturate(0);opacity:0.85">
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px">
+      <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:flex-end">
+        <button onclick="openDialog('dlg-termos')" style="background:none;border:none;font-size:12px;color:rgba(255,255,255,0.55);cursor:pointer;font-family:'DM Sans',sans-serif;padding:0" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Termos de Uso</button>
+        <button onclick="openDialog('dlg-privacidade')" style="background:none;border:none;font-size:12px;color:rgba(255,255,255,0.55);cursor:pointer;font-family:'DM Sans',sans-serif;padding:0" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Política de Privacidade</button>
+        <a href="mailto:neuroplasticidar@gmail.com" style="font-size:12px;color:rgba(255,255,255,0.55);text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">neuroplasticidar@gmail.com</a>
+      </div>
+      <p class="ft-disc">Nossos materiais apoiam, mas não substituem o acompanhamento profissional. © 2026 Neuroplasticidar. Manaus — AM.</p>
+    </div>
+  </div>
+<p style="margin-top:14px;font-size:13px"><a href="/sobre/" style="color:inherit">Sobre</a> &nbsp;&nbsp; <a href="/contato/" style="color:inherit">Contato</a> &nbsp;&nbsp; <a href="/quiz/" style="color:inherit">Quiz</a> &nbsp;&nbsp; <a href="/profissionais/" style="color:inherit">Para profissionais</a></p></footer>
+</div>
+<a href="https://wa.me/5592991479457?text=Oi!%20Vim%20pelo%20site%20da%20Neuroplasticidar" target="_blank" rel="noopener" class="wa-float" aria-label="Falar no WhatsApp" onclick="if(window.gtag)gtag('event','whatsapp_flutuante')"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.04 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.26.59 4.46 1.72 6.4L3.2 28.8l6.56-1.72a12.74 12.74 0 0 0 6.28 1.6h.01c7.06 0 12.8-5.74 12.8-12.8S23.1 3.2 16.04 3.2zm0 23.04h-.01c-1.9 0-3.77-.51-5.4-1.48l-.39-.23-4.02 1.05 1.07-3.92-.25-.4a10.6 10.6 0 0 1-1.62-5.66c0-5.87 4.78-10.64 10.65-10.64 2.84 0 5.51 1.11 7.52 3.12a10.57 10.57 0 0 1 3.11 7.53c0 5.87-4.78 10.63-10.66 10.63zm5.84-7.97c-.32-.16-1.89-.93-2.19-1.04-.29-.11-.5-.16-.71.16-.21.32-.82 1.03-1 1.24-.19.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.59-1.89-1.78-2.21-.19-.32-.02-.5.14-.66.15-.14.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.71-1.72-.98-2.35-.26-.62-.52-.53-.71-.54l-.61-.01c-.21 0-.56.08-.85.4-.29.32-1.11 1.09-1.11 2.65s1.14 3.08 1.29 3.29c.16.21 2.24 3.42 5.43 4.8.76.33 1.35.52 1.81.67.76.24 1.45.21 2 .13.61-.09 1.89-.77 2.15-1.52.27-.75.27-1.38.19-1.52-.08-.13-.29-.21-.61-.37z"/></svg></a>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/partials.js?v=1790091780"></script>
+<script src="/assets/app.js?v=1790091780"></script>
+
+</body>
+</html>
