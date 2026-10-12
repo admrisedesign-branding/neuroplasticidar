@@ -130,10 +130,32 @@ a.brq-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(15,14,12
   const raiz=document.getElementById('bq-raiz');
   const brl=v=>'R$ '+Number(v).toFixed(2).replace('.',',');
   const objDe=cat=>TAXONOMIA.find(o=>matchObj(o.id,cat||''));
-  function vazio(){raiz.innerHTML=`<div class="bq-vazio"><h1>Brinquedo não encontrado</h1>
-      <p style="color:var(--ink-md);font-weight:300;margin-bottom:26px">Ele pode ter saído do catálogo. Veja os brinquedos disponíveis.</p>
-      <a class="btn-claro" href="/brinquedos/">Ver brinquedos</a></div>`;}
-  if(!id){vazio();return;}
+  function vazio(){
+    raiz.innerHTML=`<div class="bq-vazio"><h1>Brinquedo não encontrado</h1>
+      <p style="color:var(--ink-md);font-weight:300;margin-bottom:26px">Ele pode ter saído do catálogo. Veja os que estão disponíveis agora.</p>
+      <a class="btn-claro" href="/brinquedos/">Ver todos os brinquedos</a></div>
+      <div class="bq-rel" id="bq-sug" style="display:none">
+        <h2>Disponíveis agora</h2>
+        <div id="bq-sug-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;margin-top:22px"></div>
+      </div>`;
+    sugerir();
+  }
+  async function sugerir(){
+    try{
+      const{data}=await sb.from('brinquedos').select('*')
+        .gt('estoque_atual',0).order('nome').limit(6);
+      if(!data||!data.length)return;
+      const bloco=document.getElementById('bq-sug');
+      document.getElementById('bq-sug-grid').innerHTML=data.map(x=>`
+        <a class="brq-card" href="/brinquedo/?id=${x.id}">
+          <div class="brq-img">${x.foto_url?`<img src="${x.foto_url}" alt="" loading="lazy">`:'<span class="ph">🧸</span>'}</div>
+          <div class="brq-body"><h3>${x.nome||''}</h3>
+            <div class="brq-pe"><span class="brq-preco">${x.preco_venda?brl(x.preco_venda):'Sob consulta'}</span></div></div>
+        </a>`).join('');
+      bloco.style.display='';
+    }catch(e){}
+  }
+  if(!id){location.replace('/brinquedos/');return;}
   async function carregar(){
     const{data:b,error}=await sb.from('brinquedos').select('*').eq('id',id).single();
     if(error||!b){vazio();return;}
