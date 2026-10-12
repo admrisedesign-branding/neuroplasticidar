@@ -757,7 +757,9 @@ const TAXONOMIA=[
  {id:'sono',           clin:'Sono e rotina',             fam:'Sono e rotina',               profs:[],                              match:['sono','rotina'], soFamilia:true}
 ];
 const OBJ=id=>TAXONOMIA.find(o=>o.id===id);
-function matchObj(id,cat){const o=OBJ(id);if(!o)return false;const c=(cat||'').toLowerCase();return o.match.some(m=>c.includes(m.toLowerCase()));}
+function matchObj(id,cat){const o=OBJ(id);if(!o)return false;const c=(cat||'').trim().toLowerCase();
+  if(c===id)return true;                       /* categoria gravada como id exato */
+  return o.match.some(m=>c.includes(m.toLowerCase()));}
 
 /* ══ MODO: familia | profissional ══ */
 let modo='familia', plano=[], planoFiltro=null, planoProf='';
