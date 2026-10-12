@@ -1209,3 +1209,7 @@ a.brq-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(15,14,12
 /* Foco visível para teclado */
 a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ── preço: aviso de entrega ── */
+.brq-frete{font-size:12px;font-weight:300;color:var(--ink-lt);margin-top:6px;letter-spacing:.01em}
+.bq-frete{font-size:13px;font-weight:300;color:var(--ink-lt);margin:-2px 0 14px}
